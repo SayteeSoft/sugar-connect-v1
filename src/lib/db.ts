@@ -80,7 +80,7 @@ const allProfiles: UserProfile[] = [
     piercings: 'Ears',
     tattoos: 'None',
     smokes: 'No',
-    drinks: 'Occasionally',
+    drinks: 'Socially',
     education: "Master's Degree",
   },
   {
@@ -104,7 +104,7 @@ const allProfiles: UserProfile[] = [
     piercings: 'None',
     tattoos: 'None',
     smokes: 'No',
-    drinks: 'Yes',
+    drinks: 'Socially',
     education: "Bachelor's Degree",
   },
   {
@@ -128,8 +128,8 @@ const allProfiles: UserProfile[] = [
     bodyType: 'Slim',
     hairColor: 'Black',
     eyeColor: 'Brown',
-    piercings: 'Nose, Ears',
-    tattoos: 'Small one on wrist',
+    piercings: 'Other',
+    tattoos: 'One',
     smokes: 'No',
     drinks: 'Socially',
     education: 'Some College',
@@ -156,7 +156,7 @@ const allProfiles: UserProfile[] = [
     piercings: 'None',
     tattoos: 'None',
     smokes: 'No',
-    drinks: 'Yes',
+    drinks: 'Socially',
     education: "MBA",
   },
   {

@@ -56,8 +56,14 @@ const educationOptions = [
 
 export function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState({
-    ...user,
-    interests: user.interests.join(', '),
+    name: user.name ?? '',
+    age: String(user.age ?? ''),
+    email: user.email ?? '',
+    location: user.location ?? '',
+    bio: user.bio ?? '',
+    interests: user.interests?.join(', ') ?? '',
+    gallery: user.gallery ?? [],
+    ethnicity: user.ethnicity ?? '',
     height: user.height ?? '',
     bodyType: user.bodyType ?? '',
     hairColor: user.hairColor ?? '',
@@ -68,6 +74,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     drinks: user.drinks ?? '',
     education: user.education ?? '',
   });
+
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
