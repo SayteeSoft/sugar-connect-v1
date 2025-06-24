@@ -32,13 +32,13 @@ export default async function Home() {
           </div>
         </section>
 
-        <SugarRelationshipSection />
-
         <Testimonials />
 
         <SecuritySection />
 
         <ByTheNumbersSection />
+
+        <SugarRelationshipSection />
 
       </main>
 
