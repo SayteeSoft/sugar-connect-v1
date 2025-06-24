@@ -5,6 +5,7 @@ import { db } from '@/lib/db';
 import { Heart } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Testimonials } from '@/components/Testimonials';
+import { SecuritySection } from '@/components/SecuritySection';
 
 export default async function Home() {
   const featuredProfiles = await db.getFeaturedProfiles();
@@ -47,6 +48,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <SecuritySection />
 
         <Testimonials />
 
