@@ -1,3 +1,45 @@
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { UserProfileCard } from '@/components/UserProfileCard';
+import { featuredProfiles } from '@/lib/mock-data';
+import { Heart } from 'lucide-react';
+
 export default function Home() {
-  return <></>;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow">
+        <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{backgroundImage: "url('https://placehold.co/1920x1080/6e4a6f/f0f0f0?text=')"}} data-ai-hint="romantic london night">
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative z-10 p-4">
+            <h1 className="text-4xl md:text-6xl font-headline font-bold !text-white drop-shadow-lg">UK Sugar Connect</h1>
+            <p className="mt-4 text-lg md:text-2xl font-body max-w-2xl mx-auto !text-gray-200">The UK's exclusive platform for ambitious and attractive individuals.</p>
+            <Button asChild size="lg" className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 rounded-full transition-transform duration-300 ease-in-out hover:scale-105">
+              <Link href="/search">
+                <Heart className="mr-2 h-5 w-5" />
+                Find Your Match
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        <section className="py-12 md:py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">Featured Profiles</h2>
+            <p className="text-center text-muted-foreground mt-2 mb-10">Get a glimpse of our exclusive community.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+              {featuredProfiles.map(profile => (
+                <UserProfileCard key={profile.id} user={profile} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+       <footer className="bg-card border-t py-6">
+        <div className="container mx-auto text-center text-muted-foreground text-sm">
+          <p>&copy; {new Date().getFullYear()} UK Sugar Connect. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  );
 }
