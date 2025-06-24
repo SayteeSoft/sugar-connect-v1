@@ -2,9 +2,16 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ServerCrash, Lightbulb } from 'lucide-react';
+import { Loader2, ServerCrash } from 'lucide-react';
 import { getAiMatches } from './actions';
 
 export function AiMatchClient() {
@@ -31,8 +38,39 @@ export function AiMatchClient() {
   };
 
   return (
-    <div className="mt-8">
-      <div className="flex justify-center">
+    <Card>
+      <CardHeader>
+        <CardTitle>AI Matchmaker</CardTitle>
+        <CardDescription>
+          Let our advanced AI analyze your profile and preferences to find your
+          most compatible matches. This tool helps you discover potential
+          connections you might have missed.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <ServerCrash className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {matches && (
+          <div>
+            <p className="mb-4 text-muted-foreground">
+              Based on your profile, here are some people you might connect
+              with.
+            </p>
+            <ul className="list-disc space-y-2 pl-5">
+              {matches.map((match, index) => (
+                <li key={index}>{match}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </CardContent>
+      <CardFooter className="flex justify-center">
         <Button size="lg" onClick={handleGenerateMatches} disabled={loading}>
           {loading ? (
             <>
@@ -43,38 +81,7 @@ export function AiMatchClient() {
             'Generate My AI Matches'
           )}
         </Button>
-      </div>
-
-      <div className="mt-8">
-        {error && (
-          <Alert variant="destructive">
-            <ServerCrash className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {matches && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Lightbulb className="mr-2 h-5 w-5 text-yellow-400" />
-                Your AI-Powered Suggestions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4 text-muted-foreground">
-                Based on your profile, here are some people you might connect with.
-              </p>
-              <ul className="list-disc space-y-2 pl-5">
-                {matches.map((match, index) => (
-                  <li key={index}>{match}</li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

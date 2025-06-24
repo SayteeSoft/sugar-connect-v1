@@ -176,6 +176,11 @@ const messages = {
     ],
 };
 
+const favorites = ['2', '5', '7'];
+const visitors = ['4', '6'];
+const viewed = ['3', '8'];
+
+
 // Simulate a database
 export const db = {
   getProfiles: async () => allProfiles,
@@ -186,4 +191,7 @@ export const db = {
   getMessages: async () => messages,
   getLocations: async () => [...new Set(allProfiles.map(p => p.location))],
   getAllInterests: async () => [...new Set(allProfiles.flatMap(p => p.interests))],
+  getFavorites: async () => allProfiles.filter(p => favorites.includes(p.id)),
+  getVisitors: async () => allProfiles.filter(p => visitors.includes(p.id)),
+  getViewed: async () => allProfiles.filter(p => viewed.includes(p.id)),
 };
