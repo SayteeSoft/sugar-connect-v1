@@ -59,7 +59,6 @@ export function Header() {
         )}
 
         <div className="flex items-center gap-2">
-          <ThemeSwitcher />
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
                <Button asChild variant="ghost" size="icon">
@@ -124,6 +123,7 @@ export function Header() {
               </SheetContent>
             </Sheet>
           </div>
+          <ThemeSwitcher />
         </div>
       </div>
     </header>
