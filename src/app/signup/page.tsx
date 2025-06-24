@@ -11,8 +11,23 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Heart } from "lucide-react";
 import { Footer } from "@/components/Footer";
+
+const ethnicities = [
+  "White",
+  "Black / African / Caribbean",
+  "Asian / Asian British",
+  "Mixed / Multiple ethnic groups",
+  "Other ethnic group",
+];
 
 export default function SignupPage() {
   return (
@@ -55,6 +70,21 @@ export default function SignupPage() {
                       <Label htmlFor="location">Location</Label>
                       <Input id="location" placeholder="London" required />
                   </div>
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="ethnicity">Ethnicity</Label>
+                <Select>
+                  <SelectTrigger id="ethnicity">
+                    <SelectValue placeholder="Select your ethnicity" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ethnicities.map((ethnicity) => (
+                      <SelectItem key={ethnicity} value={ethnicity.toLowerCase().replace(/ /g, '_')}>
+                        {ethnicity}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bio">Your Bio</Label>

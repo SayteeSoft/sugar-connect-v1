@@ -8,4 +8,5 @@ export interface UserProfile {
   profileImage: string;
   isVerified: boolean;
   gallery: string[];
+  ethnicity: string;
 }

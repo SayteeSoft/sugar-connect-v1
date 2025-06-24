@@ -15,6 +15,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/E6E6FA/800080',
       'https://placehold.co/600x400/E6E6FA/800080',
     ],
+    ethnicity: 'White',
   },
   {
     id: '2',
@@ -30,6 +31,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/800080/E6E6FA',
       'https://placehold.co/600x400/800080/E6E6FA',
     ],
+    ethnicity: 'White',
   },
   {
     id: '3',
@@ -44,6 +46,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/E6E6FA/800080',
       'https://placehold.co/600x400/E6E6FA/800080',
     ],
+    ethnicity: 'Mixed / Multiple ethnic groups',
   },
   {
     id: '4',
@@ -57,6 +60,7 @@ export const allProfiles: UserProfile[] = [
     gallery: [
       'https://placehold.co/600x400/800080/E6E6FA',
     ],
+    ethnicity: 'White',
   },
   {
     id: '5',
@@ -73,6 +77,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/E6E6FA/800080',
       'https://placehold.co/600x400/E6E6FA/800080',
     ],
+    ethnicity: 'Asian / Asian British',
   },
   {
     id: '6',
@@ -87,6 +92,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/800080/E6E6FA',
       'https://placehold.co/600x400/800080/E6E6FA',
     ],
+    ethnicity: 'White',
   },
   {
     id: '7',
@@ -102,6 +108,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/E6E6FA/800080',
       'https://placehold.co/600x400/E6E6FA/800080',
     ],
+    ethnicity: 'White',
   },
   {
     id: '8',
@@ -116,6 +123,7 @@ export const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400/800080/E6E6FA',
       'https://placehold.co/600x400/800080/E6E6FA',
     ],
+    ethnicity: 'White',
   },
 ];
 
