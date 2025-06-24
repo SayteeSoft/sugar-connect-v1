@@ -17,6 +17,8 @@ export function Header() {
   const pathname = usePathname();
   // A simple way to determine auth status for the prototype
   const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile'].some(path => pathname.startsWith(path));
+  // Simple flag to identify the admin user for the prototype
+  const isAdmin = true;
 
   const renderNavLinks = (isMobile = false) =>
     navLinks.map((link) => (
@@ -73,6 +75,11 @@ export function Header() {
                 </Button>
               </>
             )}
+             {isAdmin && (
+              <Button asChild variant="outline">
+                <Link href="/admin">Admin</Link>
+              </Button>
+            )}
           </div>
           
           <div className="md:hidden">
@@ -103,6 +110,13 @@ export function Header() {
                         <Link href="/signup">Sign Up</Link>
                       </Button>
                     </>
+                  )}
+                  {isAdmin && (
+                    <Button asChild variant="outline" className="w-full justify-start font-semibold text-base">
+                      <Link href="/admin">
+                        Admin
+                      </Link>
+                    </Button>
                   )}
                 </div>
               </SheetContent>
