@@ -8,7 +8,6 @@ import { Footer } from '@/components/Footer';
 import { Testimonials } from '@/components/Testimonials';
 import { SecuritySection } from '@/components/SecuritySection';
 import { ByTheNumbersSection } from '@/components/ByTheNumbersSection';
-import { SugarRelationshipSection } from '@/components/SugarRelationshipSection';
 import { HeroSection } from '@/components/HeroSection';
 
 export default async function Home() {
@@ -35,8 +34,6 @@ export default async function Home() {
         <Testimonials />
 
         <SecuritySection />
-
-        <SugarRelationshipSection />
 
         <ByTheNumbersSection />
 
