@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function SugarRelationshipSection() {
   return (
-    <section className="py-12 md:py-20 bg-secondary">
+    <section className="py-12 md:py-20 bg-background">
       <div className="container mx-auto px-4 text-center max-w-4xl">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground mb-10">
           What is a
