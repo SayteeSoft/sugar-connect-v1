@@ -23,6 +23,7 @@
     --border: 260 20% 90%;
     --input: 260 20% 92%;
     --ring: 259 61% 41%;
+    --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -58,6 +59,7 @@
     --border: 220 6% 20%;
     --input: 220 6% 20%;
     --ring: 259 61% 41%;
+    --radius: 0.5rem;
     --sidebar-background: 220 6% 15%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 259 61% 41%;
