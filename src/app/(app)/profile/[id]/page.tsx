@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
+import { ProfileActions } from './ProfileActions';
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
@@ -58,7 +59,10 @@ export default async function ProfilePage({ params }: { params: { id: string } }
           </div>
           <div className="lg:col-span-2 space-y-8">
             <Card>
-              <CardHeader><CardTitle>About {user.name}</CardTitle></CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>About {user.name}</CardTitle>
+                <ProfileActions userName={user.name} />
+              </CardHeader>
               <CardContent>
                 <p className="text-base leading-relaxed">{user.bio}</p>
               </CardContent>
