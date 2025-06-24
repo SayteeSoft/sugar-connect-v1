@@ -79,7 +79,7 @@ export default function SignupPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {ethnicities.map((ethnicity) => (
-                      <SelectItem key={ethnicity} value={ethnicity.toLowerCase().replace(/ /g, '_')}>
+                      <SelectItem key={ethnicity} value={ethnicity}>
                         {ethnicity}
                       </SelectItem>
                     ))}

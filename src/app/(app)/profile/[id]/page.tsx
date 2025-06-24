@@ -6,16 +6,17 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
 
-const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
+const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const user = await db.getProfileByName(params.id);
+  const user = await db.getProfileById(params.id);
 
   if (!user) {
     notFound();
   }
 
-  const isFemale = femaleNames.includes(user.name);
+  // The admin user (ID 1) was formerly female, so we keep the hint consistent
+  const isFemale = femaleNames.includes(user.name) || user.id === '1';
   const aiHint = isFemale ? 'woman portrait' : 'man portrait';
 
   return (

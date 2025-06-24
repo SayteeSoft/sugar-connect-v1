@@ -51,6 +51,7 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
           <TableRow>
             <TableHead className="w-[80px]">Image</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead className="hidden md:table-cell">Email</TableHead>
             <TableHead className="hidden md:table-cell">Age</TableHead>
             <TableHead className="hidden lg:table-cell">Location</TableHead>
             <TableHead>Actions</TableHead>
@@ -66,26 +67,29 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
                 </Avatar>
               </TableCell>
               <TableCell className="font-medium">{user.name}</TableCell>
+              <TableCell className="hidden md:table-cell">{user.email}</TableCell>
               <TableCell className="hidden md:table-cell">{user.age}</TableCell>
               <TableCell className="hidden lg:table-cell">{user.location}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Button asChild variant="outline" size="icon">
-                    <Link href={`/profile/${user.name}`}>
+                    <Link href={`/profile/${user.id}`}>
                       <Eye className="h-4 w-4" />
                       <span className="sr-only">View</span>
                     </Link>
                   </Button>
-                  <Button variant="outline" size="icon">
-                    <Pencil className="h-4 w-4" />
-                    <span className="sr-only">Edit</span>
+                  <Button asChild variant="outline" size="icon">
+                    <Link href={`/admin/edit/${user.id}`}>
+                      <Pencil className="h-4 w-4" />
+                      <span className="sr-only">Edit</span>
+                    </Link>
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
                         variant="destructive"
                         size="icon"
-                        disabled={user.name === 'Amelia'}
+                        disabled={user.name === 'Admin'}
                       >
                         <Trash2 className="h-4 w-4" />
                         <span className="sr-only">Delete</span>

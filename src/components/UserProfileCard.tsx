@@ -11,10 +11,11 @@ interface UserProfileCardProps {
   isLoggedIn?: boolean;
 }
 
-const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
+const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
 export function UserProfileCard({ user, isLoggedIn = false }: UserProfileCardProps) {
-  const isFemale = femaleNames.includes(user.name);
+  // The admin user (ID 1) was formerly female, so we keep the hint consistent
+  const isFemale = femaleNames.includes(user.name) || user.id === '1';
   const aiHint = isFemale ? 'woman portrait' : 'man portrait';
 
   const imageClasses = cn(
@@ -23,7 +24,7 @@ export function UserProfileCard({ user, isLoggedIn = false }: UserProfileCardPro
   );
 
   return (
-    <Link href={`/profile/${user.name}`} className="block group">
+    <Link href={`/profile/${user.id}`} className="block group">
       <Card className="overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
         <CardContent className="p-0">
           <div className="relative">

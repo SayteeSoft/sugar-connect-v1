@@ -72,7 +72,7 @@ export function Header() {
               <>
                   <Separator className="my-2" />
                   <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
-                      <Link href="/profile/Amelia">
+                      <Link href="/profile/1">
                           <UserCircle className={cn(commonIconClasses)} />
                           My Profile
                       </Link>
@@ -120,7 +120,7 @@ export function Header() {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                      <Link href="/profile/Amelia">
+                      <Link href="/profile/1">
                           <UserCircle className="mr-2 h-4 w-4" />
                           <span>Profile</span>
                       </Link>
