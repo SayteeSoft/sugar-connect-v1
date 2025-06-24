@@ -20,7 +20,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
 
   return (
     <div className="bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto py-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <Card className="sticky top-24">

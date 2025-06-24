@@ -10,6 +10,7 @@ import { SecuritySection } from '@/components/SecuritySection';
 import { ByTheNumbersSection } from '@/components/ByTheNumbersSection';
 import { HeroSection } from '@/components/HeroSection';
 import { WhatIsASection } from '@/components/WhatIsASection';
+import { WhatIsSugarRelationshipSection } from '@/components/WhatIsSugarRelationshipSection';
 
 export default async function Home() {
   const featuredProfiles = await db.getFeaturedProfiles();
@@ -21,7 +22,7 @@ export default async function Home() {
         <HeroSection />
 
         <section className="py-12 md:py-20 bg-background">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">Featured Profiles</h2>
             <p className="text-center text-muted-foreground mt-2 mb-10">Get a glimpse of our exclusive community.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -36,6 +37,8 @@ export default async function Home() {
 
         <SecuritySection />
 
+        <WhatIsSugarRelationshipSection />
+        
         <ByTheNumbersSection />
 
         <WhatIsASection />

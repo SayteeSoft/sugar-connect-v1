@@ -3,7 +3,7 @@ import { AiMatchClient } from './AiMatchClient';
 
 export default function AiMatchPage() {
   return (
-    <div className="container mx-auto max-w-4xl py-8 px-4">
+    <div className="container mx-auto py-8">
       <div className="flex flex-col items-center text-center">
         <Sparkles className="h-16 w-16 text-primary" />
         <h1 className="mt-4 text-4xl font-headline font-bold">AI Matchmaker</h1>

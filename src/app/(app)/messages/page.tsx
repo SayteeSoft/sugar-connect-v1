@@ -49,14 +49,14 @@ export default function MessagesPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4 h-[calc(100vh-4rem)] flex items-center justify-center">
+      <div className="container mx-auto h-[calc(100vh-4rem)] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-0 md:p-4 h-[calc(100vh-4rem)]">
+    <div className="container mx-auto h-[calc(100vh-4rem)]">
       <Card className="h-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 overflow-hidden">
         <div className="flex flex-col border-r md:col-span-1 lg:col-span-1">
             <div className="p-4 border-b">

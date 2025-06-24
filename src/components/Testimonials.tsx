@@ -59,7 +59,7 @@ export function Testimonials() {
 
   return (
     <section className="py-12 md:py-20 bg-secondary">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="flex flex-col items-center gap-4 text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground">
             What Our Members Say

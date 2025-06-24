@@ -43,7 +43,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Heart className="h-7 w-7 text-primary" />
           <span className="text-xl font-headline font-bold text-primary">

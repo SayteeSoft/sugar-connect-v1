@@ -19,7 +19,7 @@ const stats = [
 export function ByTheNumbersSection() {
   return (
     <section className="py-12 md:py-20 bg-secondary">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
           By The Numbers
         </h2>

@@ -22,7 +22,7 @@ const securityFeatures = [
 export function SecuritySection() {
   return (
     <section className="py-12 md:py-20 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground">
           High level security & privacy
         </h2>
