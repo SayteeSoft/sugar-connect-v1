@@ -72,46 +72,61 @@ export function Header() {
       const commonButtonClasses = 'w-full justify-start font-semibold text-base';
       const commonIconClasses = 'mr-2 h-5 w-5 text-primary';
 
+      const menuItems = (
+        <>
+            {!isAdmin && (
+                <Button variant="ghost" className={cn(commonButtonClasses)}>
+                    <CreditCard className={cn(commonIconClasses)} />
+                    Buy Credits
+                </Button>
+            )}
+             <Button variant="ghost" className={cn(commonButtonClasses)}>
+                <Settings className={cn(commonIconClasses)} />
+                Settings
+            </Button>
+             <Button variant="ghost" className={cn(commonButtonClasses)}>
+                <HelpCircle className={cn(commonIconClasses)} />
+                Help
+            </Button>
+            <Separator className="my-2" />
+             <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
+                <Link href="/">
+                    <LogOut className={cn(commonIconClasses)} />
+                    Logout
+                </Link>
+            </Button>
+        </>
+      )
+
+      const dropdownItems = (
+        <>
+            {!isAdmin && (
+                <DropdownMenuItem>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Buy Credits</span>
+                </DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <span>Help</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+                <Link href="/">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                </Link>
+            </DropdownMenuItem>
+        </>
+      )
+
       if (isMobile) {
-          return (
-              <>
-                  <Separator className="my-2" />
-                  <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
-                      <Link href="/profile/1">
-                          <UserCircle className={cn(commonIconClasses)} />
-                          My Profile
-                      </Link>
-                  </Button>
-                  {isAdmin ? (
-                      <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
-                          <Link href="/admin">
-                              <Shield className={cn(commonIconClasses)} />
-                              Admin Dashboard
-                          </Link>
-                      </Button>
-                  ) : (
-                      <Button variant="ghost" className={cn(commonButtonClasses)}>
-                          <CreditCard className={cn(commonIconClasses)} />
-                          Buy Credits
-                      </Button>
-                  )}
-                   <Button variant="ghost" className={cn(commonButtonClasses)}>
-                      <Settings className={cn(commonIconClasses)} />
-                      Settings
-                  </Button>
-                   <Button variant="ghost" className={cn(commonButtonClasses)}>
-                      <HelpCircle className={cn(commonIconClasses)} />
-                      Help
-                  </Button>
-                  <Separator className="my-2" />
-                   <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
-                      <Link href="/">
-                          <LogOut className={cn(commonIconClasses)} />
-                          Logout
-                      </Link>
-                  </Button>
-              </>
-          )
+          return menuItems;
       }
 
       return (
@@ -130,35 +145,7 @@ export function Header() {
                           <span>Profile</span>
                       </Link>
                   </DropdownMenuItem>
-                  {isAdmin ? (
-                      <DropdownMenuItem asChild>
-                          <Link href="/admin">
-                              <Shield className="mr-2 h-4 w-4" />
-                              <span>Admin Dashboard</span>
-                          </Link>
-                      </DropdownMenuItem>
-                  ) : (
-                      <DropdownMenuItem>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          <span>Buy Credits</span>
-                      </DropdownMenuItem>
-                  )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                      <HelpCircle className="mr-2 h-4 w-4" />
-                      <span>Help</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                      <Link href="/">
-                          <LogOut className="mr-2 h-4 w-4" />
-                          <span>Logout</span>
-                      </Link>
-                  </DropdownMenuItem>
+                  {dropdownItems}
               </DropdownMenuContent>
           </DropdownMenu>
       )
@@ -183,7 +170,16 @@ export function Header() {
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 md:flex">
             {isLoggedIn ? (
-              renderAccountMenuItems(false)
+              <>
+                {isAdmin && (
+                   <Button asChild>
+                     <Link href="/admin">
+                       <Shield className="mr-2 h-4 w-4" /> Admin
+                     </Link>
+                   </Button>
+                )}
+                {renderAccountMenuItems(false)}
+              </>
             ) : (
               <>
                 <Button asChild variant="ghost">
@@ -208,6 +204,20 @@ export function Header() {
                   {isLoggedIn ? (
                     <>
                       {renderNavLinks(true)}
+                       <Separator className="my-2" />
+                       <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                          <Link href="/profile/1">
+                            <UserCircle className="mr-2 h-5 w-5 text-primary" />
+                            My Profile
+                          </Link>
+                       </Button>
+                      {isAdmin && (
+                         <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                           <Link href="/admin">
+                             <Shield className="mr-2 h-5 w-5 text-primary" /> Admin
+                           </Link>
+                         </Button>
+                      )}
                       {renderAccountMenuItems(true)}
                     </>
                   ) : (
