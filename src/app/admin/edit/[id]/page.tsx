@@ -20,9 +20,7 @@ export default async function EditProfilePage({ params }: { params: { id: string
         </p>
       </div>
 
-      <div className="mt-8">
-        <EditProfileForm user={user} />
-      </div>
+      <EditProfileForm user={user} />
     </div>
   );
 }

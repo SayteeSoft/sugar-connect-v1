@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2 } from 'lucide-react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 
 interface EditProfileFormProps {
@@ -40,8 +38,6 @@ const ethnicities = [
 ];
 
 const bodyTypes = ["Slim", "Athletic", "Average", "Curvy", "A few extra pounds"];
-const hairColors = ["Blonde", "Brown", "Black", "Red", "Grey", "Other"];
-const eyeColors = ["Blue", "Green", "Brown", "Hazel", "Grey", "Other"];
 const piercingsOptions = ["None", "Ears", "Nose", "Other"];
 const tattoosOptions = ["None", "One", "Multiple", "Hidden", "Full Sleeve"];
 const smokesOptions = ["No", "Socially", "Regularly"];
@@ -101,168 +97,185 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl">Editing {user.name}</CardTitle>
-        <CardDescription>Make your changes below and click save.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form className="space-y-4" onSubmit={handleSave}>
-          <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" value={formData.name} onChange={handleChange} required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={formData.email} onChange={handleChange} required />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                  <Label htmlFor="age">Age</Label>
-                  <Input id="age" type="number" value={formData.age} onChange={handleChange} required />
-              </div>
-              <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input id="location" value={formData.location} onChange={handleChange} required />
-              </div>
-          </div>
-           <div className="space-y-2">
-            <Label htmlFor="ethnicity">Ethnicity</Label>
-            <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
-              <SelectTrigger id="ethnicity">
-                <SelectValue placeholder="Select an ethnicity" />
-              </SelectTrigger>
-              <SelectContent>
-                {ethnicities.map((ethnicity) => (
-                  <SelectItem key={ethnicity} value={ethnicity}>
-                    {ethnicity}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-           <div className="space-y-2">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" value={formData.bio} onChange={handleChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="interests">Interests</Label>
-            <Input id="interests" value={formData.interests} onChange={handleChange} />
-            <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
-          </div>
-
-          <h3 className="text-lg font-semibold border-t pt-4 mt-6">Media</h3>
-
-          <div className="space-y-2">
-            <Label>Profile Picture</Label>
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                <AvatarImage src={formData.profileImage} alt={formData.name} />
-                <AvatarFallback>{formData.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <Input
-                id="profileImage"
-                value={formData.profileImage}
-                onChange={handleChange}
-                placeholder="https://..."
-              />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <Label>Gallery</Label>
-            <div className="space-y-2">
-              {formData.gallery.map((url, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Image
-                    src={url || 'https://placehold.co/100x100.png'}
-                    alt={`Gallery image ${index + 1}`}
-                    width={40}
-                    height={40}
-                    className="rounded-md object-cover aspect-square"
+    <form onSubmit={handleSave} className="mt-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        
+        {/* Left Column */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-24">
+            <CardContent className="p-0">
+              <div className="relative">
+                 <Image
+                    src={formData.profileImage || 'https://placehold.co/400x400.png'}
+                    alt={formData.name}
+                    width={400}
+                    height={400}
+                    className="aspect-square w-full rounded-t-lg object-cover"
                     data-ai-hint="placeholder"
-                  />
-                  <Input
-                    value={url}
-                    onChange={(e) => handleGalleryChange(index, e.target.value)}
-                    placeholder="https://..."
-                  />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => handleRemoveGalleryImage(index)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                />
+              </div>
+               <div className="p-6 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="profileImage">Profile Image URL</Label>
+                    <Input id="profileImage" value={formData.profileImage} onChange={handleChange} placeholder="https://..." />
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" value={formData.name} onChange={handleChange} required />
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="age">Age</Label>
+                      <Input id="age" type="number" value={formData.age} onChange={handleChange} required />
+                  </div>
+                   <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" value={formData.email} onChange={handleChange} required />
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="location">Location</Label>
+                      <Input id="location" value={formData.location} onChange={handleChange} required />
+                  </div>
+               </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column */}
+        <div className="lg:col-span-2 space-y-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="bio">Bio</Label>
+                <Textarea id="bio" value={formData.bio} onChange={handleChange} rows={5} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="interests">Interests</Label>
+                <Input id="interests" value={formData.interests} onChange={handleChange} />
+                <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Gallery</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Label>Gallery Image URLs</Label>
+                <div className="space-y-2">
+                  {formData.gallery.map((url, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Image
+                        src={url || 'https://placehold.co/100x100.png'}
+                        alt={`Gallery image ${index + 1}`}
+                        width={40}
+                        height={40}
+                        className="rounded-md object-cover aspect-square"
+                        data-ai-hint="placeholder"
+                      />
+                      <Input
+                        value={url}
+                        onChange={(e) => handleGalleryChange(index, e.target.value)}
+                        placeholder="https://..."
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => handleRemoveGalleryImage(index)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <Button type="button" variant="outline" onClick={handleAddGalleryImage}>
-              Add Gallery Image
-            </Button>
-          </div>
-          
-          <h3 className="text-lg font-semibold border-t pt-4 mt-6">Attributes</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="height">Height</Label>
-              <Input id="height" value={formData.height || ''} onChange={handleChange} placeholder="e.g., 5' 10&quot;" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bodyType">Body Type</Label>
-              <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
-                <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="hairColor">Hair Color</Label>
-              <Input id="hairColor" value={formData.hairColor || ''} onChange={handleChange} placeholder="e.g., Brown" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="eyeColor">Eye Color</Label>
-               <Input id="eyeColor" value={formData.eyeColor || ''} onChange={handleChange} placeholder="e.g., Blue" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="piercings">Piercings</Label>
-              <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
-                <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="tattoos">Tattoos</Label>
-              <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
-                <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="smokes">Smokes</Label>
-              <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
-                <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="drinks">Drinks</Label>
-              <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
-                <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="education">Education</Label>
-              <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
-                <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <Button type="submit" className="w-full !mt-6" size="lg" disabled={isSaving}>
+                <Button type="button" variant="outline" onClick={handleAddGalleryImage}>
+                  Add Gallery Image
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Attributes</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="ethnicity">Ethnicity</Label>
+                    <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
+                      <SelectTrigger id="ethnicity"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{ethnicities.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="height">Height</Label>
+                    <Input id="height" value={formData.height || ''} onChange={handleChange} placeholder="e.g., 5' 10&quot;" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bodyType">Body Type</Label>
+                    <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
+                      <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="hairColor">Hair Color</Label>
+                    <Input id="hairColor" value={formData.hairColor || ''} onChange={handleChange} placeholder="e.g., Brown" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="eyeColor">Eye Color</Label>
+                    <Input id="eyeColor" value={formData.eyeColor || ''} onChange={handleChange} placeholder="e.g., Blue" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="piercings">Piercings</Label>
+                    <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
+                      <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tattoos">Tattoos</Label>
+                    <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
+                      <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="smokes">Smokes</Label>
+                    <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
+                      <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="drinks">Drinks</Label>
+                    <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
+                      <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="education">Education</Label>
+                    <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
+                      <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
+                      <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
+                </div>
+            </CardContent>
+          </Card>
+
+          <Button type="submit" className="w-full" size="lg" disabled={isSaving}>
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -272,8 +285,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               'Save Changes'
             )}
           </Button>
-        </form>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </form>
   );
 }
