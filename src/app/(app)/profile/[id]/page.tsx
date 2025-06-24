@@ -35,7 +35,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                     data-ai-hint={aiHint}
                 />
                  <div className="p-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <h1 className="text-3xl font-bold font-headline">{user.name}, {user.age}</h1>
                       {user.isVerified && (
                         <Badge variant="default" className="bg-primary text-primary-foreground">
