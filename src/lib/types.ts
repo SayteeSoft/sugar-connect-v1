@@ -11,4 +11,13 @@ export interface UserProfile {
   gallery: string[];
   ethnicity: string;
   password?: string;
+  height?: string;
+  bodyType?: string;
+  hairColor?: string;
+  eyeColor?: string;
+  piercings?: string;
+  tattoos?: string;
+  smokes?: string;
+  drinks?: string;
+  education?: string;
 }

@@ -35,6 +35,25 @@ const ethnicities = [
   "Other ethnic group",
 ];
 
+const bodyTypes = ["Slim", "Athletic", "Average", "Curvy", "A few extra pounds"];
+const hairColors = ["Blonde", "Brown", "Black", "Red", "Grey", "Other"];
+const eyeColors = ["Blue", "Green", "Brown", "Hazel", "Grey", "Other"];
+const piercingsOptions = ["None", "Ears", "Nose", "Other"];
+const tattoosOptions = ["None", "One", "Multiple", "Hidden", "Full Sleeve"];
+const smokesOptions = ["No", "Socially", "Regularly"];
+const drinksOptions = ["No", "Socially", "Regularly", "Daily"];
+const educationOptions = [
+  "High School",
+  "Some College",
+  "Associate Degree",
+  "Bachelor's Degree",
+  "Master's Degree",
+  "PhD / Doctorate",
+  "MD",
+  "MBA",
+  "Juris Doctor"
+];
+
 export function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState({ ...user, interests: user.interests.join(', ') });
   const [isSaving, setIsSaving] = useState(false);
@@ -57,13 +76,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   
-  const handleSelectChange = (value: string) => {
-    setFormData({ ...formData, ethnicity: value });
+  const handleSelectChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
   };
 
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl">Editing {user.name}</CardTitle>
         <CardDescription>Make your changes below and click save.</CardDescription>
@@ -90,7 +109,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           </div>
            <div className="space-y-2">
             <Label htmlFor="ethnicity">Ethnicity</Label>
-            <Select onValueChange={handleSelectChange} defaultValue={formData.ethnicity}>
+            <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
               <SelectTrigger id="ethnicity">
                 <SelectValue placeholder="Select an ethnicity" />
               </SelectTrigger>
@@ -103,7 +122,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
+           <div className="space-y-2">
             <Label htmlFor="bio">Bio</Label>
             <Textarea id="bio" value={formData.bio} onChange={handleChange} />
           </div>
@@ -112,6 +131,66 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <Input id="interests" value={formData.interests} onChange={handleChange} />
             <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
           </div>
+          
+          <h3 className="text-lg font-semibold border-t pt-4 mt-6">Attributes</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="height">Height</Label>
+              <Input id="height" value={formData.height || ''} onChange={handleChange} placeholder="e.g., 5' 10&quot;" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="bodyType">Body Type</Label>
+              <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
+                <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="hairColor">Hair Color</Label>
+              <Input id="hairColor" value={formData.hairColor || ''} onChange={handleChange} placeholder="e.g., Brown" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="eyeColor">Eye Color</Label>
+               <Input id="eyeColor" value={formData.eyeColor || ''} onChange={handleChange} placeholder="e.g., Blue" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="piercings">Piercings</Label>
+              <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
+                <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tattoos">Tattoos</Label>
+              <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
+                <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="smokes">Smokes</Label>
+              <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
+                <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="drinks">Drinks</Label>
+              <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
+                <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+             <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="education">Education</Label>
+              <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
+                <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </div>
+          
           <Button type="submit" className="w-full !mt-6" size="lg" disabled={isSaving}>
             {isSaving ? (
               <>

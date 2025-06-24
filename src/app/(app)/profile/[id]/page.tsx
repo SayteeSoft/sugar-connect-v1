@@ -9,6 +9,22 @@ import { ProfileActions } from './ProfileActions';
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
+const AttributeItem = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | undefined;
+}) => {
+  if (!value) return null;
+  return (
+    <div className="flex justify-between border-b py-3 text-sm last:border-none">
+      <span className="font-semibold text-foreground">{label}</span>
+      <span className="text-muted-foreground">{value}</span>
+    </div>
+  );
+};
+
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const user = await db.getProfileById(params.id);
 
@@ -84,6 +100,26 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                   {user.gallery.map((img, index) => (
                     <Image key={index} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Attributes</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-1">
+                  <AttributeItem label="Age" value={user.age} />
+                  <AttributeItem label="Height" value={user.height} />
+                  <AttributeItem label="Body Type" value={user.bodyType} />
+                  <AttributeItem label="Ethnicity" value={user.ethnicity} />
+                  <AttributeItem label="Hair Color" value={user.hairColor} />
+                  <AttributeItem label="Eye Color" value={user.eyeColor} />
+                  <AttributeItem label="Piercings" value={user.piercings} />
+                  <AttributeItem label="Tattoos" value={user.tattoos} />
+                  <AttributeItem label="Smokes" value={user.smokes} />
+                  <AttributeItem label="Drinks" value={user.drinks} />
+                  <AttributeItem label="Education" value={user.education} />
                 </div>
               </CardContent>
             </Card>
