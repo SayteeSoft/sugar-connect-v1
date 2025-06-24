@@ -23,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -48,6 +49,7 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[80px]">Image</TableHead>
             <TableHead>Name</TableHead>
             <TableHead className="hidden md:table-cell">Age</TableHead>
             <TableHead className="hidden lg:table-cell">Location</TableHead>
@@ -57,6 +59,12 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
         <TableBody>
           {profiles.map((user) => (
             <TableRow key={user.id}>
+              <TableCell>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={user.profileImage} alt={user.name} />
+                  <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+              </TableCell>
               <TableCell className="font-medium">{user.name}</TableCell>
               <TableCell className="hidden md:table-cell">{user.age}</TableCell>
               <TableCell className="hidden lg:table-cell">{user.location}</TableCell>
