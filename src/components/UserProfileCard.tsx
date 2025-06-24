@@ -9,7 +9,12 @@ interface UserProfileCardProps {
   user: UserProfile;
 }
 
+const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
+
 export function UserProfileCard({ user }: UserProfileCardProps) {
+  const isFemale = femaleNames.includes(user.name);
+  const aiHint = isFemale ? 'woman portrait' : 'man portrait';
+
   return (
     <Link href={`/profile/${user.id}`} className="block group">
       <Card className="overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
@@ -20,7 +25,8 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               alt={user.name}
               width={400}
               height={400}
-              className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="aspect-square w-full object-cover transition-all duration-300 group-hover:scale-105 filter saturate-50 opacity-80 group-hover:saturate-100 group-hover:opacity-100"
+              data-ai-hint={aiHint}
             />
             {user.isVerified && (
               <Badge variant="default" className="absolute top-2 right-2 bg-primary/80 border-none text-primary-foreground">

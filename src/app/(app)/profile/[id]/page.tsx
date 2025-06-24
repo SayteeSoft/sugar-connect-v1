@@ -6,12 +6,17 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
 
+const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
+
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const user = await db.getProfileById(params.id);
 
   if (!user) {
     notFound();
   }
+
+  const isFemale = femaleNames.includes(user.name);
+  const aiHint = isFemale ? 'woman portrait' : 'man portrait';
 
   return (
     <div className="bg-background">
@@ -26,6 +31,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                     width={400}
                     height={400}
                     className="aspect-square w-full rounded-t-lg object-cover"
+                    data-ai-hint={aiHint}
                 />
                  <div className="p-6">
                     <div className="flex items-center justify-between">
@@ -69,7 +75,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   {user.gallery.map((img, index) => (
-                    <Image key={index} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" />
+                    <Image key={index} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
                   ))}
                 </div>
               </CardContent>
