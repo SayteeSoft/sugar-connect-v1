@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import type { UserProfile } from '@/lib/types';
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Loader2, Trash2, Upload } from 'lucide-react';
 
 
 interface EditProfileFormProps {
@@ -58,6 +58,20 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState({ ...user, interests: user.interests.join(', ') });
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+
+  const galleryJson = JSON.stringify(formData.gallery);
+
+  useEffect(() => {
+    const firstImage = formData.gallery[0];
+    const newProfileImage = firstImage !== undefined ? firstImage : 'https://placehold.co/400x400.png';
+
+    if (formData.profileImage !== newProfileImage) {
+      setFormData(prev => ({
+        ...prev,
+        profileImage: newProfileImage
+      }));
+    }
+  }, [galleryJson, formData.profileImage]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,10 +130,6 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               </div>
                <div className="p-6 space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="profileImage">Profile Image URL</Label>
-                    <Input id="profileImage" value={formData.profileImage} onChange={handleChange} placeholder="https://..." />
-                  </div>
-                  <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
                       <Input id="name" value={formData.name} onChange={handleChange} required />
                   </div>
@@ -166,7 +176,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Gallery</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Gallery</CardTitle></Header>
             <CardContent>
               <div className="space-y-4">
                 <Label>Gallery Image URLs</Label>
@@ -186,6 +196,14 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                         onChange={(e) => handleGalleryChange(index, e.target.value)}
                         placeholder="https://..."
                       />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => alert('Upload functionality not implemented.')}
+                      >
+                        <Upload className="h-4 w-4" />
+                      </Button>
                       <Button
                         type="button"
                         variant="destructive"
