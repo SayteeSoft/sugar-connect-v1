@@ -43,7 +43,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <Heart className="h-7 w-7 text-primary" />
           <span className="text-xl font-headline font-bold text-primary">
-            UK Sugar Connect
+            Sugar Connect
           </span>
         </Link>
 

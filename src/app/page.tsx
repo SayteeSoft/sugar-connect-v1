@@ -14,8 +14,8 @@ export default async function Home() {
         <section className="relative h-[70vh] md:h-[80vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{backgroundImage: "url('https://placehold.co/1920x1080.png')"}} data-ai-hint="romantic london night">
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative z-10 p-4">
-            <h1 className="text-4xl md:text-6xl font-headline font-bold !text-white drop-shadow-lg">UK Sugar Connect</h1>
-            <p className="mt-4 text-lg md:text-2xl font-body max-w-2xl mx-auto !text-gray-200">The UK's exclusive platform for ambitious and attractive individuals.</p>
+            <h1 className="text-4xl md:text-6xl font-headline font-bold !text-white drop-shadow-lg">Sugar Connect</h1>
+            <p className="mt-4 text-lg md:text-2xl font-body max-w-2xl mx-auto !text-gray-200">An exclusive platform for ambitious and attractive individuals.</p>
             <div className="mt-8 flex flex-col items-center gap-4">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button asChild size="lg" className="bg-white/90 hover:bg-white text-primary font-bold text-lg px-8 py-6 rounded-full transition-transform duration-300 ease-in-out hover:scale-105">

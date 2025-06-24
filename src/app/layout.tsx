@@ -3,8 +3,8 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'UK Sugar Connect',
-  description: 'Find Your Perfect Connection in the UK.',
+  title: 'Sugar Connect',
+  description: 'Find Your Perfect Connection.',
   icons: {
     icon: '/favicon.ico',
   }
