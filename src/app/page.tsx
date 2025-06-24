@@ -4,6 +4,7 @@ import { UserProfileCard } from '@/components/UserProfileCard';
 import { db } from '@/lib/db';
 import { Heart } from 'lucide-react';
 import { Footer } from '@/components/Footer';
+import { Testimonials } from '@/components/Testimonials';
 
 export default async function Home() {
   const featuredProfiles = await db.getFeaturedProfiles();
@@ -46,6 +47,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <Testimonials />
+
       </main>
 
        <Footer />
