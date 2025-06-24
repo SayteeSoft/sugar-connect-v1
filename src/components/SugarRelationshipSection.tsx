@@ -8,11 +8,7 @@ export function SugarRelationshipSection() {
   return (
     <section className="py-12 md:py-20 bg-secondary">
       <div className="container mx-auto px-4 text-center max-w-4xl">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground leading-tight">
-          What is a...
-        </h2>
-
-        <Tabs defaultValue="sugar-daddy" className="mt-8 w-full">
+        <Tabs defaultValue="sugar-daddy" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-sm mx-auto">
             <TabsTrigger value="sugar-daddy">Sugar Daddy</TabsTrigger>
             <TabsTrigger value="sugar-baby">Sugar Baby</TabsTrigger>
