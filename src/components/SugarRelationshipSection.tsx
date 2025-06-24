@@ -8,12 +8,22 @@ export function SugarRelationshipSection() {
     <section className="py-12 md:py-20 bg-background">
       <div className="container mx-auto px-4 text-center max-w-4xl">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground mb-10">
-          What is a
+          What is a...
         </h2>
         <Tabs defaultValue="sugar-daddy" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-sm mx-auto">
-            <TabsTrigger value="sugar-daddy">Sugar Daddy</TabsTrigger>
-            <TabsTrigger value="sugar-baby">Sugar Baby</TabsTrigger>
+            <TabsTrigger
+              value="sugar-daddy"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Sugar Daddy
+            </TabsTrigger>
+            <TabsTrigger
+              value="sugar-baby"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Sugar Baby
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="sugar-daddy">
              <Card className="mt-6 text-left bg-card">
