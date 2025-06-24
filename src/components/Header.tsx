@@ -31,7 +31,7 @@ export function Header() {
         )}
       >
         <Link href={link.href}>
-          <link.icon className="mr-2 h-5 w-5 text-[#D62828]" />
+          <link.icon className="mr-2 h-5 w-5 text-primary" />
           {link.label}
         </Link>
       </Button>
