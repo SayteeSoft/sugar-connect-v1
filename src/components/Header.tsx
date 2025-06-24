@@ -178,6 +178,7 @@ export function Header() {
                      </Link>
                    </Button>
                 )}
+                <ThemeSwitcher />
                 {renderAccountMenuItems(false)}
               </>
             ) : (
@@ -188,11 +189,13 @@ export function Header() {
                 <Button asChild>
                   <Link href="/signup">Sign Up</Link>
                 </Button>
+                <ThemeSwitcher />
               </>
             )}
           </div>
           
-          <div className="md:hidden">
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeSwitcher />
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -234,7 +237,6 @@ export function Header() {
               </SheetContent>
             </Sheet>
           </div>
-          <ThemeSwitcher />
         </div>
       </div>
     </header>
