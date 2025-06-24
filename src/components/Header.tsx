@@ -30,9 +30,9 @@ import {
 import { Separator } from './ui/separator';
 
 const navLinks = [
+  { href: '/profile/1', label: 'Profile', icon: UserCircle },
   { href: '/messages', label: 'Messages', icon: MessageSquare },
   { href: '/search', label: 'Search', icon: Search },
-  { href: '/profile/1', label: 'Profile', icon: UserCircle },
   { href: '/ai-match', label: 'AI Match', icon: Sparkles },
 ];
 
