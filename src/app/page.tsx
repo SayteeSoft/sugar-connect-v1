@@ -17,7 +17,7 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow">
-        <section className="relative h-[70vh] md:h-[80vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{backgroundImage: "url('https://placehold.co/1920x1080.png')"}} data-ai-hint="romantic london night">
+        <section className="relative h-[70vh] md:h-[80vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{backgroundImage: "url('https://web-developer.one/imgs/sugar-daddy-002.jpg')"}} data-ai-hint="romantic london night">
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative z-10 p-4">
             <h1 className="text-4xl md:text-6xl font-headline font-bold !text-white drop-shadow-lg">Sugar Connect</h1>
