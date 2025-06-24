@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { Testimonials } from '@/components/Testimonials';
 import { SecuritySection } from '@/components/SecuritySection';
 import { ByTheNumbersSection } from '@/components/ByTheNumbersSection';
+import { SugarRelationshipSection } from '@/components/SugarRelationshipSection';
 
 export default async function Home() {
   const featuredProfiles = await db.getFeaturedProfiles();
@@ -51,6 +52,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <SugarRelationshipSection />
 
         <Testimonials />
 
