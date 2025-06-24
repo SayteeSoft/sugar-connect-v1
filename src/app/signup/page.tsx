@@ -23,8 +23,8 @@ export default function SignupPage() {
               <div className="flex justify-center mb-4">
                   <Heart className="h-12 w-12 text-primary" />
               </div>
-            <CardTitle className="text-3xl font-headline">Create Your Profile</CardTitle>
-            <CardDescription>Join UK Sugar Connect and start your journey.</CardDescription>
+            <CardTitle className="text-3xl font-headline">100% Free Signup</CardTitle>
+            <CardDescription>It only takes a minute to create your free profile and find your match.</CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
