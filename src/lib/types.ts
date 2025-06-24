@@ -10,4 +10,5 @@ export interface UserProfile {
   isVerified: boolean;
   gallery: string[];
   ethnicity: string;
+  password?: string;
 }
