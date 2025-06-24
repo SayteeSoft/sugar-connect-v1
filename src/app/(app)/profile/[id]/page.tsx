@@ -27,23 +27,25 @@ export default async function ProfilePage({ params }: { params: { id: string } }
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardContent className="p-0">
-                 <Image
-                    src={user.profileImage}
-                    alt={user.name}
-                    width={400}
-                    height={400}
-                    className="aspect-square w-full rounded-t-lg object-cover"
-                    data-ai-hint={aiHint}
-                />
+                <div className="relative">
+                   <Image
+                      src={user.profileImage}
+                      alt={user.name}
+                      width={400}
+                      height={400}
+                      className="aspect-square w-full rounded-t-lg object-cover"
+                      data-ai-hint={aiHint}
+                  />
+                   {user.isVerified && (
+                    <Badge variant="default" className="absolute top-2 right-2 bg-primary/80 border-none text-primary-foreground backdrop-blur-sm">
+                        <CheckCircle className="w-4 h-4 mr-1.5" />
+                        Verified
+                    </Badge>
+                  )}
+                </div>
                  <div className="p-6">
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <h1 className="text-3xl font-bold font-headline">{user.name}, {user.age}</h1>
-                      {user.isVerified && (
-                        <Badge variant="default" className="bg-primary text-primary-foreground">
-                            <CheckCircle className="w-4 h-4 mr-1.5" />
-                            Verified
-                        </Badge>
-                      )}
                     </div>
                     <div className="flex items-center text-muted-foreground mt-2">
                       <MapPin className="w-4 h-4 mr-2" />
