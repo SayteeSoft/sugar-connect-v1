@@ -15,6 +15,8 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
+  // A simple way to determine auth status for the prototype
+  const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile'].some(path => pathname.startsWith(path));
 
   const renderNavLinks = (isMobile = false) =>
     navLinks.map((link) => (
@@ -47,18 +49,32 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-4 md:flex">
-          {renderNavLinks()}
-        </nav>
+        {isLoggedIn && (
+          <nav className="hidden items-center gap-4 md:flex">
+            {renderNavLinks()}
+          </nav>
+        )}
 
         <div className="flex items-center gap-2">
-           <Button asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
-          <Button variant="ghost" size="icon">
-             <UserCircle className="h-6 w-6" />
-          </Button>
-
+          <div className="hidden md:flex items-center gap-2">
+            {isLoggedIn ? (
+               <Button asChild variant="ghost" size="icon">
+                <Link href="/profile/Amelia">
+                  <UserCircle className="h-6 w-6" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
+          </div>
+          
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
@@ -68,7 +84,26 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right">
                 <div className="flex flex-col gap-4 py-6">
-                  {renderNavLinks(true)}
+                  {isLoggedIn ? (
+                    <>
+                      {renderNavLinks(true)}
+                       <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                        <Link href="/profile/Amelia">
+                          <UserCircle className="mr-2 h-5 w-5 text-primary" />
+                          My Profile
+                        </Link>
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                        <Link href="/login">Login</Link>
+                      </Button>
+                      <Button asChild className="w-full justify-start font-semibold text-base">
+                        <Link href="/signup">Sign Up</Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>

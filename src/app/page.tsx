@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { UserProfileCard } from '@/components/UserProfileCard';
 import { db } from '@/lib/db';
 import { Heart } from 'lucide-react';
+import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Testimonials } from '@/components/Testimonials';
 import { SecuritySection } from '@/components/SecuritySection';
@@ -12,6 +13,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <Header />
       <main className="flex-grow">
         <section className="relative h-[70vh] md:h-[80vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{backgroundImage: "url('https://placehold.co/1920x1080.png')"}} data-ai-hint="romantic london night">
           <div className="absolute inset-0 bg-black/50" />
