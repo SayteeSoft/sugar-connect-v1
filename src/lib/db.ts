@@ -1,3 +1,4 @@
+
 import type { UserProfile } from './types';
 
 const allProfiles: UserProfile[] = [
@@ -12,6 +13,9 @@ const allProfiles: UserProfile[] = [
     profileImage: 'https://placehold.co/400x400.png',
     isVerified: true,
     gallery: [
+      'https://placehold.co/600x400.png',
+      'https://placehold.co/600x400.png',
+      'https://placehold.co/600x400.png',
       'https://placehold.co/600x400.png',
       'https://placehold.co/600x400.png',
       'https://placehold.co/600x400.png',

@@ -1,6 +1,8 @@
+
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import type { UserProfile } from '@/lib/types';
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
 
 interface EditProfileFormProps {
   user: UserProfile;
@@ -80,6 +84,21 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setFormData({ ...formData, [field]: value });
   };
 
+  const handleGalleryChange = (index: number, value: string) => {
+    const newGallery = [...formData.gallery];
+    newGallery[index] = value;
+    setFormData({ ...formData, gallery: newGallery });
+  };
+
+  const handleAddGalleryImage = () => {
+    setFormData({ ...formData, gallery: [...formData.gallery, ''] });
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    const newGallery = formData.gallery.filter((_, i) => i !== index);
+    setFormData({ ...formData, gallery: newGallery });
+  };
+
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -130,6 +149,58 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <Label htmlFor="interests">Interests</Label>
             <Input id="interests" value={formData.interests} onChange={handleChange} />
             <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
+          </div>
+
+          <h3 className="text-lg font-semibold border-t pt-4 mt-6">Media</h3>
+
+          <div className="space-y-2">
+            <Label>Profile Picture</Label>
+            <div className="flex items-center gap-4">
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={formData.profileImage} alt={formData.name} />
+                <AvatarFallback>{formData.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <Input
+                id="profileImage"
+                value={formData.profileImage}
+                onChange={handleChange}
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <Label>Gallery</Label>
+            <div className="space-y-2">
+              {formData.gallery.map((url, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <Image
+                    src={url || 'https://placehold.co/100x100.png'}
+                    alt={`Gallery image ${index + 1}`}
+                    width={40}
+                    height={40}
+                    className="rounded-md object-cover aspect-square"
+                    data-ai-hint="placeholder"
+                  />
+                  <Input
+                    value={url}
+                    onChange={(e) => handleGalleryChange(index, e.target.value)}
+                    placeholder="https://..."
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => handleRemoveGalleryImage(index)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" onClick={handleAddGalleryImage}>
+              Add Gallery Image
+            </Button>
           </div>
           
           <h3 className="text-lg font-semibold border-t pt-4 mt-6">Attributes</h3>
