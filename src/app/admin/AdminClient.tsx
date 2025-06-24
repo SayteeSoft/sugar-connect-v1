@@ -117,7 +117,7 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
                             <Button
                               variant="destructive"
                               size="icon"
-                              disabled={user.name === 'Admin'}
+                              disabled={user.id === '1'}
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="sr-only">Delete {user.name}</span>

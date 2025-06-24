@@ -36,12 +36,16 @@ const navLinks = [
   { href: '/ai-match', label: 'AI Match', icon: Sparkles },
 ];
 
+// In a real app, you would get this from your authentication system.
+// For the prototype, we can easily toggle between admin ('1') and a regular user ('2').
+const MOCK_CURRENT_USER_ID = '1';
+
 export function Header() {
   const pathname = usePathname();
   // A simple way to determine auth status for the prototype
   const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile', '/admin'].some(path => pathname.startsWith(path));
-  // Simple flag to identify the admin user for the prototype
-  const isAdmin = true;
+  // The user with ID '1' is the admin.
+  const isAdmin = MOCK_CURRENT_USER_ID === '1';
 
   const renderNavLinks = (isMobile = false) =>
     navLinks.map((link) => (
