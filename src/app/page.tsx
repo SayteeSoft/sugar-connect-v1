@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { UserProfileCard } from '@/components/UserProfileCard';
-import { featuredProfiles } from '@/lib/mock-data';
+import { db } from '@/lib/db';
 import { Heart } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 
-export default function Home() {
+export default async function Home() {
+  const featuredProfiles = await db.getFeaturedProfiles();
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">

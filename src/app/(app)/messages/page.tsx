@@ -1,24 +1,59 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { conversations, messages as allMessages } from '@/lib/mock-data';
+import { db } from '@/lib/db';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Send, Search } from 'lucide-react';
+import { Send, Search, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+type Conversation = {
+    id: string;
+    userId: string;
+    userName: string;
+    lastMessage: string;
+    avatar: string;
+    unreadCount: number;
+}
 
 type Messages = {
     [key: string]: { id: string; sender: string; text: string }[];
 }
 
 export default function MessagesPage() {
-  const [selectedConv, setSelectedConv] = useState(conversations[0]);
-  const [messages] = useState<Messages>(allMessages);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [messages, setMessages] = useState<Messages>({});
+  const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [convos, msgs] = await Promise.all([
+        db.getConversations(),
+        db.getMessages(),
+      ]);
+      setConversations(convos);
+      setMessages(msgs);
+      if (convos.length > 0) {
+        setSelectedConv(convos[0]);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4 h-[calc(100vh-4rem)] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-0 md:p-4 h-[calc(100vh-4rem)]">
@@ -38,7 +73,7 @@ export default function MessagesPage() {
                 onClick={() => setSelectedConv(conv)}
                 className={cn(
                   "flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-accent",
-                  selectedConv.id === conv.id && "bg-accent"
+                  selectedConv?.id === conv.id && "bg-accent"
                 )}
               >
                 <Avatar className="h-12 w-12">

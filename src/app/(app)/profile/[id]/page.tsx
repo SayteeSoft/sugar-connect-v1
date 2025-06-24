@@ -1,13 +1,13 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { allProfiles } from '@/lib/mock-data';
+import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
 
-export default function ProfilePage({ params }: { params: { id: string } }) {
-  const user = allProfiles.find(p => p.id === params.id);
+export default async function ProfilePage({ params }: { params: { id: string } }) {
+  const user = await db.getProfileById(params.id);
 
   if (!user) {
     notFound();
