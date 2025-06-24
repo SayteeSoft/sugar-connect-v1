@@ -9,7 +9,7 @@ import { Testimonials } from '@/components/Testimonials';
 import { SecuritySection } from '@/components/SecuritySection';
 import { ByTheNumbersSection } from '@/components/ByTheNumbersSection';
 import { HeroSection } from '@/components/HeroSection';
-import { WhatIsSugarRelationshipSection } from '@/components/WhatIsSugarRelationshipSection';
+import { WhatIsASection } from '@/components/WhatIsASection';
 
 export default async function Home() {
   const featuredProfiles = await db.getFeaturedProfiles();
@@ -38,7 +38,7 @@ export default async function Home() {
 
         <ByTheNumbersSection />
 
-        <WhatIsSugarRelationshipSection />
+        <WhatIsASection />
 
       </main>
 
