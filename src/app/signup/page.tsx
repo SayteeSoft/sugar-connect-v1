@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Heart } from "lucide-react";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 const ethnicities = [
@@ -32,6 +34,7 @@ const ethnicities = [
 export default function SignupPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
+      <Header />
       <main className="flex-grow flex items-center justify-center p-4">
         <Card className="w-full max-w-lg mx-auto">
           <CardHeader className="text-center">
