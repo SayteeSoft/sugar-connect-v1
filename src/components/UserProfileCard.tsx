@@ -4,16 +4,23 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { UserProfile } from '@/lib/types';
 import { CheckCircle, MapPin } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface UserProfileCardProps {
   user: UserProfile;
+  isLoggedIn?: boolean;
 }
 
 const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
 
-export function UserProfileCard({ user }: UserProfileCardProps) {
+export function UserProfileCard({ user, isLoggedIn = false }: UserProfileCardProps) {
   const isFemale = femaleNames.includes(user.name);
   const aiHint = isFemale ? 'woman portrait' : 'man portrait';
+
+  const imageClasses = cn(
+    "aspect-square w-full object-cover transition-all duration-300 group-hover:scale-105",
+    !isLoggedIn && "filter saturate-50 opacity-80 group-hover:saturate-100 group-hover:opacity-100"
+  );
 
   return (
     <Link href={`/profile/${user.id}`} className="block group">
@@ -25,7 +32,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               alt={user.name}
               width={400}
               height={400}
-              className="aspect-square w-full object-cover transition-all duration-300 group-hover:scale-105 filter saturate-50 opacity-80 group-hover:saturate-100 group-hover:opacity-100"
+              className={imageClasses}
               data-ai-hint={aiHint}
             />
             {user.isVerified && (
