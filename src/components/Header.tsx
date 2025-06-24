@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Heart, Search, MessageSquare, Sparkles, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 const navLinks = [
   { href: '/search', label: 'Search', icon: Search },
@@ -58,6 +59,7 @@ export function Header() {
         )}
 
         <div className="flex items-center gap-2">
+          <ThemeSwitcher />
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
                <Button asChild variant="ghost" size="icon">
