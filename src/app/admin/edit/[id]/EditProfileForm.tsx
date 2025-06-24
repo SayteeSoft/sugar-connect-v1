@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import type { UserProfile } from '@/lib/types';
 import { Button } from "@/components/ui/button";
@@ -59,20 +59,6 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
-  const galleryJson = JSON.stringify(formData.gallery);
-
-  useEffect(() => {
-    const firstImage = formData.gallery[0];
-    const newProfileImage = firstImage !== undefined ? firstImage : 'https://placehold.co/400x400.png';
-
-    if (formData.profileImage !== newProfileImage) {
-      setFormData(prev => ({
-        ...prev,
-        profileImage: newProfileImage
-      }));
-    }
-  }, [galleryJson, formData.profileImage]);
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -109,6 +95,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setFormData({ ...formData, gallery: newGallery });
   };
 
+  const profileImage = formData.gallery?.[0] || 'https://placehold.co/400x400.png';
+
 
   return (
     <form onSubmit={handleSave} className="mt-8">
@@ -120,7 +108,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <CardContent className="p-0">
               <div className="relative">
                  <Image
-                    src={formData.profileImage || 'https://placehold.co/400x400.png'}
+                    src={profileImage}
                     alt={formData.name}
                     width={400}
                     height={400}
@@ -165,7 +153,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Interests</CardTitle></Header>
             <CardContent>
               <div className="space-y-2">
                 <Label htmlFor="interests">Interests</Label>
@@ -230,7 +218,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="ethnicity">Ethnicity</Label>
-                    <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
+                    <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} value={formData.ethnicity || ''}>
                       <SelectTrigger id="ethnicity"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{ethnicities.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
@@ -241,7 +229,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="bodyType">Body Type</Label>
-                    <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
+                    <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType || ''}>
                       <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
@@ -256,35 +244,35 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="piercings">Piercings</Label>
-                    <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
+                    <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings || ''}>
                       <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="tattoos">Tattoos</Label>
-                    <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
+                    <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos || ''}>
                       <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="smokes">Smokes</Label>
-                    <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
+                    <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes || ''}>
                       <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="drinks">Drinks</Label>
-                    <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
+                    <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks || ''}>
                       <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="education">Education</Label>
-                    <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
+                    <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education || ''}>
                       <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
                       <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                     </Select>
