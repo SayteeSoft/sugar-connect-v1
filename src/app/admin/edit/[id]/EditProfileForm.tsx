@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface EditProfileFormProps {
   user: UserProfile;
@@ -36,14 +37,19 @@ const ethnicities = [
 
 export function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState({ ...user, interests: user.interests.join(', ') });
+  const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     // In a real app, this would be an API call to update the user.
+    // We simulate it with a delay.
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsSaving(false);
     toast({
       title: 'Success!',
-      description: 'Profile has been updated.',
+      description: `Profile for ${formData.name} has been updated.`,
     });
   };
 
@@ -106,8 +112,15 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <Input id="interests" value={formData.interests} onChange={handleChange} />
             <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
           </div>
-          <Button type="submit" className="w-full !mt-6" size="lg">
-            Save Changes
+          <Button type="submit" className="w-full !mt-6" size="lg" disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              'Save Changes'
+            )}
           </Button>
         </form>
       </CardContent>
