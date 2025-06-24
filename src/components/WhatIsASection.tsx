@@ -8,7 +8,7 @@ export function WhatIsASection() {
   const [activeTab, setActiveTab] = useState('sugar-daddy');
 
   return (
-    <section className="py-12 md:py-20 bg-background">
+    <section className="py-12 md:py-20 bg-secondary">
       <div className="container mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground mb-6">
           What is a...

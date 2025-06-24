@@ -39,9 +39,9 @@ export default async function Home() {
         
         <ByTheNumbersSection />
 
-        <WhatIsASection />
-
         <WhatIsSugarRelationshipSection />
+
+        <WhatIsASection />
 
       </main>
 
