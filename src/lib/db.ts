@@ -173,6 +173,7 @@ export const db = {
   getProfiles: async () => allProfiles,
   getFeaturedProfiles: async () => allProfiles.slice(0, 4),
   getProfileById: async (id: string) => allProfiles.find(p => p.id === id),
+  getProfileByName: async (name: string) => allProfiles.find(p => p.name === name),
   getConversations: async () => conversations,
   getMessages: async () => messages,
   getLocations: async () => [...new Set(allProfiles.map(p => p.location))],

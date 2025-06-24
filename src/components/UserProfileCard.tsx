@@ -23,7 +23,7 @@ export function UserProfileCard({ user, isLoggedIn = false }: UserProfileCardPro
   );
 
   return (
-    <Link href={`/profile/${user.id}`} className="block group">
+    <Link href={`/profile/${user.name}`} className="block group">
       <Card className="overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
         <CardContent className="p-0">
           <div className="relative">

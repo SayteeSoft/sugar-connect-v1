@@ -9,7 +9,7 @@ import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
 const femaleNames = ['Amelia', 'Isabella', 'Sophia', 'Charlotte'];
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const user = await db.getProfileById(params.id);
+  const user = await db.getProfileByName(params.id);
 
   if (!user) {
     notFound();
