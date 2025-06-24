@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 const stats = [
   {
     icon: Smile,
-    title: 'Average Sugar Baby Age: 23',
+    title: <>Average Sugar Baby<br />Age: 23</>,
   },
   {
     icon: Users,
@@ -30,7 +30,7 @@ export function ByTheNumbersSection() {
                 <div className="bg-primary/10 p-4 rounded-full">
                   <stat.icon className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="mt-4 text-xl">{stat.title}</CardTitle>
+                <CardTitle className="mt-4 text-xl leading-snug">{stat.title}</CardTitle>
               </CardHeader>
             </Card>
           ))}
