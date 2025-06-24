@@ -36,9 +36,9 @@ export default async function Home() {
 
         <SecuritySection />
 
-        <ByTheNumbersSection />
-
         <SugarRelationshipSection />
+
+        <ByTheNumbersSection />
 
       </main>
 
