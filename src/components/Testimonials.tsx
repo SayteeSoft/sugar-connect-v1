@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const testimonials = [
   {
@@ -38,39 +40,94 @@ const testimonials = [
 ];
 
 export function Testimonials() {
-  const displayedTestimonials = testimonials.slice(0, 3);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const testimonialsPerPage = 3;
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  };
+
+  const handleNext = () => {
+    const maxIndex = testimonials.length - testimonialsPerPage;
+    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
+  };
+
+  const displayedTestimonials = testimonials.slice(
+    currentIndex,
+    currentIndex + testimonialsPerPage
+  );
 
   return (
     <section className="py-12 md:py-20 bg-secondary">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold text-center text-foreground mb-10">
-          What Our Members Say
-        </h2>
+        <div className="flex justify-between items-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground">
+            What Our Members Say
+          </h2>
+          <div className="hidden md:flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNext}
+              disabled={currentIndex >= testimonials.length - testimonialsPerPage}
+              aria-label="Next testimonials"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {displayedTestimonials.map((testimonial) => (
-            <Card key={testimonial.name} className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6 flex flex-col flex-grow">
-                    <div className="flex mb-4">
-                        {Array(5).fill(0).map((_, i) => (
-                            <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                        ))}
+            <Card
+              key={testimonial.name}
+              className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <CardContent className="p-6 flex flex-col flex-grow">
+                <div className="flex mb-4">
+                  {Array(5)
+                    .fill(0)
+                    .map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-5 w-5 text-yellow-400 fill-yellow-400"
+                      />
+                    ))}
+                </div>
+                <blockquote className="flex flex-col flex-grow">
+                  <p className="text-base text-foreground font-body italic flex-grow">
+                    "{testimonial.quote}"
+                  </p>
+                  <footer className="mt-6 flex items-center gap-4">
+                    <Avatar>
+                      <AvatarImage
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        data-ai-hint="portrait"
+                      />
+                      <AvatarFallback>
+                        {testimonial.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <cite className="font-semibold text-foreground not-italic">
+                        {testimonial.name}
+                      </cite>
+                      <p className="text-sm text-muted-foreground">
+                        {testimonial.role}
+                      </p>
                     </div>
-                    <blockquote className="flex flex-col flex-grow">
-                        <p className="text-base text-foreground font-body italic flex-grow">
-                        "{testimonial.quote}"
-                        </p>
-                        <footer className="mt-6 flex items-center gap-4">
-                            <Avatar>
-                                <AvatarImage src={testimonial.avatar} alt={testimonial.name} data-ai-hint="portrait" />
-                                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <cite className="font-semibold text-foreground not-italic">{testimonial.name}</cite>
-                                <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                            </div>
-                        </footer>
-                    </blockquote>
-                </CardContent>
+                  </footer>
+                </blockquote>
+              </CardContent>
             </Card>
           ))}
         </div>
