@@ -3,7 +3,7 @@ import type { UserProfile } from './types';
 const allProfiles: UserProfile[] = [
   {
     id: '1',
-    name: 'saytee.software@gmail.com',
+    name: 'saytee.software',
     age: 49,
     email: 'saytee.software@gmail.com',
     location: 'London',
@@ -17,7 +17,7 @@ const allProfiles: UserProfile[] = [
       'https://placehold.co/600x400.png',
     ],
     ethnicity: 'White',
-    password: '1234',
+    password: '12345',
   },
   {
     id: '2',
