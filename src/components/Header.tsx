@@ -4,9 +4,30 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Heart, Search, MessageSquare, Sparkles, UserCircle } from 'lucide-react';
+import {
+  Menu,
+  Heart,
+  Search,
+  MessageSquare,
+  Sparkles,
+  UserCircle,
+  Shield,
+  CreditCard,
+  Settings,
+  HelpCircle,
+  LogOut,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Separator } from './ui/separator';
 
 const navLinks = [
   { href: '/search', label: 'Search', icon: Search },
@@ -17,7 +38,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   // A simple way to determine auth status for the prototype
-  const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile'].some(path => pathname.startsWith(path));
+  const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile', '/admin'].some(path => pathname.startsWith(path));
   // Simple flag to identify the admin user for the prototype
   const isAdmin = true;
 
@@ -42,6 +63,102 @@ export function Header() {
       </Button>
     ));
 
+  const renderAccountMenuItems = (isMobile = false) => {
+      const commonButtonClasses = 'w-full justify-start font-semibold text-base';
+      const commonIconClasses = 'mr-2 h-5 w-5 text-primary';
+
+      if (isMobile) {
+          return (
+              <>
+                  <Separator className="my-2" />
+                  <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
+                      <Link href="/profile/Amelia">
+                          <UserCircle className={cn(commonIconClasses)} />
+                          My Profile
+                      </Link>
+                  </Button>
+                  {isAdmin ? (
+                      <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
+                          <Link href="/admin">
+                              <Shield className={cn(commonIconClasses)} />
+                              Admin Dashboard
+                          </Link>
+                      </Button>
+                  ) : (
+                      <Button variant="ghost" className={cn(commonButtonClasses)}>
+                          <CreditCard className={cn(commonIconClasses)} />
+                          Buy Credits
+                      </Button>
+                  )}
+                   <Button variant="ghost" className={cn(commonButtonClasses)}>
+                      <Settings className={cn(commonIconClasses)} />
+                      Settings
+                  </Button>
+                   <Button variant="ghost" className={cn(commonButtonClasses)}>
+                      <HelpCircle className={cn(commonIconClasses)} />
+                      Help
+                  </Button>
+                  <Separator className="my-2" />
+                   <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
+                      <Link href="/">
+                          <LogOut className={cn(commonIconClasses)} />
+                          Logout
+                      </Link>
+                  </Button>
+              </>
+          )
+      }
+
+      return (
+          <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                      <UserCircle className="h-6 w-6" />
+                  </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                      <Link href="/profile/Amelia">
+                          <UserCircle className="mr-2 h-4 w-4" />
+                          <span>Profile</span>
+                      </Link>
+                  </DropdownMenuItem>
+                  {isAdmin ? (
+                      <DropdownMenuItem asChild>
+                          <Link href="/admin">
+                              <Shield className="mr-2 h-4 w-4" />
+                              <span>Admin Dashboard</span>
+                          </Link>
+                      </DropdownMenuItem>
+                  ) : (
+                      <DropdownMenuItem>
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          <span>Buy Credits</span>
+                      </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                      <HelpCircle className="mr-2 h-4 w-4" />
+                      <span>Help</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                      <Link href="/">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Logout</span>
+                      </Link>
+                  </DropdownMenuItem>
+              </DropdownMenuContent>
+          </DropdownMenu>
+      )
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between">
@@ -59,13 +176,9 @@ export function Header() {
         )}
 
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden items-center gap-2 md:flex">
             {isLoggedIn ? (
-               <Button asChild variant="ghost" size="icon">
-                <Link href="/profile/Amelia">
-                  <UserCircle className="h-6 w-6" />
-                </Link>
-              </Button>
+              renderAccountMenuItems(false)
             ) : (
               <>
                 <Button asChild variant="ghost">
@@ -75,11 +188,6 @@ export function Header() {
                   <Link href="/signup">Sign Up</Link>
                 </Button>
               </>
-            )}
-             {isAdmin && (
-              <Button asChild variant="outline">
-                <Link href="/admin">Admin</Link>
-              </Button>
             )}
           </div>
           
@@ -91,16 +199,11 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
-                <div className="flex flex-col gap-4 py-6">
+                 <div className="flex flex-col gap-4 py-6">
                   {isLoggedIn ? (
                     <>
                       {renderNavLinks(true)}
-                       <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
-                        <Link href="/profile/Amelia">
-                          <UserCircle className="mr-2 h-5 w-5 text-primary" />
-                          My Profile
-                        </Link>
-                      </Button>
+                      {renderAccountMenuItems(true)}
                     </>
                   ) : (
                     <>
@@ -111,13 +214,6 @@ export function Header() {
                         <Link href="/signup">Sign Up</Link>
                       </Button>
                     </>
-                  )}
-                  {isAdmin && (
-                    <Button asChild variant="outline" className="w-full justify-start font-semibold text-base">
-                      <Link href="/admin">
-                        Admin
-                      </Link>
-                    </Button>
                   )}
                 </div>
               </SheetContent>
