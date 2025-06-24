@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { UserProfileCard } from '@/components/UserProfileCard';
 import { featuredProfiles } from '@/lib/mock-data';
 import { Heart } from 'lucide-react';
+import { Footer } from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -35,11 +36,7 @@ export default function Home() {
         </section>
       </main>
 
-       <footer className="bg-card border-t py-6">
-        <div className="container mx-auto text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} UK Sugar Connect. All rights reserved.</p>
-        </div>
-      </footer>
+       <Footer />
     </div>
   );
 }
