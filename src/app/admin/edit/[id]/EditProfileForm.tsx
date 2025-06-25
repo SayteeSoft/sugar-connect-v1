@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2, Upload } from 'lucide-react';
+import { updateUserProfile } from './actions';
 
 
 interface EditProfileFormProps {
@@ -85,15 +86,29 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    // In a real app, you'd make an API call here to save the data.
-    // We can simulate it for the prototype.
-    console.log('Saving data:', formData);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const dataToSave = {
+      ...formData,
+      age: Number(formData.age), // convert age back to number
+      interests: formData.interests.split(',').map(i => i.trim()).filter(i => i), // convert interests string to array
+    };
+
+    const result = await updateUserProfile(user.id, dataToSave);
+
     setIsSaving(false);
-    toast({
-      title: 'Success!',
-      description: `Profile for ${formData.name} has been updated.`,
-    });
+
+    if (result.success) {
+      toast({
+        title: 'Success!',
+        description: `Profile for ${formData.name} has been updated.`,
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error!',
+        description: result.error || 'Failed to update profile.',
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

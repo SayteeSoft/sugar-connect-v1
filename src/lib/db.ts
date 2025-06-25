@@ -1,7 +1,8 @@
 
 import type { UserProfile } from './types';
 
-const allProfiles: UserProfile[] = [
+// Data is now mutable to simulate a database.
+let allProfiles: UserProfile[] = [
   {
     id: '1',
     name: 'saytee.software',
@@ -212,7 +213,7 @@ const allProfiles: UserProfile[] = [
   },
 ];
 
-const conversations = [
+let conversations = [
     {
       id: 'conv1',
       userId: '2',
@@ -239,7 +240,7 @@ const conversations = [
     },
 ];
 
-const messages = {
+let messages = {
     conv1: [
         { id: 'msg1', sender: 'Oliver', text: 'Hello, I came across your profile and was very impressed.' },
         { id: 'msg2', sender: 'Me', text: 'Hi Oliver, thank you! Your profile is quite impressive as well.' },
@@ -253,9 +254,9 @@ const messages = {
     ],
 };
 
-const favorites = ['2', '5', '7'];
-const visitors = ['4', '6'];
-const viewed = ['3', '8'];
+let favorites = ['2', '5', '7'];
+let visitors = ['4', '6'];
+let viewed = ['3', '8'];
 
 
 // Simulate a database
@@ -264,6 +265,14 @@ export const db = {
   getFeaturedProfiles: async () => allProfiles.slice(0, 4),
   getProfileById: async (id: string) => allProfiles.find(p => p.id === id),
   getProfileByName: async (name: string) => allProfiles.find(p => p.name === name),
+  updateProfile: async (id: string, data: Partial<UserProfile>) => {
+    const profileIndex = allProfiles.findIndex(p => p.id === id);
+    if (profileIndex > -1) {
+      allProfiles[profileIndex] = { ...allProfiles[profileIndex], ...data };
+      return allProfiles[profileIndex];
+    }
+    return null;
+  },
   getConversations: async () => conversations,
   getMessages: async () => messages,
   getLocations: async () => [...new Set(allProfiles.map(p => p.location))],
