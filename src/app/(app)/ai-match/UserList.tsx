@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, MessageSquare, X } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface UserListProps {
   initialUsers: UserProfile[];
@@ -16,9 +17,24 @@ interface UserListProps {
 
 export function UserList({ initialUsers, title, emptyMessage }: UserListProps) {
   const [users, setUsers] = useState(initialUsers);
+  const { toast } = useToast();
 
   const handleRemove = (userId: string) => {
+    const user = users.find((u) => u.id === userId);
     setUsers(users.filter((u) => u.id !== userId));
+    if (user) {
+      toast({
+        title: 'User Removed',
+        description: `${user.name} has been removed from this list.`,
+      });
+    }
+  };
+
+  const handleFavorite = (user: UserProfile) => {
+    toast({
+      title: 'Favorited!',
+      description: `You have added ${user.name} to your favorites.`,
+    });
   };
 
   return (
@@ -54,6 +70,7 @@ export function UserList({ initialUsers, title, emptyMessage }: UserListProps) {
                     variant="ghost"
                     size="icon"
                     className="text-pink-500 hover:bg-pink-100 hover:text-pink-600 dark:hover:bg-pink-900/50"
+                    onClick={() => handleFavorite(user)}
                   >
                     <Heart className="h-5 w-5" />
                   </Button>

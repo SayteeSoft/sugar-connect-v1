@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AiMatchClient } from './AiMatchClient';
 import { UserList } from './UserList';
 import { db } from '@/lib/db';
+import { UserListWithVisitToast } from './UserListWithVisitToast';
 
 export default async function AiMatchPage() {
   const [favorites, visitors, viewed] = await Promise.all([
@@ -48,7 +49,7 @@ export default async function AiMatchPage() {
           />
         </TabsContent>
         <TabsContent value="visitors" className="mt-6">
-          <UserList
+          <UserListWithVisitToast
             initialUsers={visitors}
             title="Recent Visitors"
             emptyMessage="No one has visited your profile recently."
