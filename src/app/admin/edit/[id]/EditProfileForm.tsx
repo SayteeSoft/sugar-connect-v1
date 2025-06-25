@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import type { UserProfile } from '@/lib/types';
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,7 @@ const educationOptions = [
 
 export function EditProfileForm({ user }: EditProfileFormProps) {
     const [formData, setFormData] = useState({
+        profileImage: user.profileImage || 'https://placehold.co/400x400.png',
         name: user.name ?? '',
         age: user.age ? String(user.age) : '',
         email: user.email ?? '',
@@ -77,6 +78,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +102,18 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setFormData({ ...formData, [field]: value });
   };
 
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setFormData({ ...formData, profileImage: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleGalleryChange = (index: number, value: string) => {
     const newGallery = [...formData.gallery];
     newGallery[index] = value;
@@ -115,8 +129,6 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setFormData({ ...formData, gallery: newGallery });
   };
 
-  const profileImage = formData.gallery?.[0] || 'https://placehold.co/400x400.png';
-
   return (
     <form onSubmit={handleSave} className="mt-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -130,7 +142,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               <div className="space-y-4">
                  <div className="relative group">
                    <Image
-                      src={profileImage}
+                      src={formData.profileImage}
                       alt={formData.name}
                       width={400}
                       height={400}
@@ -138,12 +150,19 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                       data-ai-hint="placeholder"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Button type="button" variant="outline" size="sm" onClick={() => alert('Upload functionality not implemented.')}>
+                      <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
                           <Upload className="h-4 w-4 mr-2" />
                           Change Photo
                       </Button>
                   </div>
                 </div>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleProfileImageChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
 
                   <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
