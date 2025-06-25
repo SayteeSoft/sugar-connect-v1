@@ -1,10 +1,11 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, MapPin, Gift, MessageSquare } from 'lucide-react';
+import { CheckCircle, MapPin, Gift, MessageSquare, Pencil } from 'lucide-react';
 import { ProfileActions } from './ProfileActions';
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
@@ -69,6 +70,11 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <Button size="lg" className="w-full"><MessageSquare className="w-4 h-4 mr-2" /> Message</Button>
+                        <Button asChild size="lg" variant="outline" className="w-full">
+                          <Link href={`/admin/edit/${user.id}`}>
+                            <Pencil className="w-4 h-4 mr-2" /> Edit Profile
+                          </Link>
+                        </Button>
                         <Button size="lg" variant="secondary" className="w-full"><Gift className="w-4 h-4 mr-2" /> Send a Gift</Button>
                     </div>
                  </div>
