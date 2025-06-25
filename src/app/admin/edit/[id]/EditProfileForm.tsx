@@ -41,7 +41,7 @@ const bodyTypes = ["Slim", "Athletic", "Average", "Curvy", "A few extra pounds"]
 const piercingsOptions = ["None", "Ears", "Nose", "Other"];
 const tattoosOptions = ["None", "One", "Multiple", "Hidden", "Full Sleeve"];
 const smokesOptions = ["No", "Socially", "Regularly"];
-const drinksOptions = ["No", "Socially", "Regularly"];
+const drinksOptions = ["No", "Socially", "Regularly", "Daily"];
 const educationOptions = [
   "High School",
   "Some College",
@@ -79,6 +79,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryFileInputRef = useRef<HTMLInputElement>(null);
+  const [editingGalleryIndex, setEditingGalleryIndex] = useState<number | null>(null);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +120,25 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     const newGallery = [...formData.gallery];
     newGallery[index] = value;
     setFormData({ ...formData, gallery: newGallery });
+  };
+
+  const handleGalleryFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && editingGalleryIndex !== null) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        const newGallery = [...formData.gallery];
+        newGallery[editingGalleryIndex] = result;
+        setFormData({ ...formData, gallery: newGallery });
+        setEditingGalleryIndex(null); // Reset index
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset the input value so the same file can be selected again
+    if (e.target) {
+      e.target.value = '';
+    }
   };
 
   const handleAddGalleryImage = () => {
@@ -163,6 +184,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                     accept="image/*"
                     className="hidden"
                   />
+                <input
+                  type="file"
+                  ref={galleryFileInputRef}
+                  onChange={handleGalleryFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
 
                   <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
@@ -232,7 +260,10 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                       type="button"
                       variant="outline"
                       size="icon"
-                      onClick={() => alert('Upload functionality not implemented.')}
+                      onClick={() => {
+                        setEditingGalleryIndex(index);
+                        galleryFileInputRef.current?.click();
+                      }}
                     >
                       <Upload className="h-4 w-4" />
                     </Button>
@@ -260,7 +291,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="ethnicity">Ethnicity</Label>
-                  <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} value={formData.ethnicity}>
+                  <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
                     <SelectTrigger id="ethnicity"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{ethnicities.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
@@ -271,7 +302,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="bodyType">Body Type</Label>
-                  <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
+                  <Select onValueChange={(value) => handleSelectChange('bodyType', value)} defaultValue={formData.bodyType}>
                     <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
@@ -286,35 +317,35 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="piercings">Piercings</Label>
-                  <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
+                  <Select onValueChange={(value) => handleSelectChange('piercings', value)} defaultValue={formData.piercings}>
                     <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="tattoos">Tattoos</Label>
-                  <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
+                  <Select onValueChange={(value) => handleSelectChange('tattoos', value)} defaultValue={formData.tattoos}>
                     <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="smokes">Smokes</Label>
-                  <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
+                  <Select onValueChange={(value) => handleSelectChange('smokes', value)} defaultValue={formData.smokes}>
                     <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="drinks">Drinks</Label>
-                  <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
+                  <Select onValueChange={(value) => handleSelectChange('drinks', value)} defaultValue={formData.drinks}>
                     <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="education">Education</Label>
-                  <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
+                  <Select onValueChange={(value) => handleSelectChange('education', value)} defaultValue={formData.education}>
                     <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
