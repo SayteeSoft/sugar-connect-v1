@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { UserProfile } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -41,9 +42,23 @@ export function AdminClient({ profiles: initialProfiles }: AdminClientProps) {
   const [profiles, setProfiles] = useState(initialProfiles);
   const { toast } = useToast();
 
+  useEffect(() => {
+    const updatedProfiles = initialProfiles.map(p => {
+      const stored = localStorage.getItem(`user-profile-${p.id}`);
+      try {
+        return stored ? JSON.parse(stored) : p;
+      } catch (e) {
+        console.error("Failed to parse profile from localStorage", e);
+        return p;
+      }
+    });
+    setProfiles(updatedProfiles);
+  }, [initialProfiles]);
+
   const handleDelete = (userId: string) => {
     // In a real app, this would be an API call.
     setProfiles((prevProfiles) => prevProfiles.filter((p) => p.id !== userId));
+    localStorage.removeItem(`user-profile-${userId}`);
     toast({
       title: 'Success',
       description: 'User profile has been deleted.',

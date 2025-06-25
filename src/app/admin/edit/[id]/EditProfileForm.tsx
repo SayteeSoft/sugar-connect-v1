@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import type { UserProfile } from '@/lib/types';
 import { Button } from "@/components/ui/button";
@@ -56,48 +56,42 @@ const educationOptions = [
 ];
 
 export function EditProfileForm({ user }: EditProfileFormProps) {
-    const [formData, setFormData] = useState({
-        profileImage: user.profileImage || 'https://placehold.co/400x400.png',
-        name: user.name ?? '',
-        age: user.age ? String(user.age) : '',
-        email: user.email ?? '',
-        location: user.location ?? '',
-        bio: user.bio ?? '',
-        interests: user.interests?.join(', ') || '',
-        gallery: user.gallery || [],
-        ethnicity: user.ethnicity ?? '',
-        height: user.height ?? '',
-        bodyType: user.bodyType ?? '',
-        hairColor: user.hairColor ?? '',
-        eyeColor: user.eyeColor ?? '',
-        piercings: user.piercings ?? '',
-        tattoos: user.tattoos ?? '',
-        smokes: user.smokes ?? '',
-        drinks: user.drinks ?? '',
-        education: user.education ?? '',
-    });
-
+  const [formData, setFormData] = useState<UserProfile>(user);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
   const [editingGalleryIndex, setEditingGalleryIndex] = useState<number | null>(null);
+  
+  useEffect(() => {
+    const storedProfile = localStorage.getItem(`user-profile-${user.id}`);
+    if (storedProfile) {
+        const parsedProfile = JSON.parse(storedProfile);
+        const mergedData = { ...user, ...parsedProfile };
+        if (!Array.isArray(mergedData.gallery)) {
+            mergedData.gallery = user.gallery || [];
+        }
+        setFormData(mergedData);
+    }
+  }, [user]);
+
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     
-    const dataToSave = {
+    const dataToSave: Partial<UserProfile> = {
       ...formData,
-      age: Number(formData.age), // convert age back to number
-      interests: formData.interests.split(',').map(i => i.trim()).filter(i => i), // convert interests string to array
+      age: Number(formData.age),
+      interests: formData.interests.toString().split(',').map(i => i.trim()).filter(i => i),
     };
 
     const result = await updateUserProfile(user.id, dataToSave);
 
     setIsSaving(false);
 
-    if (result.success) {
+    if (result.success && result.user) {
+      localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(result.user));
       toast({
         title: 'Success!',
         description: `Profile for ${formData.name} has been updated.`,
@@ -132,7 +126,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   };
 
   const handleGalleryChange = (index: number, value: string) => {
-    const newGallery = [...formData.gallery];
+    const newGallery = [...(formData.gallery || [])];
     newGallery[index] = value;
     setFormData({ ...formData, gallery: newGallery });
   };
@@ -143,7 +137,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        const newGallery = [...formData.gallery];
+        const newGallery = [...(formData.gallery || [])];
         newGallery[editingGalleryIndex] = result;
         setFormData({ ...formData, gallery: newGallery });
         setEditingGalleryIndex(null); // Reset index
@@ -157,11 +151,12 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   };
 
   const handleAddGalleryImage = () => {
-    setFormData({ ...formData, gallery: [...formData.gallery, 'https://placehold.co/600x400.png'] });
+    const currentGallery = formData.gallery || [];
+    setFormData({ ...formData, gallery: [...currentGallery, 'https://placehold.co/600x400.png'] });
   };
 
   const handleRemoveGalleryImage = (index: number) => {
-    const newGallery = formData.gallery.filter((_, i) => i !== index);
+    const newGallery = (formData.gallery || []).filter((_, i) => i !== index);
     setFormData({ ...formData, gallery: newGallery });
   };
 
@@ -179,7 +174,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                  <div className="relative group">
                    <Image
                       src={formData.profileImage}
-                      alt={formData.name}
+                      alt={formData.name || 'User Profile'}
                       width={400}
                       height={400}
                       className="aspect-square w-full rounded-lg object-cover"
@@ -246,7 +241,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <CardContent>
               <div className="space-y-2">
                 <Label htmlFor="interests">Interests</Label>
-                <Input id="interests" value={formData.interests} onChange={handleChange} />
+                <Input id="interests" value={Array.isArray(formData.interests) ? formData.interests.join(', ') : ''} onChange={handleChange} />
                 <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
               </div>
             </CardContent>
@@ -256,7 +251,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <CardHeader><CardTitle>Gallery</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {formData.gallery.map((url, index) => (
+                {(formData.gallery || []).map((url, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <Image
                       src={url || 'https://placehold.co/100x100.png'}
@@ -306,7 +301,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="ethnicity">Ethnicity</Label>
-                  <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} defaultValue={formData.ethnicity}>
+                  <Select onValueChange={(value) => handleSelectChange('ethnicity', value)} value={formData.ethnicity}>
                     <SelectTrigger id="ethnicity"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{ethnicities.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
@@ -317,7 +312,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="bodyType">Body Type</Label>
-                  <Select onValueChange={(value) => handleSelectChange('bodyType', value)} defaultValue={formData.bodyType}>
+                  <Select onValueChange={(value) => handleSelectChange('bodyType', value)} value={formData.bodyType}>
                     <SelectTrigger id="bodyType"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{bodyTypes.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
@@ -332,35 +327,35 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="piercings">Piercings</Label>
-                  <Select onValueChange={(value) => handleSelectChange('piercings', value)} defaultValue={formData.piercings}>
+                  <Select onValueChange={(value) => handleSelectChange('piercings', value)} value={formData.piercings}>
                     <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{piercingsOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="tattoos">Tattoos</Label>
-                  <Select onValueChange={(value) => handleSelectChange('tattoos', value)} defaultValue={formData.tattoos}>
+                  <Select onValueChange={(value) => handleSelectChange('tattoos', value)} value={formData.tattoos}>
                     <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{tattoosOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="smokes">Smokes</Label>
-                  <Select onValueChange={(value) => handleSelectChange('smokes', value)} defaultValue={formData.smokes}>
+                  <Select onValueChange={(value) => handleSelectChange('smokes', value)} value={formData.smokes}>
                     <SelectTrigger id="smokes"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{smokesOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="drinks">Drinks</Label>
-                  <Select onValueChange={(value) => handleSelectChange('drinks', value)} defaultValue={formData.drinks}>
+                  <Select onValueChange={(value) => handleSelectChange('drinks', value)} value={formData.drinks}>
                     <SelectTrigger id="drinks"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{drinksOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="education">Education</Label>
-                  <Select onValueChange={(value) => handleSelectChange('education', value)} defaultValue={formData.education}>
+                  <Select onValueChange={(value) => handleSelectChange('education', value)} value={formData.education}>
                     <SelectTrigger id="education"><SelectValue placeholder="Select..." /></SelectTrigger>
                     <SelectContent>{educationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                   </Select>

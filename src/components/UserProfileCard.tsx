@@ -1,3 +1,6 @@
+
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -5,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import type { UserProfile } from '@/lib/types';
 import { CheckCircle, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
 
 interface UserProfileCardProps {
   user: UserProfile;
@@ -13,7 +17,25 @@ interface UserProfileCardProps {
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
-export function UserProfileCard({ user, isLoggedIn = false }: UserProfileCardProps) {
+export function UserProfileCard({ user: initialUser, isLoggedIn = false }: UserProfileCardProps) {
+  const [user, setUser] = useState(initialUser);
+
+  useEffect(() => {
+    const storedUserJSON = localStorage.getItem(`user-profile-${initialUser.id}`);
+    if (storedUserJSON) {
+      try {
+        const storedUser = JSON.parse(storedUserJSON);
+        setUser({ ...initialUser, ...storedUser });
+      } catch (e) {
+        console.error("Failed to parse user from localStorage", e);
+        setUser(initialUser);
+      }
+    } else {
+        setUser(initialUser);
+    }
+  }, [initialUser]);
+
+
   // The admin user (ID 1) was formerly female, so we keep the hint consistent
   const isFemale = femaleNames.includes(user.name) || user.id === '1';
   const aiHint = isFemale ? 'woman portrait' : 'man portrait';
