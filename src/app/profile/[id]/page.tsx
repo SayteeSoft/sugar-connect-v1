@@ -1,3 +1,3 @@
-// This file has been disabled to resolve a build error.
-// The active page for this route is located at /src/app/(app)/profile/[id]/page.tsx.
-// By removing the default export, this file is no longer treated as a page by Next.js.
+// This file is intentionally modified to resolve a routing conflict.
+// The active page is located at /src/app/(app)/profile/[id]/page.tsx.
+export const placeholder = null;
