@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -30,7 +31,18 @@ export default function SearchPage() {
         db.getProfiles(),
         db.getLocations(),
       ]);
-      setProfiles(profilesData);
+
+      const updatedProfiles = profilesData.map(p => {
+        const stored = localStorage.getItem(`user-profile-${p.id}`);
+        try {
+          return stored ? JSON.parse(stored) : p;
+        } catch (e) {
+          console.error("Failed to parse profile from localStorage", e);
+          return p;
+        }
+      });
+      
+      setProfiles(updatedProfiles);
       setLocations(locationsData);
       setIsLoading(false);
     };

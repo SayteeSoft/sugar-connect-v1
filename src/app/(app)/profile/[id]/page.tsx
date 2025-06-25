@@ -1,12 +1,17 @@
+
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, MapPin, Gift, MessageSquare, Pencil } from 'lucide-react';
+import { CheckCircle, MapPin, Gift, MessageSquare, Pencil, Loader2 } from 'lucide-react';
 import { ProfileActions } from './ProfileActions';
+import { useState, useEffect } from 'react';
+import type { UserProfile } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
@@ -26,11 +31,82 @@ const AttributeItem = ({
   );
 };
 
-export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const user = await db.getProfileById(params.id);
+const ProfileSkeleton = () => (
+  <div className="container mx-auto py-8">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="lg:col-span-1">
+        <Card className="sticky top-24">
+          <CardContent className="p-0">
+            <Skeleton className="aspect-square w-full rounded-t-lg" />
+            <div className="p-6 space-y-4">
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-5 w-1/2" />
+              <div className="mt-6 flex flex-col gap-2">
+                <Skeleton className="h-11 w-full" />
+                <Skeleton className="h-11 w-full" />
+                <Skeleton className="h-11 w-full" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="lg:col-span-2 space-y-8">
+        <Card>
+          <CardHeader><Skeleton className="h-7 w-1/4" /></CardHeader>
+          <CardContent><Skeleton className="h-20 w-full" /></CardContent>
+        </Card>
+        <Card>
+          <CardHeader><Skeleton className="h-7 w-1/4" /></CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-8 w-16" />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </div>
+)
 
+export default function ProfilePage({ params }: { params: { id: string } }) {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setIsLoading(true);
+      const dbUser = await db.getProfileById(params.id);
+      
+      const storedUserJSON = localStorage.getItem(`user-profile-${params.id}`);
+      let finalUser = dbUser;
+      if (storedUserJSON) {
+        try {
+          const storedUser = JSON.parse(storedUserJSON);
+          finalUser = { ...dbUser, ...storedUser };
+        } catch (e) {
+          console.error("Failed to parse user from localStorage", e);
+        }
+      }
+
+      if (finalUser) {
+        setUser(finalUser);
+      }
+      setIsLoading(false);
+    };
+
+    fetchUser();
+  }, [params.id]);
+
+  if (isLoading) {
+    return <ProfileSkeleton />;
+  }
+  
   if (!user) {
-    notFound();
+    return (
+      <div className="container mx-auto py-8 text-center">
+        <p>User not found.</p>
+      </div>
+    );
   }
 
   // The admin user (ID 1) was formerly female, so we keep the hint consistent
@@ -94,7 +170,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
             <Card>
               <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {user.interests.map(interest => (
+                {(user.interests || []).map(interest => (
                   <Badge key={interest} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
                 ))}
               </CardContent>
@@ -103,7 +179,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
               <CardHeader><CardTitle>Gallery</CardTitle></CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
-                  {user.gallery.map((img, index) => (
+                  {(user.gallery || []).map((img, index) => (
                     <Image key={index} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
                   ))}
                 </div>
