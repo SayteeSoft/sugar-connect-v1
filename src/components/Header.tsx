@@ -57,13 +57,13 @@ export function Header() {
         className={cn(
           'justify-start font-semibold text-base transition-colors duration-200',
           pathname === link.href
-            ? 'text-primary'
-            : 'text-muted-foreground hover:text-primary',
+            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+            : 'text-muted-foreground',
           isMobile && 'w-full'
         )}
       >
         <Link href={link.href}>
-          <link.icon className="mr-2 h-5 w-5 text-primary" />
+          <link.icon className="mr-2 h-5 w-5" />
           {link.label}
         </Link>
       </Button>
