@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -29,6 +30,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from './ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { db } from '@/lib/db';
+import type { UserProfile } from '@/lib/types';
 
 const navLinks = [
   { href: '/profile/1', label: 'Profile', icon: UserCircle },
@@ -43,10 +46,35 @@ const MOCK_CURRENT_USER_ID = '1';
 
 export function Header() {
   const pathname = usePathname();
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const profile = await db.getProfileById(MOCK_CURRENT_USER_ID);
+      if (profile) {
+        // also check localStorage for updates
+        const storedProfileJSON = localStorage.getItem(`user-profile-${profile.id}`);
+        if (storedProfileJSON) {
+          try {
+            const storedProfile = JSON.parse(storedProfileJSON);
+            setUser({ ...profile, ...storedProfile });
+          } catch(e) {
+            setUser(profile);
+          }
+        } else {
+          setUser(profile);
+        }
+      }
+    };
+    if (typeof window !== 'undefined') {
+      fetchUser();
+    }
+  }, [pathname]); // Refetch when path changes to get latest localstorage data
+  
   // A simple way to determine auth status for the prototype
   const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile', '/admin'].some(path => pathname.startsWith(path));
   // The user with ID '1' is the admin.
-  const isAdmin = MOCK_CURRENT_USER_ID === '1';
+  const isAdmin = user?.id === '1';
 
   const renderNavLinks = (isMobile = false) =>
     navLinks.map((link) => (
@@ -129,14 +157,18 @@ export function Header() {
       if (isMobile) {
           return menuItems;
       }
+      
+      const avatarSrc = user?.profileImage || "https://placehold.co/100x100.png";
+      const avatarAlt = user?.name || "My Account";
+      const avatarFallback = user?.name?.charAt(0) || 'A';
 
       return (
           <DropdownMenu>
               <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="My Account" data-ai-hint="placeholder" />
-                        <AvatarFallback>A</AvatarFallback>
+                        <AvatarImage src={avatarSrc} alt={avatarAlt} data-ai-hint="placeholder" />
+                        <AvatarFallback>{avatarFallback}</AvatarFallback>
                       </Avatar>
                   </Button>
               </DropdownMenuTrigger>
@@ -146,8 +178,8 @@ export function Header() {
                   <DropdownMenuItem asChild>
                       <Link href="/profile/1">
                           <Avatar className="mr-2 h-5 w-5">
-                            <AvatarImage src="https://placehold.co/100x100.png" alt="Profile" data-ai-hint="placeholder" />
-                            <AvatarFallback>A</AvatarFallback>
+                            <AvatarImage src={avatarSrc} alt={user?.name || "Profile"} data-ai-hint="placeholder" />
+                            <AvatarFallback>{avatarFallback}</AvatarFallback>
                           </Avatar>
                           <span>Profile</span>
                       </Link>
@@ -157,6 +189,10 @@ export function Header() {
           </DropdownMenu>
       )
   }
+
+  const avatarSrc = user?.profileImage || "https://placehold.co/100x100.png";
+  const avatarAlt = user?.name || "My Profile";
+  const avatarFallback = user?.name?.charAt(0) || 'A';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
@@ -218,8 +254,8 @@ export function Header() {
                        <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
                           <Link href="/profile/1">
                             <Avatar className="mr-2 h-6 w-6">
-                              <AvatarImage src="https://placehold.co/100x100.png" alt="My Profile" data-ai-hint="placeholder" />
-                              <AvatarFallback>A</AvatarFallback>
+                              <AvatarImage src={avatarSrc} alt={avatarAlt} data-ai-hint="placeholder" />
+                              <AvatarFallback>{avatarFallback}</AvatarFallback>
                             </Avatar>
                             My Profile
                           </Link>
