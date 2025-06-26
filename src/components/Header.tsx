@@ -247,8 +247,8 @@ export function Header() {
                      </Link>
                    </Button>
                 )}
-                {creditDisplay}
                 <ThemeSwitcher />
+                {creditDisplay}
                 {renderAccountMenuItems(false)}
               </>
             ) : (
@@ -265,6 +265,8 @@ export function Header() {
           </div>
           
           <div className="flex items-center gap-2 md:hidden">
+            <ThemeSwitcher />
+            {isLoggedIn && creditDisplay}
             {isLoggedIn ? (
               <Sheet>
                 <SheetTrigger asChild>
@@ -315,7 +317,6 @@ export function Header() {
                 </SheetContent>
               </Sheet>
             )}
-            <ThemeSwitcher />
           </div>
         </div>
       </div>
