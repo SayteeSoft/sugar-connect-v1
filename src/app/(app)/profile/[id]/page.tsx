@@ -94,18 +94,24 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
         }
       }
 
-      // Ensure array fields are correctly typed before setting state
+      // Ensure array fields are correctly typed and sanitized before setting state
       if (typeof finalUser.wants === 'string') {
         finalUser.wants = (finalUser.wants as string).split(',').map(s => s.trim()).filter(Boolean);
-      } else if (!Array.isArray(finalUser.wants)) {
+      } else if (Array.isArray(finalUser.wants)) {
+        finalUser.wants = finalUser.wants.map(s => String(s).trim()).filter(Boolean);
+      } else {
         finalUser.wants = [];
       }
 
-      if (!Array.isArray(finalUser.interests)) {
+      if (Array.isArray(finalUser.interests)) {
+        finalUser.interests = finalUser.interests.map(s => String(s).trim()).filter(Boolean);
+      } else {
         finalUser.interests = [];
       }
-
-      if (!Array.isArray(finalUser.gallery)) {
+      
+      if (Array.isArray(finalUser.gallery)) {
+        finalUser.gallery = finalUser.gallery.map(s => String(s).trim()).filter(Boolean);
+      } else {
         finalUser.gallery = [];
       }
       
@@ -190,7 +196,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               <CardHeader><CardTitle>Wants</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {(user.wants || []).map((want, index) => (
-                  <Badge key={index} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
+                  <Badge key={`${want}-${index}`} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
                 ))}
               </CardContent>
             </Card>
@@ -198,7 +204,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {(user.interests || []).map((interest, index) => (
-                  <Badge key={index} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
+                  <Badge key={`${interest}-${index}`} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
                 ))}
               </CardContent>
             </Card>
@@ -207,7 +213,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   {(user.gallery || []).map((img, index) => (
-                    <Image key={index} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
+                    <Image key={`${img}-${index}`} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
                   ))}
                 </div>
               </CardContent>
