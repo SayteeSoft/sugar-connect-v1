@@ -161,12 +161,12 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <Button size="lg" className="w-full"><MessageSquare className="w-4 h-4 mr-2" /> Message</Button>
-                        <Button asChild size="lg" variant="secondary" className="w-full">
+                        <Button asChild size="lg" variant="outline" className="w-full">
                           <Link href={`/admin/edit/${user.id}`}>
                             <Pencil className="w-4 h-4 mr-2" /> Edit Profile
                           </Link>
                         </Button>
-                        <Button size="lg" variant="secondary" className="w-full"><Gift className="w-4 h-4 mr-2" /> Send a Gift</Button>
+                        <Button size="lg" variant="outline" className="w-full"><Gift className="w-4 h-4 mr-2" /> Send a Gift</Button>
                     </div>
                  </div>
               </CardContent>
