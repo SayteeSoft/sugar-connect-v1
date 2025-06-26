@@ -89,6 +89,21 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
       }
 
       if (finalUser) {
+        // Ensure array fields are correctly typed before setting state
+        if (finalUser.wants && typeof finalUser.wants === 'string') {
+          finalUser.wants = (finalUser.wants as string).split(',').map(s => s.trim()).filter(Boolean);
+        } else if (!Array.isArray(finalUser.wants)) {
+          finalUser.wants = [];
+        }
+
+        if (!Array.isArray(finalUser.interests)) {
+          finalUser.interests = [];
+        }
+
+        if (!Array.isArray(finalUser.gallery)) {
+          finalUser.gallery = [];
+        }
+        
         setUser(finalUser);
       }
       setIsLoading(false);
