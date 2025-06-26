@@ -66,15 +66,28 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   useEffect(() => {
     const storedProfile = localStorage.getItem(`user-profile-${user.id}`);
     if (storedProfile) {
-        const parsedProfile = JSON.parse(storedProfile);
-        const mergedData = { ...user, ...parsedProfile };
-        if (!Array.isArray(mergedData.gallery)) {
-            mergedData.gallery = user.gallery || [];
+        try {
+            const parsedProfile = JSON.parse(storedProfile);
+            const mergedData = { ...user, ...parsedProfile };
+            
+            // Ensure array fields are correctly typed
+            if (!Array.isArray(mergedData.gallery)) {
+                mergedData.gallery = user.gallery || [];
+            }
+            if (!Array.isArray(mergedData.wants)) {
+                mergedData.wants = user.wants || [];
+            }
+            if (!Array.isArray(mergedData.interests)) {
+                mergedData.interests = user.interests || [];
+            }
+            
+            setFormData(mergedData);
+        } catch(e) {
+            console.error("Failed to parse profile from localStorage", e);
+            setFormData(user);
         }
-        if (!Array.isArray(mergedData.wants)) {
-            mergedData.wants = user.wants || [];
-        }
-        setFormData(mergedData);
+    } else {
+        setFormData(user);
     }
   }, [user]);
 
@@ -97,6 +110,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     if (result.success && result.user) {
       try {
         localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(result.user));
+        setFormData(result.user as UserProfile);
         toast({
           title: 'Success!',
           description: `Profile for ${formData.name} has been updated.`,
