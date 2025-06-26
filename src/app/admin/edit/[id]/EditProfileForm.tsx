@@ -22,8 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, Upload } from 'lucide-react';
+import { Loader2, Trash2, Upload, ChevronDown } from 'lucide-react';
 import { updateUserProfile } from './actions';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 
 
 interface EditProfileFormProps {
@@ -54,6 +57,8 @@ const educationOptions = [
   "MBA",
   "Juris Doctor"
 ];
+
+const popularInterests = ["Business", "Charity", "Dining", "Horses", "Literature", "Running", "Shopping", "Sports", "Travel"];
 
 export function EditProfileForm({ user }: EditProfileFormProps) {
   const [formData, setFormData] = useState<UserProfile>(user);
@@ -100,7 +105,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       ...formData,
       age: Number(formData.age),
       wants: (formData.wants || '').toString().split(',').map(i => i.trim()).filter(i => i),
-      interests: (formData.interests || '').toString().split(',').map(i => i.trim()).filter(i => i),
+      interests: formData.interests || [],
     };
 
     const result = await updateUserProfile(user.id, dataToSave);
@@ -277,11 +282,44 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           <Card>
             <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <Label htmlFor="interests">Interests</Label>
-                <Input id="interests" value={(Array.isArray(formData.interests) ? formData.interests.join(', ') : formData.interests) || ''} onChange={handleChange} />
-                <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-auto min-h-10">
+                    <div className="flex gap-1 flex-wrap">
+                      {formData.interests?.length > 0 ? (
+                        formData.interests.map(interest => (
+                          <Badge variant="secondary" key={interest}>{interest}</Badge>
+                        ))
+                      ) : (
+                        <span className="text-muted-foreground font-normal">Select interests...</span>
+                      )}
+                    </div>
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                   <div className="p-4 grid grid-cols-2 gap-4">
+                    {popularInterests.map((interest) => (
+                      <div key={interest} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`interest-${interest}`}
+                          checked={(formData.interests || []).includes(interest)}
+                          onCheckedChange={(checked) => {
+                             const currentInterests = formData.interests || [];
+                             if (checked) {
+                               setFormData({ ...formData, interests: [...currentInterests, interest] });
+                             } else {
+                               setFormData({ ...formData, interests: currentInterests.filter(i => i !== interest) });
+                             }
+                          }}
+                        />
+                        <Label htmlFor={`interest-${interest}`} className="font-normal cursor-pointer">{interest}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+               <p className="text-xs text-muted-foreground mt-2">Select all that apply.</p>
             </CardContent>
           </Card>
 
