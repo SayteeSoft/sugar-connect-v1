@@ -4,10 +4,10 @@ import { PolicyModal } from "./PolicyModal";
 
 const siteLinks = [
   { href: "/", label: "Home" },
-  { href: "#", label: "About Us" },
-  { href: "#", label: "FAQs" },
-  { href: "#", label: "Glossary" },
-  { href: "#", label: "Contact" },
+  { href: "/about", label: "About Us" },
+  { href: "/faqs", label: "FAQs" },
+  { href: "/glossary", label: "Glossary" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const otherLinks = [{ href: "#", label: "Sitemap" }];
