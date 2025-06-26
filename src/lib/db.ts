@@ -6,6 +6,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '1',
     name: 'saytee.software',
+    role: 'Sugar Daddy',
+    credits: 10,
     age: 49,
     email: 'saytee.software@gmail.com',
     location: 'London',
@@ -39,6 +41,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '2',
     name: 'Oliver',
+    role: 'Sugar Daddy',
+    credits: 10,
     age: 35,
     email: 'oliver@example.com',
     location: 'Manchester',
@@ -68,6 +72,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '3',
     name: 'Isabella',
+    role: 'Sugar Baby',
+    credits: -1,
     age: 28,
     email: 'isabella@example.com',
     location: 'Edinburgh',
@@ -96,6 +102,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '4',
     name: 'George',
+    role: 'Sugar Daddy',
+    credits: 10,
     age: 42,
     email: 'george@example.com',
     location: 'Bristol',
@@ -123,6 +131,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '5',
     name: 'Sophia',
+    role: 'Sugar Baby',
+    credits: -1,
     age: 22,
     email: 'sophia@example.com',
     location: 'Birmingham',
@@ -153,6 +163,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '6',
     name: 'Harry',
+    role: 'Sugar Daddy',
+    credits: 10,
     age: 31,
     email: 'harry@example.com',
     location: 'London',
@@ -181,6 +193,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '7',
     name: 'Charlotte',
+    role: 'Sugar Baby',
+    credits: -1,
     age: 29,
     email: 'charlotte@example.com',
     location: 'Leeds',
@@ -210,6 +224,8 @@ let allProfiles: UserProfile[] = [
   {
     id: '8',
     name: 'Arthur',
+    role: 'Sugar Daddy',
+    credits: 10,
     age: 50,
     email: 'arthur@example.com',
     location: 'Cornwall',

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { db } from '@/lib/db';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Send, Search, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { UserProfile } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
+import { spendCredit } from './actions';
 
 type Conversation = {
     id: string;
@@ -22,31 +24,118 @@ type Conversation = {
     unreadCount: number;
 }
 
+type Message = { 
+  id: string; 
+  sender: string; 
+  text: string 
+};
+
 type Messages = {
-    [key: string]: { id: string; sender: string; text: string }[];
+    [key: string]: Message[];
 }
 
+// In a real app, you would get this from your authentication system.
+const MOCK_CURRENT_USER_ID = '1';
+
 export default function MessagesPage() {
+  const router = useRouter();
+  const { toast } = useToast();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messages, setMessages] = useState<Messages>({});
   const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [messageInput, setMessageInput] = useState('');
+  
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [convos, msgs] = await Promise.all([
+      setIsLoading(true);
+      const [convos, msgs, userProfile] = await Promise.all([
         db.getConversations(),
         db.getMessages(),
+        db.getProfileById(MOCK_CURRENT_USER_ID),
       ]);
       setConversations(convos);
       setMessages(msgs);
       if (convos.length > 0) {
         setSelectedConv(convos[0]);
       }
+      
+      let finalUser = userProfile;
+      if (userProfile) {
+         const storedProfileJSON = localStorage.getItem(`user-profile-${userProfile.id}`);
+          if (storedProfileJSON) {
+            try {
+              finalUser = { ...userProfile, ...JSON.parse(storedProfileJSON) };
+            } catch (e) {
+              // ignore error
+            }
+          }
+      }
+      setCurrentUser(finalUser);
       setIsLoading(false);
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight });
+    }
+  }, [messages, selectedConv]);
+  
+  const handleSendMessage = async () => {
+    if (!messageInput.trim() || !selectedConv || !currentUser) return;
+    
+    if (currentUser.role === 'Sugar Baby') {
+      // Sugar Babies have unlimited messaging
+      addNewMessage();
+      toast({ title: 'Message Sent!' });
+      return;
+    }
+
+    if (currentUser.role === 'Sugar Daddy') {
+      if (currentUser.credits > 0) {
+        const result = await spendCredit(currentUser.id);
+        if (result.success && result.user) {
+          const newCredits = result.user.credits;
+          setCurrentUser(result.user as UserProfile);
+          localStorage.setItem(`user-profile-${currentUser.id}`, JSON.stringify(result.user));
+          addNewMessage();
+          toast({
+            title: 'Message Sent!',
+            description: `1 credit was used. You have ${newCredits} credits remaining.`
+          });
+        } else {
+           toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: result.error || 'Could not send message.'
+          });
+        }
+      } else {
+        router.push('/payment');
+      }
+    }
+  };
+
+  const addNewMessage = () => {
+     if (!selectedConv) return;
+     const newMessage: Message = {
+        id: `msg-${Date.now()}`,
+        sender: 'Me',
+        text: messageInput.trim(),
+      };
+
+      setMessages(prev => ({
+        ...prev,
+        [selectedConv.id]: [...(prev[selectedConv.id] || []), newMessage]
+      }));
+      setMessageInput('');
+  }
+
 
   if (isLoading) {
     return (
@@ -105,7 +194,7 @@ export default function MessagesPage() {
                     </Avatar>
                     <h2 className="text-lg font-semibold">{selectedConv.userName}</h2>
                 </div>
-                 <ScrollArea className="flex-grow p-4 bg-background">
+                 <ScrollArea className="flex-grow p-4 bg-background" ref={scrollAreaRef}>
                     <div className="space-y-4">
                     {messages[selectedConv.id]?.map(msg => (
                         <div key={msg.id} className={cn("flex items-end gap-2", msg.sender === 'Me' ? 'justify-end' : 'justify-start')}>
@@ -118,12 +207,17 @@ export default function MessagesPage() {
                     </div>
                 </ScrollArea>
                 <div className="border-t p-4 bg-card">
-                    <div className="relative">
-                    <Input placeholder="Type a message..." className="pr-12" />
-                    <Button size="icon" className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2">
-                        <Send className="h-4 w-4" />
-                    </Button>
-                    </div>
+                    <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="relative">
+                        <Input 
+                            placeholder="Type a message..." 
+                            className="pr-12"
+                            value={messageInput}
+                            onChange={(e) => setMessageInput(e.target.value)}
+                        />
+                        <Button type="submit" size="icon" className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2">
+                            <Send className="h-4 w-4" />
+                        </Button>
+                    </form>
                 </div>
                 </>
             ) : (

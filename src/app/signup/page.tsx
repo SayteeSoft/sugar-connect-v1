@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Heart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -46,6 +47,19 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent>
             <form className="space-y-4">
+               <div className="space-y-3">
+                <Label>I am a...</Label>
+                <RadioGroup defaultValue="sugar-baby" className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="sugar-baby" id="r1" />
+                    <Label htmlFor="r1">Sugar Baby</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="sugar-daddy" id="r2" />
+                    <Label htmlFor="r2">Sugar Daddy</Label>
+                  </div>
+                </RadioGroup>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                       <Label htmlFor="first-name">First Name</Label>

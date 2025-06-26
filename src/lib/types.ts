@@ -1,6 +1,8 @@
 export interface UserProfile {
   id: string;
   name: string;
+  role: 'Sugar Daddy' | 'Sugar Baby';
+  credits: number;
   age: number;
   email: string;
   location: string;

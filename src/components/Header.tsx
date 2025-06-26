@@ -17,6 +17,7 @@ import {
   Settings,
   HelpCircle,
   LogOut,
+  Infinity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeSwitcher } from './ThemeSwitcher';
@@ -32,6 +33,7 @@ import { Separator } from './ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { db } from '@/lib/db';
 import type { UserProfile } from '@/lib/types';
+import { Badge } from './ui/badge';
 
 const navLinks = [
   { href: '/profile/1', label: 'Profile', icon: UserCircle },
@@ -50,20 +52,19 @@ export function Header() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const profile = await db.getProfileById(MOCK_CURRENT_USER_ID);
+      let profile = await db.getProfileById(MOCK_CURRENT_USER_ID);
       if (profile) {
         // also check localStorage for updates
         const storedProfileJSON = localStorage.getItem(`user-profile-${profile.id}`);
         if (storedProfileJSON) {
           try {
             const storedProfile = JSON.parse(storedProfileJSON);
-            setUser({ ...profile, ...storedProfile });
+            profile = { ...profile, ...storedProfile };
           } catch(e) {
-            setUser(profile);
+            // ignore parsing errors
           }
-        } else {
-          setUser(profile);
         }
+        setUser(profile);
       }
     };
     if (typeof window !== 'undefined') {
@@ -72,7 +73,7 @@ export function Header() {
   }, [pathname]); // Refetch when path changes to get latest localstorage data
   
   // A simple way to determine auth status for the prototype
-  const isLoggedIn = !['/', '/login', '/signup'].includes(pathname);
+  const isLoggedIn = !['/', '/login', '/signup'].includes(pathname) && user;
   // The user with ID '1' is the admin.
   const isAdmin = user?.id === '1';
 
@@ -102,10 +103,12 @@ export function Header() {
 
       const menuItems = (
         <>
-            {!isAdmin && (
-                <Button variant="ghost" className={cn(commonButtonClasses)}>
-                    <CreditCard className={cn(commonIconClasses)} />
-                    Buy Credits
+            {user?.role === 'Sugar Daddy' && (
+                <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
+                    <Link href="/payment">
+                        <CreditCard className={cn(commonIconClasses)} />
+                        Buy Credits
+                    </Link>
                 </Button>
             )}
              <Button variant="ghost" className={cn(commonButtonClasses)}>
@@ -128,11 +131,13 @@ export function Header() {
 
       const dropdownItems = (
         <>
-            {!isAdmin && (
-                <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Buy Credits</span>
-                </DropdownMenuItem>
+            {user?.role === 'Sugar Daddy' && (
+              <DropdownMenuItem asChild>
+                  <Link href="/payment">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      <span>Buy Credits</span>
+                  </Link>
+              </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -193,11 +198,36 @@ export function Header() {
   const avatarAlt = user?.name || "My Profile";
   const avatarFallback = user?.name?.charAt(0) || 'A';
 
+  const creditDisplay = user ? (
+    user.role === 'Sugar Daddy' ? (
+      <Button asChild variant="ghost" size="icon">
+        <Link href="/payment" className="relative">
+          <CreditCard className="h-6 w-6" />
+          <Badge className="absolute -top-1 -right-2 h-5 w-5 justify-center rounded-full p-0">
+            {user.credits}
+          </Badge>
+          <span className="sr-only">{user.credits} credits remaining</span>
+        </Link>
+      </Button>
+    ) : (
+      <Button variant="ghost" size="icon" className="relative">
+        <CreditCard className="h-6 w-6" />
+        <Badge
+          variant="secondary"
+          className="absolute -top-1 -right-2 flex h-5 w-5 items-center justify-center rounded-full p-0"
+        >
+          <Infinity className="h-4 w-4" />
+        </Badge>
+        <span className="sr-only">Unlimited credits</span>
+      </Button>
+    )
+  ) : null;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Heart className="h-7 w-7 text-primary dark:text-foreground" />
+          <Heart className="h-7 w-7 text-primary" />
           <span className="text-xl font-headline font-bold text-primary dark:text-foreground">
             Sugar Connect
           </span>
@@ -220,6 +250,7 @@ export function Header() {
                      </Link>
                    </Button>
                 )}
+                {creditDisplay}
                 <ThemeSwitcher />
                 {renderAccountMenuItems(false)}
               </>
