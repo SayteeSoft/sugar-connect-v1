@@ -8,20 +8,19 @@ export function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // We run this effect only on the client
-    const consent = localStorage.getItem('cookie_consent');
-    if (!consent) {
-      // Delay showing banner slightly to avoid flickering on page load
-      const timer = setTimeout(() => {
-        setVisible(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
+    // We run this effect only on the client.
+    // By removing the localStorage check, this will now appear on every page load.
+    // Delay showing banner slightly to avoid flickering on page load
+    const timer = setTimeout(() => {
+      setVisible(true);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAccept = () => {
     setVisible(false);
-    localStorage.setItem('cookie_consent', 'true');
+    // By removing the localStorage.setItem, the consent is not saved,
+    // so the banner will reappear on the next page load.
   };
 
   if (!visible) {
