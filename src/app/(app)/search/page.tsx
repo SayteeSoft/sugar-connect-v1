@@ -26,7 +26,7 @@ export default function SearchPage() {
   const [locations, setLocations] = useState<string[]>([]);
   const [allInterests, setAllInterests] = useState<string[]>([]);
   const [ageRange, setAgeRange] = useState([18, 65]);
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,7 +73,7 @@ export default function SearchPage() {
     results = results.filter(p => p.age >= ageRange[0] && p.age <= ageRange[1]);
 
     // Location filter
-    if (selectedLocation) {
+    if (selectedLocation && selectedLocation !== 'all') {
         results = results.filter(p => p.location.toLowerCase() === selectedLocation);
     }
 
@@ -106,7 +106,7 @@ export default function SearchPage() {
                     <SelectValue placeholder="Select location" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Locations</SelectItem>
+                    <SelectItem value="all">All Locations</SelectItem>
                     {locations.map(loc => (
                       <SelectItem key={loc} value={loc.toLowerCase()}>{loc}</SelectItem>
                     ))}
