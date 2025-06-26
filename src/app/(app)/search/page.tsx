@@ -7,7 +7,6 @@ import type { UserProfile } from '@/lib/types';
 import { UserProfileCard } from '@/components/UserProfileCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -18,36 +17,75 @@ import {
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Search as SearchIcon, Loader2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function SearchPage() {
-  const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
+  const [filteredProfiles, setFilteredProfiles] = useState<UserProfile[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
+  const [allInterests, setAllInterests] = useState<string[]>([]);
   const [ageRange, setAgeRange] = useState([18, 65]);
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [profilesData, locationsData] = await Promise.all([
+      setIsLoading(true);
+      const [profilesData, locationsData, interestsData] = await Promise.all([
         db.getProfiles(),
         db.getLocations(),
+        db.getAllInterests(),
       ]);
 
       const updatedProfiles = profilesData.map(p => {
         const stored = localStorage.getItem(`user-profile-${p.id}`);
         try {
-          return stored ? JSON.parse(stored) : p;
+          return stored ? { ...p, ...JSON.parse(stored) } : p;
         } catch (e) {
           console.error("Failed to parse profile from localStorage", e);
           return p;
         }
       });
       
-      setProfiles(updatedProfiles);
+      setAllProfiles(updatedProfiles);
+      setFilteredProfiles(updatedProfiles);
       setLocations(locationsData);
+      setAllInterests(interestsData.sort());
       setIsLoading(false);
     };
     fetchData();
   }, []);
+
+  const handleInterestChange = (interest: string) => {
+    setSelectedInterests((prev) =>
+      prev.includes(interest)
+        ? prev.filter((i) => i !== interest)
+        : [...prev, interest]
+    );
+  };
+
+  const handleApplyFilters = () => {
+    let results = [...allProfiles];
+
+    // Age filter
+    results = results.filter(p => p.age >= ageRange[0] && p.age <= ageRange[1]);
+
+    // Location filter
+    if (selectedLocation) {
+        results = results.filter(p => p.location.toLowerCase() === selectedLocation);
+    }
+
+    // Interests filter
+    if (selectedInterests.length > 0) {
+        results = results.filter(p => 
+            selectedInterests.every(interest => (p.interests || []).includes(interest))
+        );
+    }
+    
+    setFilteredProfiles(results);
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -63,11 +101,12 @@ export default function SearchPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="location">Location</Label>
-                <Select>
+                <Select value={selectedLocation} onValueChange={setSelectedLocation}>
                   <SelectTrigger id="location">
                     <SelectValue placeholder="Select location" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="">All Locations</SelectItem>
                     {locations.map(loc => (
                       <SelectItem key={loc} value={loc.toLowerCase()}>{loc}</SelectItem>
                     ))}
@@ -86,10 +125,28 @@ export default function SearchPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="interests">Interests</Label>
-                <Input id="interests" placeholder="e.g. Travel, Art" />
+                <Label>Interests</Label>
+                <ScrollArea className="h-40 rounded-md border p-4">
+                  <div className="space-y-2">
+                    {allInterests.map((interest) => (
+                      <div key={interest} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`interest-${interest}`}
+                          checked={selectedInterests.includes(interest)}
+                          onCheckedChange={() => handleInterestChange(interest)}
+                        />
+                        <Label
+                          htmlFor={`interest-${interest}`}
+                          className="font-normal cursor-pointer"
+                        >
+                          {interest}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
               </div>
-              <Button className="w-full">Apply Filters</Button>
+              <Button className="w-full" onClick={handleApplyFilters}>Apply Filters</Button>
             </CardContent>
           </Card>
         </aside>
@@ -111,11 +168,20 @@ export default function SearchPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {profiles.map((profile) => (
-                <UserProfileCard key={profile.id} user={profile} isLoggedIn={true} />
-              ))}
-            </div>
+            filteredProfiles.length > 0 ? (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {filteredProfiles.map((profile) => (
+                    <UserProfileCard key={profile.id} user={profile} isLoggedIn={true} />
+                  ))}
+                </div>
+              ) : (
+                <Card className="flex items-center justify-center h-64">
+                    <div className="text-center">
+                        <p className="text-lg font-semibold">No profiles match your criteria.</p>
+                        <p className="text-muted-foreground mt-1">Try adjusting your filters.</p>
+                    </div>
+                </Card>
+              )
           )}
         </main>
       </div>
