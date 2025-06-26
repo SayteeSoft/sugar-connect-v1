@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -11,13 +12,34 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 interface ProfileActionsProps {
+  userId: string;
   userName: string;
 }
 
-export function ProfileActions({ userName }: ProfileActionsProps) {
+const getStoredFavorites = (): string[] => {
+  if (typeof window === 'undefined') return [];
+  const stored = localStorage.getItem('user_favorites');
+  try {
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.error('Failed to parse favorites from localStorage', e);
+    return [];
+  }
+};
+
+const setStoredFavorites = (list: string[]) => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('user_favorites', JSON.stringify(list));
+};
+
+export function ProfileActions({ userId, userName }: ProfileActionsProps) {
   const { toast } = useToast();
 
   const handleFavorite = () => {
+    const favorites = getStoredFavorites();
+    if (!favorites.includes(userId)) {
+      setStoredFavorites([...favorites, userId]);
+    }
     toast({
       title: 'Favorited!',
       description: `You have added ${userName} to your favorites.`,

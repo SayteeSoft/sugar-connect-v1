@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { UserProfile } from '@/lib/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,15 +14,24 @@ interface UserListProps {
   initialUsers: UserProfile[];
   title: string;
   emptyMessage: string;
+  onRemoveUser?: (userId: string) => void;
+  onFavoriteUser?: (user: UserProfile) => void;
 }
 
-export function UserList({ initialUsers, title, emptyMessage }: UserListProps) {
-  const [users, setUsers] = useState(initialUsers);
+export function UserList({
+  initialUsers,
+  title,
+  emptyMessage,
+  onRemoveUser,
+  onFavoriteUser,
+}: UserListProps) {
   const { toast } = useToast();
 
   const handleRemove = (userId: string) => {
-    const user = users.find((u) => u.id === userId);
-    setUsers(users.filter((u) => u.id !== userId));
+    const user = initialUsers.find((u) => u.id === userId);
+    if (onRemoveUser) {
+      onRemoveUser(userId);
+    }
     if (user) {
       toast({
         title: 'User Removed',
@@ -31,6 +41,9 @@ export function UserList({ initialUsers, title, emptyMessage }: UserListProps) {
   };
 
   const handleFavorite = (user: UserProfile) => {
+    if (onFavoriteUser) {
+      onFavoriteUser(user);
+    }
     toast({
       title: 'Favorited!',
       description: `You have added ${user.name} to your favorites.`,
@@ -43,9 +56,9 @@ export function UserList({ initialUsers, title, emptyMessage }: UserListProps) {
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        {users.length > 0 ? (
+        {initialUsers.length > 0 ? (
           <div className="space-y-4">
-            {users.map((user) => (
+            {initialUsers.map((user) => (
               <div
                 key={user.id}
                 className="flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-accent"

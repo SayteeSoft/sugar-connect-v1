@@ -161,7 +161,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>About {user.name}</CardTitle>
-                <ProfileActions userName={user.name} />
+                <ProfileActions userId={user.id} userName={user.name} />
               </CardHeader>
               <CardContent>
                 <p className="text-base leading-relaxed">{user.bio}</p>
