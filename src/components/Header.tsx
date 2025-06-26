@@ -73,7 +73,7 @@ export function Header() {
     }
   }, [pathname]); // Refetch when path changes to get latest localstorage data
   
-  const isLoggedIn = !['/login', '/signup', '/'].includes(pathname) && user;
+  const isLoggedIn = user;
   const isAdmin = user?.id === '1';
 
   const renderNavLinks = (isMobile = false) =>
@@ -106,7 +106,17 @@ export function Header() {
                     <Link href="/payment">
                         <Gem className={cn(commonIconClasses)} />
                         Buy Credits
+                        <Badge className="ml-auto">{user.credits}</Badge>
                     </Link>
+                </Button>
+            )}
+            {user?.role === 'Sugar Baby' && (
+                <Button variant="ghost" className={cn(commonButtonClasses)} disabled>
+                    <Gem className={cn(commonIconClasses)} />
+                    Credits
+                    <Badge variant="secondary" className="ml-auto">
+                        <Infinity className="h-4 w-4" />
+                    </Badge>
                 </Button>
             )}
              <Button variant="ghost" className={cn(commonButtonClasses)}>
@@ -133,8 +143,18 @@ export function Header() {
               <DropdownMenuItem asChild>
                   <Link href="/payment">
                       <Gem className="mr-2 h-4 w-4" />
-                      <span>Buy Credits</span>
+                      <span className="flex-grow">Buy Credits</span>
+                      <Badge>{user.credits}</Badge>
                   </Link>
+              </DropdownMenuItem>
+            )}
+            {user?.role === 'Sugar Baby' && (
+              <DropdownMenuItem disabled>
+                  <Gem className="mr-2 h-4 w-4" />
+                  <span className="flex-grow">Credits</span>
+                  <Badge variant="secondary">
+                    <Infinity className="h-4 w-4" />
+                  </Badge>
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
