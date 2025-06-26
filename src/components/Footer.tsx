@@ -49,11 +49,31 @@ export function Footer() {
               <ul className="space-y-3">
                  <li>
                   <PolicyModal triggerText="Cookie Policy" title="Cookie Policy">
-                   <p>This is a placeholder for the Cookie Policy. In a real application, this would contain detailed information about the cookies used on the site, their purpose, and how users can manage them.</p>
-                   <p>Cookies are small text files stored on your device that help us improve your experience. We use essential cookies for basic site functionality, performance cookies to understand how you interact with our site, and marketing cookies to personalize content and ads.</p>
-                   <h4 className="font-semibold text-card-foreground">Managing Cookies</h4>
-                   <p>You can control and/or delete cookies as you wish – for details, see aboutcookies.org. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p>
-                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <h4 className="font-semibold text-card-foreground">1. Introduction</h4>
+                    <p>This Cookie Policy explains how Sugar Connect ("we", "us", and "our") uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are and why we use them, as well as your rights to control our use of them.</p>
+                    
+                    <h4 className="font-semibold text-card-foreground">2. What are cookies?</h4>
+                    <p>A cookie is a small data file that is placed on your device when you visit a website. Cookies are widely used by website owners in order to make their websites work, or to work more efficiently, as well as to provide reporting information. Cookies set by the website owner (in this case, Sugar Connect) are called "first-party cookies". Cookies set by parties other than the website owner are called "third-party cookies".</p>
+                    
+                    <h4 className="font-semibold text-card-foreground">3. Why do we use cookies?</h4>
+                    <p>We use first-party and third-party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other cookies also enable us to track and target the interests of our users to enhance the experience on our platform. For example, we use cookies to remember your login status and preferences.</p>
+
+                    <h4 className="font-semibold text-card-foreground">4. Types of Cookies We Use</h4>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Strictly Necessary Cookies:</strong> These are essential for you to browse the website and use its features, such as accessing secure areas of the site.</li>
+                        <li><strong>Performance and Analytics Cookies:</strong> These cookies collect information about how you use our website, like which pages you visited and which links you clicked on. None of this information can be used to identify you. It is all aggregated and, therefore, anonymized. Their sole purpose is to improve website functions.</li>
+                        <li><strong>Functionality Cookies:</strong> These cookies allow our website to remember choices you have made in the past, like what language you prefer or what your user name and password are so you can automatically log in.</li>
+                        <li><strong>Marketing Cookies:</strong> These cookies track your online activity to help advertisers deliver more relevant advertising or to limit how many times you see an ad. These cookies can share that information with other organizations or advertisers.</li>
+                    </ul>
+
+                    <h4 className="font-semibold text-card-foreground">5. How can you control cookies?</h4>
+                    <p>You have the right to decide whether to accept or reject cookies. You can exercise your cookie rights by setting your preferences in your browser. Most browsers allow you to refuse to accept cookies and to delete cookies. The methods for doing so vary from browser to browser, and from version to version. Please note, however, that if you disable cookies, you may not be able to use all the features of our website.</p>
+
+                    <h4 className="font-semibold text-card-foreground">6. Changes to This Cookie Policy</h4>
+                    <p>We may update this Cookie Policy from time to time in order to reflect, for example, changes to the cookies we use or for other operational, legal, or regulatory reasons. Please therefore re-visit this Cookie Policy regularly to stay informed about our use of cookies and related technologies.</p>
+
+                    <h4 className="font-semibold text-card-foreground">7. Contact Us</h4>
+                    <p>If you have any questions about our use of cookies or other technologies, please email us using the contact form on our website.</p>
                   </PolicyModal>
                 </li>
                  <li>
