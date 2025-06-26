@@ -72,7 +72,7 @@ export function Header() {
   }, [pathname]); // Refetch when path changes to get latest localstorage data
   
   // A simple way to determine auth status for the prototype
-  const isLoggedIn = ['/search', '/messages', '/ai-match', '/profile', '/admin'].some(path => pathname.startsWith(path));
+  const isLoggedIn = !['/', '/login', '/signup'].includes(pathname);
   // The user with ID '1' is the admin.
   const isAdmin = user?.id === '1';
 
