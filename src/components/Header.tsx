@@ -13,7 +13,7 @@ import {
   Sparkles,
   UserCircle,
   Shield,
-  CreditCard,
+  Gem,
   Settings,
   HelpCircle,
   LogOut,
@@ -103,7 +103,7 @@ export function Header() {
             {user?.role === 'Sugar Daddy' && (
                 <Button asChild variant="ghost" className={cn(commonButtonClasses)}>
                     <Link href="/payment">
-                        <CreditCard className={cn(commonIconClasses)} />
+                        <Gem className={cn(commonIconClasses)} />
                         Buy Credits
                     </Link>
                 </Button>
@@ -131,7 +131,7 @@ export function Header() {
             {user?.role === 'Sugar Daddy' && (
               <DropdownMenuItem asChild>
                   <Link href="/payment">
-                      <CreditCard className="mr-2 h-4 w-4" />
+                      <Gem className="mr-2 h-4 w-4" />
                       <span>Buy Credits</span>
                   </Link>
               </DropdownMenuItem>
@@ -199,7 +199,7 @@ export function Header() {
     user.role === 'Sugar Daddy' ? (
       <Button asChild variant="ghost" size="icon">
         <Link href="/payment" className="relative">
-          <CreditCard className="h-6 w-6" />
+          <Gem className="h-6 w-6" />
           <Badge className="absolute -top-1 -right-2 h-5 w-5 justify-center rounded-full p-0">
             {user.credits}
           </Badge>
@@ -208,7 +208,7 @@ export function Header() {
       </Button>
     ) : (
       <Button variant="ghost" size="icon" className="relative">
-        <CreditCard className="h-6 w-6" />
+        <Gem className="h-6 w-6" />
         <Badge
           variant="secondary"
           className="absolute -top-1 -right-2 flex h-5 w-5 items-center justify-center rounded-full p-0"
@@ -248,8 +248,8 @@ export function Header() {
                    </Button>
                 )}
                 {creditDisplay}
-                {renderAccountMenuItems(false)}
                 <ThemeSwitcher />
+                {renderAccountMenuItems(false)}
               </>
             ) : (
               <>
