@@ -11,7 +11,7 @@ let allProfiles: UserProfile[] = [
     location: 'London',
     interests: ['Art', 'Travel', 'Fine Dining'],
     bio: 'A student of art history with a passion for exploring new cultures. I enjoy gallery openings, weekend trips to Paris, and discovering hidden culinary gems.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -41,7 +41,7 @@ let allProfiles: UserProfile[] = [
     location: 'Manchester',
     interests: ['Business', 'Fitness', 'Watches'],
     bio: 'Entrepreneur with a focus on tech startups. When I\'m not working, I\'m in the gym or planning my next investment. Looking for an intelligent and ambitious partner.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -67,7 +67,7 @@ let allProfiles: UserProfile[] = [
     location: 'Edinburgh',
     interests: ['Literature', 'Horses', 'Charity'],
     bio: 'I split my time between managing a family charity foundation and my passion for equestrian sports. A good book and a quiet evening are my idea of heaven.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: false,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -92,7 +92,7 @@ let allProfiles: UserProfile[] = [
     location: 'Bristol',
     interests: ['Sailing', 'Architecture', 'Jazz'],
     bio: 'Architect with a love for the sea. I spend my weekends sailing along the coast. Searching for a companion to share adventures and quiet moments with.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -116,7 +116,7 @@ let allProfiles: UserProfile[] = [
     location: 'Birmingham',
     interests: ['Fashion', 'Social Media', 'Dancing'],
     bio: 'Fashion blogger and social media influencer. My life is fast-paced and exciting. Looking for someone who can keep up and enjoys the finer things.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -143,7 +143,7 @@ let allProfiles: UserProfile[] = [
     location: 'London',
     interests: ['Finance', 'Golf', 'Cars'],
     bio: 'Investment banker in the city. Work hard, play hard is my motto. I enjoy weekends on the golf course and driving my sports car.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: false,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -168,7 +168,7 @@ let allProfiles: UserProfile[] = [
     location: 'Leeds',
     interests: ['Yoga', 'Vegan cooking', 'Music'],
     bio: 'Lawyer by day, yoga enthusiast by night. I believe in a balanced life of professional ambition and personal wellness. Seeking a genuine connection.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -194,7 +194,7 @@ let allProfiles: UserProfile[] = [
     location: 'Cornwall',
     interests: ['Wine', 'History', 'Gardening'],
     bio: 'Retired surgeon, now a vineyard owner in Cornwall. Life is slower now, and I appreciate the simple pleasures. Looking for a graceful and kind partner.',
-    profileImage: 'https://placehold.co/400x400.png',
+    profileImage: 'https://placehold.co/600x400.png',
     isVerified: true,
     gallery: [
       'https://placehold.co/600x400.png',
@@ -219,7 +219,7 @@ let conversations = [
       userId: '2',
       userName: 'Oliver',
       lastMessage: 'I\'m intrigued by your profile. Tell me more about your work.',
-      avatar: 'https://placehold.co/400x400.png',
+      avatar: 'https://placehold.co/600x400.png',
       unreadCount: 2,
     },
     {
@@ -227,7 +227,7 @@ let conversations = [
       userId: '4',
       userName: 'George',
       lastMessage: 'I saw you enjoy sailing. We should connect.',
-      avatar: 'https://placehold.co/400x400.png',
+      avatar: 'https://placehold.co/600x400.png',
       unreadCount: 0,
     },
      {
@@ -235,7 +235,7 @@ let conversations = [
       userId: '8',
       userName: 'Arthur',
       lastMessage: 'A vineyard sounds lovely. I\'ve always wanted to visit Cornwall.',
-      avatar: 'https://placehold.co/400x400.png',
+      avatar: 'https://placehold.co/600x400.png',
       unreadCount: 0,
     },
 ];
@@ -273,7 +273,7 @@ export const db = {
     }
     return null;
   },
-  getConversations: async () => conversations,
+  getConversations: async () => conversations.map(c => ({...c, avatar: allProfiles.find(p => p.id === c.userId)?.profileImage || c.avatar})),
   getMessages: async () => messages,
   getLocations: async () => [...new Set(allProfiles.map(p => p.location))],
   getAllInterests: async () => [...new Set(allProfiles.flatMap(p => p.interests))],

@@ -11,6 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Send, Search, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { UserProfile } from '@/lib/types';
 
 type Conversation = {
     id: string;
