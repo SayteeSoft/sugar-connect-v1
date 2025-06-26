@@ -1,6 +1,12 @@
+
+'use client';
+
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { PolicyModal } from "./PolicyModal";
+import { useState, useEffect } from "react";
+import { db } from "@/lib/db";
+import type { UserProfile } from "@/lib/types";
 
 const siteLinks = [
   { href: "/", label: "Home" },
@@ -12,7 +18,36 @@ const siteLinks = [
 
 const otherLinks = [{ href: "#", label: "Sitemap" }];
 
+// In a real app, this would come from your authentication system.
+const MOCK_CURRENT_USER_ID = '1';
+
 export function Footer() {
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      let profile = await db.getProfileById(MOCK_CURRENT_USER_ID);
+      if (profile) {
+        const storedProfileJSON = localStorage.getItem(`user-profile-${profile.id}`);
+        if (storedProfileJSON) {
+          try {
+            const storedProfile = JSON.parse(storedProfileJSON);
+            profile = { ...profile, ...storedProfile };
+          } catch (e) {
+            // Ignore parsing errors
+          }
+        }
+        setUser(profile);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      fetchUser();
+    }
+  }, []);
+
+  const isAdmin = user?.id === '1';
+
   return (
     <footer className="bg-card border-t">
       <div className="container mx-auto py-12 px-6">
@@ -98,7 +133,7 @@ export function Footer() {
                     <h4 className="font-semibold text-card-foreground">3. Intellectual Property</h4>
                     <p>The Service and its original content, features, and functionality are and will remain the exclusive property of Sugar Connect and its licensors. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Sugar Connect.</p>
                     <h4 className="font-semibold text-card-foreground">4. Termination</h4>
-                    <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.</p>
+                    <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not to a breach of the Terms.</p>
                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
                   </PolicyModal>
                 </li>
@@ -117,6 +152,16 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                {isAdmin && (
+                  <li>
+                    <Link
+                      href="/admin"
+                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      Admin
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
