@@ -100,11 +100,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    
+
     const dataToSave: Partial<UserProfile> = {
       ...formData,
       age: Number(formData.age),
-      wants: (formData.wants || '').toString().split(',').map(i => i.trim()).filter(i => i),
+      wants: (Array.isArray(formData.wants) ? formData.wants.join(',') : formData.wants || '').split(',').map(i => i.trim()).filter(i => i),
       interests: formData.interests || [],
     };
 
@@ -114,8 +114,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
     if (result.success && result.user) {
       try {
-        localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(result.user));
+        // Exclude large image fields from localStorage to prevent errors
+        const { profileImage, gallery, ...restForStorage } = result.user;
+        localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(restForStorage));
+        
+        // Update form state with the full user object including images
         setFormData(result.user as UserProfile);
+        
         toast({
           title: 'Success!',
           description: `Profile for ${formData.name} has been updated.`,
@@ -125,7 +130,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         toast({
           variant: 'destructive',
           title: 'Save Failed',
-          description: 'Could not save profile changes. The uploaded images might be too large. Please try smaller files.'
+          description: 'Could not save profile changes to your browser. Changes may be lost on refresh.'
         });
       }
     } else {
