@@ -168,6 +168,14 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               </CardContent>
             </Card>
             <Card>
+              <CardHeader><CardTitle>Wants</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {(user.wants || []).map(want => (
+                  <Badge key={want} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
+                ))}
+              </CardContent>
+            </Card>
+            <Card>
               <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {(user.interests || []).map(interest => (

@@ -5,6 +5,7 @@ export interface UserProfile {
   email: string;
   location: string;
   interests: string[];
+  wants: string[];
   bio: string;
   profileImage: string;
   isVerified: boolean;

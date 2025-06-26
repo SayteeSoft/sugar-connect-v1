@@ -71,6 +71,9 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         if (!Array.isArray(mergedData.gallery)) {
             mergedData.gallery = user.gallery || [];
         }
+        if (!Array.isArray(mergedData.wants)) {
+            mergedData.wants = user.wants || [];
+        }
         setFormData(mergedData);
     }
   }, [user]);
@@ -83,7 +86,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     const dataToSave: Partial<UserProfile> = {
       ...formData,
       age: Number(formData.age),
-      interests: formData.interests.toString().split(',').map(i => i.trim()).filter(i => i),
+      wants: (formData.wants || '').toString().split(',').map(i => i.trim()).filter(i => i),
+      interests: (formData.interests || '').toString().split(',').map(i => i.trim()).filter(i => i),
     };
 
     const result = await updateUserProfile(user.id, dataToSave);
@@ -246,11 +250,22 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           </Card>
 
           <Card>
+            <CardHeader><CardTitle>Wants</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="wants">Wants</Label>
+                <Input id="wants" value={(Array.isArray(formData.wants) ? formData.wants.join(', ') : formData.wants) || ''} onChange={handleChange} />
+                <p className="text-xs text-muted-foreground">Separate wants with a comma.</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
             <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <Label htmlFor="interests">Interests</Label>
-                <Input id="interests" value={Array.isArray(formData.interests) ? formData.interests.join(', ') : ''} onChange={handleChange} />
+                <Input id="interests" value={(Array.isArray(formData.interests) ? formData.interests.join(', ') : formData.interests) || ''} onChange={handleChange} />
                 <p className="text-xs text-muted-foreground">Separate interests with a comma.</p>
               </div>
             </CardContent>
