@@ -21,4 +21,6 @@ export interface UserProfile {
   smokes?: string;
   drinks?: string;
   education?: string;
+  createdAt: Date;
+  lastActive: Date;
 }

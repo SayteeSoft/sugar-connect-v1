@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db } from '@/lib/db';
 import type { UserProfile } from '@/lib/types';
 import { UserProfileCard } from '@/components/UserProfileCard';
@@ -18,6 +19,7 @@ import { Slider } from '@/components/ui/slider';
 import { Search as SearchIcon, Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SearchPage() {
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
@@ -28,6 +30,7 @@ export default function SearchPage() {
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('discover');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +44,14 @@ export default function SearchPage() {
       const updatedProfiles = profilesData.map(p => {
         const stored = localStorage.getItem(`user-profile-${p.id}`);
         try {
-          return stored ? { ...p, ...JSON.parse(stored) } : p;
+          if (stored) {
+            const storedProfile = JSON.parse(stored);
+            // Rehydrate date fields from localStorage string values
+            if (storedProfile.lastActive) storedProfile.lastActive = new Date(storedProfile.lastActive);
+            if (storedProfile.createdAt) storedProfile.createdAt = new Date(storedProfile.createdAt);
+            return { ...p, ...storedProfile };
+          }
+          return p;
         } catch (e) {
           console.error("Failed to parse profile from localStorage", e);
           return p;
@@ -56,6 +66,16 @@ export default function SearchPage() {
     };
     fetchData();
   }, []);
+
+  const sortedProfiles = useMemo(() => {
+    let sorted = [...filteredProfiles];
+    if (activeTab === 'recently-active') {
+      sorted.sort((a, b) => new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime());
+    } else if (activeTab === 'newest') {
+      sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+    return sorted;
+  }, [filteredProfiles, activeTab]);
 
   const handleInterestChange = (interest: string) => {
     setSelectedInterests((prev) =>
@@ -151,7 +171,14 @@ export default function SearchPage() {
         </aside>
 
         <main className="lg:col-span-3">
-           <h1 className="text-3xl font-headline font-bold mb-6">Discover Profiles</h1>
+          <Tabs defaultValue="discover" onValueChange={setActiveTab} className="mb-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="discover">Discover</TabsTrigger>
+              <TabsTrigger value="recently-active">Recently Active</TabsTrigger>
+              <TabsTrigger value="newest">Newest</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           {isLoading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {Array.from({ length: 6 }).map((_, index) => (
@@ -167,9 +194,9 @@ export default function SearchPage() {
               ))}
             </div>
           ) : (
-            filteredProfiles.length > 0 ? (
+            sortedProfiles.length > 0 ? (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {filteredProfiles.map((profile) => (
+                  {sortedProfiles.map((profile) => (
                     <UserProfileCard key={profile.id} user={profile} isLoggedIn={true} />
                   ))}
                 </div>

@@ -12,10 +12,10 @@ let allProfiles: UserProfile[] = [
     interests: ['Art', 'Travel', 'Fine Dining'],
     wants: ['Mentorship', 'Discreet', 'Long-term'],
     bio: 'A student of art history with a passion for exploring new cultures. I enjoy gallery openings, weekend trips to Paris, and discovering hidden culinary gems.',
-    profileImage: 'https://placehold.co/600x400.png',
+    profileImage: 'https://web-developer.one/imgs/sugar-daddy-001.jpg',
     isVerified: true,
     gallery: [
-      'https://placehold.co/600x400.png',
+      'https://web-developer.one/imgs/sugar-daddy-001.jpg',
       'https://placehold.co/600x400.png',
       'https://placehold.co/600x400.png',
       'https://placehold.co/600x400.png',
@@ -33,6 +33,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: "Master's Degree",
+    createdAt: new Date('2023-01-15T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 2)),
   },
   {
     id: '2',
@@ -60,6 +62,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: "Bachelor's Degree",
+    createdAt: new Date('2024-05-10T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
   {
     id: '3',
@@ -86,6 +90,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: "Master's Degree",
+    createdAt: new Date('2024-07-01T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 5)),
   },
   {
     id: '4',
@@ -111,6 +117,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: "Bachelor's Degree",
+    createdAt: new Date('2023-09-20T12:00:00Z'),
+    lastActive: new Date(new Date().setHours(new Date().getHours() - 3)),
   },
   {
     id: '5',
@@ -139,6 +147,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: 'Some College',
+    createdAt: new Date('2024-07-15T12:00:00Z'),
+    lastActive: new Date(),
   },
   {
     id: '6',
@@ -165,6 +175,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Socially',
     education: "MBA",
+    createdAt: new Date('2024-03-01T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 7)),
   },
   {
     id: '7',
@@ -192,6 +204,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'No',
     education: 'Juris Doctor',
+    createdAt: new Date('2024-06-25T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 3)),
   },
   {
     id: '8',
@@ -218,6 +232,8 @@ let allProfiles: UserProfile[] = [
     smokes: 'No',
     drinks: 'Daily',
     education: 'MD',
+    createdAt: new Date('2022-11-11T12:00:00Z'),
+    lastActive: new Date(new Date().setDate(new Date().getDate() - 10)),
   },
 ];
 
