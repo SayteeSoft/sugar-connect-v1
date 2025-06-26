@@ -12,6 +12,12 @@ import { ProfileActions } from './ProfileActions';
 import { useState, useEffect } from 'react';
 import type { UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const femaleNames = ['Isabella', 'Sophia', 'Charlotte'];
 
@@ -85,7 +91,6 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
       
       let finalUser = { ...dbUser };
       
-      // Merge text data from localStorage
       const storedUserJSON = localStorage.getItem(`user-profile-${params.id}`);
       if (storedUserJSON) {
         try {
@@ -96,7 +101,6 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
         }
       }
 
-      // Merge image data from sessionStorage
       const imageOverridesJSON = sessionStorage.getItem(`ss_profile_overrides_${params.id}`);
       if(imageOverridesJSON) {
         try {
@@ -107,27 +111,19 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
         }
       }
 
+      const sanitizeArray = (field: any): string[] => {
+        if (Array.isArray(field)) {
+          return field.map(s => String(s).trim()).filter(Boolean);
+        }
+        if (typeof field === 'string') {
+          return field.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        return [];
+      };
 
-      // Ensure array fields are correctly typed and sanitized before setting state
-      if (typeof finalUser.wants === 'string') {
-        finalUser.wants = (finalUser.wants as string).split(',').map(s => s.trim()).filter(Boolean);
-      } else if (Array.isArray(finalUser.wants)) {
-        finalUser.wants = finalUser.wants.map(s => String(s).trim()).filter(Boolean);
-      } else {
-        finalUser.wants = [];
-      }
-
-      if (Array.isArray(finalUser.interests)) {
-        finalUser.interests = finalUser.interests.map(s => String(s).trim()).filter(Boolean);
-      } else {
-        finalUser.interests = [];
-      }
-      
-      if (Array.isArray(finalUser.gallery)) {
-        finalUser.gallery = finalUser.gallery.map(s => String(s).trim()).filter(Boolean);
-      } else {
-        finalUser.gallery = [];
-      }
+      finalUser.wants = sanitizeArray(finalUser.wants);
+      finalUser.interests = sanitizeArray(finalUser.interests);
+      finalUser.gallery = sanitizeArray(finalUser.gallery);
       
       setUser(finalUser);
       setIsLoading(false);
@@ -144,11 +140,13 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
     return (
       <div className="container mx-auto py-8 text-center">
         <p>User not found.</p>
+        <Link href="/search" className="text-primary hover:underline mt-4 inline-block">
+          Back to Search
+        </Link>
       </div>
     );
   }
 
-  // The admin user (ID 1) was formerly female, so we keep the hint consistent
   const isFemale = femaleNames.includes(user.name) || user.id === '1';
   const aiHint = isFemale ? 'woman portrait' : 'man portrait';
 
@@ -161,8 +159,8 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
               <CardContent className="p-0">
                 <div className="relative">
                    <Image
-                      src={user.profileImage}
-                      alt={user.name}
+                      src={user.profileImage || 'https://placehold.co/400x400.png'}
+                      alt={user.name || 'User profile image'}
                       width={400}
                       height={400}
                       className="aspect-square w-full rounded-t-lg object-cover"
@@ -177,20 +175,37 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 </div>
                  <div className="p-6">
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <h1 className="text-3xl font-bold font-headline">{user.name}, {user.age}</h1>
+                      <h1 className="text-3xl font-bold font-headline">{user.name || 'Unknown User'}{user.age ? `, ${user.age}` : ''}</h1>
                     </div>
                     <div className="flex items-center text-muted-foreground mt-2">
                       <MapPin className="w-4 h-4 mr-2" />
-                      <span>{user.location}</span>
+                      <span>{user.location || 'Unknown Location'}</span>
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
-                        <Button size="lg" className="w-full"><MessageSquare className="w-4 h-4 mr-2" /> Message</Button>
+                        <Button asChild size="lg" className="w-full">
+                          <Link href="/messages">
+                            <MessageSquare className="w-4 h-4 mr-2" /> Message
+                          </Link>
+                        </Button>
                         <Button asChild size="lg" variant="outline" className="w-full">
                           <Link href={`/admin/edit/${user.id}`}>
                             <Pencil className="w-4 h-4 mr-2" /> Edit Profile
                           </Link>
                         </Button>
-                        <Button size="lg" variant="outline" className="w-full"><Gift className="w-4 h-4 mr-2" /> Send a Gift</Button>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span tabIndex={0} className="w-full">
+                                <Button size="lg" variant="outline" className="w-full" disabled>
+                                  <Gift className="w-4 h-4 mr-2" /> Send a Gift
+                                </Button>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>This feature is coming soon!</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                     </div>
                  </div>
               </CardContent>
@@ -199,37 +214,43 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
           <div className="lg:col-span-2 space-y-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>About {user.name}</CardTitle>
-                <ProfileActions userId={user.id} userName={user.name} />
+                <CardTitle>About {user.name || 'this user'}</CardTitle>
+                <ProfileActions userId={user.id} userName={user.name || 'this user'} />
               </CardHeader>
               <CardContent>
-                <p className="text-base leading-relaxed">{user.bio}</p>
+                <p className="text-base leading-relaxed">{user.bio || 'No bio available.'}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Wants</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {(user.wants || []).map((want, index) => (
-                  <Badge key={`${want}-${index}`} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
-                ))}
+                {user.wants.length > 0 ? (
+                  user.wants.map((want, index) => (
+                    <Badge key={`want-${index}`} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
+                  ))
+                ) : <p className="text-sm text-muted-foreground">No wants listed.</p>}
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {(user.interests || []).map((interest, index) => (
-                  <Badge key={`${interest}-${index}`} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
-                ))}
+                {user.interests.length > 0 ? (
+                  user.interests.map((interest, index) => (
+                    <Badge key={`interest-${index}`} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
+                  ))
+                ) : <p className="text-sm text-muted-foreground">No interests listed.</p>}
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Gallery</CardTitle></CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  {(user.gallery || []).map((img, index) => (
-                    <Image key={`${img}-${index}`} src={img} alt={`${user.name}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
-                  ))}
-                </div>
+                {user.gallery.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    {user.gallery.map((img, index) => (
+                      <Image key={`gallery-${index}`} src={img} alt={`${user.name || 'User'}'s gallery image ${index + 1}`} width={600} height={400} className="rounded-lg object-cover aspect-video" data-ai-hint="lifestyle photo" />
+                    ))}
+                  </div>
+                ) : <p className="text-sm text-muted-foreground">No gallery images available.</p>}
               </CardContent>
             </Card>
             <Card>
