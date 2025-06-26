@@ -73,7 +73,7 @@ export function Header() {
   }, [pathname]); // Refetch when path changes to get latest localstorage data
   
   // A simple way to determine auth status for the prototype
-  const isLoggedIn = !['/', '/login', '/signup'].includes(pathname) && user;
+  const isLoggedIn = !['/login', '/signup'].includes(pathname) && user && pathname !== '/';
   // The user with ID '1' is the admin.
   const isAdmin = user?.id === '1';
 
@@ -227,7 +227,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Heart className="h-7 w-7 text-primary" />
+          <Heart className="h-7 w-7 text-primary dark:text-foreground" />
           <span className="text-xl font-headline font-bold text-primary dark:text-foreground">
             Sugar Connect
           </span>
@@ -251,8 +251,8 @@ export function Header() {
                    </Button>
                 )}
                 {creditDisplay}
-                <ThemeSwitcher />
                 {renderAccountMenuItems(false)}
+                <ThemeSwitcher />
               </>
             ) : (
               <>
@@ -268,7 +268,6 @@ export function Header() {
           </div>
           
           <div className="flex items-center gap-2 md:hidden">
-            <ThemeSwitcher />
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -312,6 +311,7 @@ export function Header() {
                 </div>
               </SheetContent>
             </Sheet>
+            <ThemeSwitcher />
           </div>
         </div>
       </div>
