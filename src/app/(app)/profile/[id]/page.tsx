@@ -84,6 +84,8 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
       }
       
       let finalUser = { ...dbUser };
+      
+      // Merge text data from localStorage
       const storedUserJSON = localStorage.getItem(`user-profile-${params.id}`);
       if (storedUserJSON) {
         try {
@@ -93,6 +95,18 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
           console.error("Failed to parse user from localStorage", e);
         }
       }
+
+      // Merge image data from sessionStorage
+      const imageOverridesJSON = sessionStorage.getItem(`ss_profile_overrides_${params.id}`);
+      if(imageOverridesJSON) {
+        try {
+          const imageOverrides = JSON.parse(imageOverridesJSON);
+          finalUser = { ...finalUser, ...imageOverrides };
+        } catch(e) {
+          console.error("Failed to parse images from sessionStorage", e);
+        }
+      }
+
 
       // Ensure array fields are correctly typed and sanitized before setting state
       if (typeof finalUser.wants === 'string') {

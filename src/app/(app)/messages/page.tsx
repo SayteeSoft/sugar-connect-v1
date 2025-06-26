@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -65,14 +66,26 @@ export default function MessagesPage() {
       
       let finalUser = userProfile;
       if (userProfile) {
-         const storedProfileJSON = localStorage.getItem(`user-profile-${userProfile.id}`);
-          if (storedProfileJSON) {
+         let mergedProfile = { ...userProfile };
+         
+         const storedText = localStorage.getItem(`user-profile-${userProfile.id}`);
+         if (storedText) {
             try {
-              finalUser = { ...userProfile, ...JSON.parse(storedProfileJSON) };
+              mergedProfile = { ...mergedProfile, ...JSON.parse(storedText) };
             } catch (e) {
-              // ignore error
+              console.error("Failed to parse user profile from localStorage", e);
             }
-          }
+         }
+
+         const storedImages = sessionStorage.getItem(`ss_profile_overrides_${userProfile.id}`);
+         if(storedImages) {
+            try {
+              mergedProfile = { ...mergedProfile, ...JSON.parse(storedImages) };
+            } catch (e) {
+              console.error("Failed to parse images from sessionStorage", e);
+            }
+         }
+         finalUser = mergedProfile;
       }
       setCurrentUser(finalUser);
       setIsLoading(false);

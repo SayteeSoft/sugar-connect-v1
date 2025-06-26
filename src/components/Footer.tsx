@@ -28,16 +28,27 @@ export function Footer() {
     const fetchUser = async () => {
       let profile = await db.getProfileById(MOCK_CURRENT_USER_ID);
       if (profile) {
-        const storedProfileJSON = localStorage.getItem(`user-profile-${profile.id}`);
-        if (storedProfileJSON) {
+        let mergedProfile = { ...profile };
+        
+        const storedText = localStorage.getItem(`user-profile-${profile.id}`);
+        if(storedText) {
           try {
-            const storedProfile = JSON.parse(storedProfileJSON);
-            profile = { ...profile, ...storedProfile };
+            mergedProfile = { ...mergedProfile, ...JSON.parse(storedText) };
           } catch (e) {
-            // Ignore parsing errors
+             console.error("Failed to parse profile from localStorage", e);
           }
         }
-        setUser(profile);
+        
+        const storedImages = sessionStorage.getItem(`ss_profile_overrides_${profile.id}`);
+        if(storedImages) {
+            try {
+                mergedProfile = { ...mergedProfile, ...JSON.parse(storedImages) };
+            } catch(e) {
+                console.error("Failed to parse images from sessionStorage", e);
+            }
+        }
+
+        setUser(mergedProfile);
       }
     };
 

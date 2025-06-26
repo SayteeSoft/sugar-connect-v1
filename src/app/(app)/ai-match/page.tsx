@@ -61,15 +61,31 @@ export default function AiMatchPage() {
     const fetchProfiles = async () => {
       setIsLoading(true);
       const profilesFromDb = await db.getProfiles();
+      
       const mergedProfiles = profilesFromDb.map(p => {
-         const stored = localStorage.getItem(`user-profile-${p.id}`);
-         try {
-            return stored ? { ...p, ...JSON.parse(stored) } : p;
-         } catch (e) { 
-            console.error("Failed to parse profile from localStorage", e);
-            return p; 
+         let finalProfile = { ...p };
+         
+         const storedText = localStorage.getItem(`user-profile-${p.id}`);
+         if (storedText) {
+            try {
+               finalProfile = { ...finalProfile, ...JSON.parse(storedText) };
+            } catch (e) { 
+               console.error("Failed to parse profile from localStorage", e);
+            }
          }
+
+         const storedImages = sessionStorage.getItem(`ss_profile_overrides_${p.id}`);
+         if (storedImages) {
+            try {
+                finalProfile = { ...finalProfile, ...JSON.parse(storedImages) };
+            } catch (e) {
+                console.error("Failed to parse images from sessionStorage", e);
+            }
+         }
+
+         return finalProfile;
       });
+
       setAllProfiles(mergedProfiles);
       setIsLoading(false);
     }

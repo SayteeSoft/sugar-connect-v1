@@ -69,31 +69,43 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const [editingGalleryIndex, setEditingGalleryIndex] = useState<number | null>(null);
   
   useEffect(() => {
+    // Start with the base user from props
+    let finalProfile = { ...user };
+    
+    // Merge text data from localStorage
     const storedProfile = localStorage.getItem(`user-profile-${user.id}`);
     if (storedProfile) {
         try {
             const parsedProfile = JSON.parse(storedProfile);
-            const mergedData = { ...user, ...parsedProfile };
-            
-            // Ensure array fields are correctly typed
-            if (!Array.isArray(mergedData.gallery)) {
-                mergedData.gallery = user.gallery || [];
-            }
-            if (!Array.isArray(mergedData.wants)) {
-                mergedData.wants = user.wants || [];
-            }
-            if (!Array.isArray(mergedData.interests)) {
-                mergedData.interests = user.interests || [];
-            }
-            
-            setFormData(mergedData);
+            finalProfile = { ...finalProfile, ...parsedProfile };
         } catch(e) {
             console.error("Failed to parse profile from localStorage", e);
-            setFormData(user);
         }
-    } else {
-        setFormData(user);
     }
+    
+    // Merge image data from sessionStorage for session persistence
+    const imageOverrides = sessionStorage.getItem(`ss_profile_overrides_${user.id}`);
+    if (imageOverrides) {
+        try {
+            const parsedImages = JSON.parse(imageOverrides);
+            finalProfile = { ...finalProfile, ...parsedImages };
+        } catch(e) {
+            console.error("Failed to parse images from sessionStorage", e);
+        }
+    }
+
+    // Ensure array fields are correctly typed
+    if (!Array.isArray(finalProfile.gallery)) {
+        finalProfile.gallery = user.gallery || [];
+    }
+    if (!Array.isArray(finalProfile.wants)) {
+        finalProfile.wants = user.wants || [];
+    }
+    if (!Array.isArray(finalProfile.interests)) {
+        finalProfile.interests = user.interests || [];
+    }
+    
+    setFormData(finalProfile);
   }, [user]);
 
 
@@ -114,19 +126,25 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
     if (result.success && result.user) {
       try {
-        // Exclude large image fields from localStorage to prevent errors
-        const { profileImage, gallery, ...restForStorage } = result.user;
+        const updatedUser = result.user as UserProfile;
+        const { profileImage, gallery, ...restForStorage } = updatedUser;
+        
+        // Persist text data to localStorage
         localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(restForStorage));
         
+        // Persist image data to sessionStorage to avoid quota errors and allow session-persistence
+        const imageOverrides = { profileImage, gallery };
+        sessionStorage.setItem(`ss_profile_overrides_${user.id}`, JSON.stringify(imageOverrides));
+
         // Update form state with the full user object including images
-        setFormData(result.user as UserProfile);
+        setFormData(updatedUser);
         
         toast({
           title: 'Success!',
           description: `Profile for ${formData.name} has been updated.`,
         });
       } catch (e) {
-        console.error("Failed to save to localStorage", e);
+        console.error("Failed to save to storages", e);
         toast({
           variant: 'destructive',
           title: 'Save Failed',

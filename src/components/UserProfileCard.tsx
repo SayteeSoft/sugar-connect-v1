@@ -21,18 +21,27 @@ export function UserProfileCard({ user: initialUser, isLoggedIn = false }: UserP
   const [user, setUser] = useState(initialUser);
 
   useEffect(() => {
-    const storedUserJSON = localStorage.getItem(`user-profile-${initialUser.id}`);
-    if (storedUserJSON) {
+    let finalProfile = { ...initialUser };
+
+    const storedText = localStorage.getItem(`user-profile-${initialUser.id}`);
+    if (storedText) {
       try {
-        const storedUser = JSON.parse(storedUserJSON);
-        setUser({ ...initialUser, ...storedUser });
+        finalProfile = { ...finalProfile, ...JSON.parse(storedText) };
       } catch (e) {
         console.error("Failed to parse user from localStorage", e);
-        setUser(initialUser);
       }
-    } else {
-        setUser(initialUser);
     }
+    
+    const storedImages = sessionStorage.getItem(`ss_profile_overrides_${initialUser.id}`);
+    if (storedImages) {
+        try {
+            finalProfile = { ...finalProfile, ...JSON.parse(storedImages) };
+        } catch(e) {
+            console.error("Failed to parse images from sessionStorage", e);
+        }
+    }
+    
+    setUser(finalProfile);
   }, [initialUser]);
 
 
