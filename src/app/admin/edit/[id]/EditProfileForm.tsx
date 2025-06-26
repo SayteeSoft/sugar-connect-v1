@@ -22,11 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, Upload, ChevronDown } from 'lucide-react';
+import { Loader2, Trash2, Upload, ChevronDown, Info } from 'lucide-react';
 import { updateUserProfile } from './actions';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 
 interface EditProfileFormProps {
@@ -462,7 +463,15 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             </CardContent>
           </Card>
 
-          <Button type="submit" className="w-full" size="lg" disabled={isSaving}>
+          <Alert className="mt-6">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Note on Image Storage</AlertTitle>
+            <AlertDescription>
+              Profile and gallery image changes are saved for your current session and will persist through page reloads. However, due to browser storage limitations in this prototype, they will be cleared when the browser tab is closed. Text-based changes are saved in your browser's local storage.
+            </AlertDescription>
+          </Alert>
+
+          <Button type="submit" className="w-full !mt-6" size="lg" disabled={isSaving}>
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
