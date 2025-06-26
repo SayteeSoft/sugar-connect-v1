@@ -72,9 +72,7 @@ export function Header() {
     }
   }, [pathname]); // Refetch when path changes to get latest localstorage data
   
-  // A simple way to determine auth status for the prototype
-  const isLoggedIn = !['/login', '/signup'].includes(pathname) && user && pathname !== '/';
-  // The user with ID '1' is the admin.
+  const isLoggedIn = !['/login', '/signup', '/'].includes(pathname) && user;
   const isAdmin = user?.id === '1';
 
   const renderNavLinks = (isMobile = false) =>
@@ -82,12 +80,11 @@ export function Header() {
       <Button
         key={link.href}
         asChild
-        variant={pathname === link.href ? 'secondary' : 'ghost'}
+        variant={pathname === link.href ? 'default' : 'ghost'}
         className={cn(
-          'justify-start text-base font-semibold text-muted-foreground transition-colors duration-200',
-          pathname === link.href &&
-            '!text-primary dark:!text-foreground',
-          isMobile && 'w-full'
+          'justify-start text-base',
+          isMobile && 'w-full',
+          pathname === link.href ? 'font-bold' : 'font-semibold text-muted-foreground'
         )}
       >
         <Link href={link.href}>
@@ -268,49 +265,56 @@ export function Header() {
           </div>
           
           <div className="flex items-center gap-2 md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                 <div className="flex flex-col gap-4 py-6">
-                  {isLoggedIn ? (
-                    <>
-                      {renderNavLinks(true)}
-                       <Separator className="my-2" />
-                       <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
-                          <Link href="/profile/1">
-                            <Avatar className="mr-2 h-6 w-6">
-                              <AvatarImage src={avatarSrc} alt={avatarAlt} data-ai-hint="placeholder" />
-                              <AvatarFallback>{avatarFallback}</AvatarFallback>
-                            </Avatar>
-                            My Profile
-                          </Link>
-                       </Button>
-                      {isAdmin && (
+            {isLoggedIn ? (
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                   <div className="flex flex-col gap-4 py-6">
+                        {renderNavLinks(true)}
+                         <Separator className="my-2" />
                          <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
-                           <Link href="/admin">
-                             <Shield className="mr-2 h-5 w-5 text-primary" /> Admin
-                           </Link>
+                            <Link href="/profile/1">
+                              <Avatar className="mr-2 h-6 w-6">
+                                <AvatarImage src={avatarSrc} alt={avatarAlt} data-ai-hint="placeholder" />
+                                <AvatarFallback>{avatarFallback}</AvatarFallback>
+                              </Avatar>
+                              My Profile
+                            </Link>
                          </Button>
-                      )}
-                      {renderAccountMenuItems(true)}
-                    </>
-                  ) : (
-                    <>
-                      <Button asChild className="w-full justify-start font-semibold text-base">
-                        <Link href="/signup">Join Free</Link>
-                      </Button>
-                      <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
-                        <Link href="/login">Login</Link>
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </SheetContent>
-            </Sheet>
+                        {isAdmin && (
+                           <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                             <Link href="/admin">
+                               <Shield className="mr-2 h-5 w-5 text-primary" /> Admin
+                             </Link>
+                           </Button>
+                        )}
+                        {renderAccountMenuItems(true)}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            ) : (
+               <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                   <div className="flex flex-col gap-4 py-6">
+                        <Button asChild className="w-full justify-start font-semibold text-base">
+                          <Link href="/signup">Join Free</Link>
+                        </Button>
+                        <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                          <Link href="/login">Login</Link>
+                        </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            )}
             <ThemeSwitcher />
           </div>
         </div>

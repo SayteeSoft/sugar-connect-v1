@@ -10,18 +10,7 @@ import { db } from '@/lib/db';
 import { UserListWithVisitToast } from './UserListWithVisitToast';
 import type { UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Helper to get from localStorage or return default
-const getStoredIds = (key: string, defaultIds: string[]): string[] => {
-  if (typeof window === 'undefined') return defaultIds;
-  const stored = localStorage.getItem(key);
-  try {
-    return stored ? JSON.parse(stored) : defaultIds;
-  } catch (e) {
-    console.error(`Failed to parse ${key} from localStorage`, e);
-    return defaultIds;
-  }
-};
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const ListSkeleton = () => (
   <Card>
@@ -46,45 +35,68 @@ const ListSkeleton = () => (
 export default function AiMatchPage() {
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => getStoredIds('user_favorites', ['2', '5', '7']));
-  const [visitorIds, setVisitorIds] = useState<string[]>(() => getStoredIds('user_visitors', ['4', '6']));
-  const [viewedIds, setViewedIds] = useState<string[]>(() => getStoredIds('user_viewed', ['3', '8']));
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [visitorIds, setVisitorIds] = useState<string[]>([]);
+  const [viewedIds, setViewedIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    
+    const getStoredIds = (key: string, defaultIds: string[]): string[] => {
+      const stored = localStorage.getItem(key);
+      try {
+        return stored ? JSON.parse(stored) : defaultIds;
+      } catch (e) {
+        console.error(`Failed to parse ${key} from localStorage`, e);
+        return defaultIds;
+      }
+    };
+
+    setFavoriteIds(getStoredIds('user_favorites', ['2', '5', '7']));
+    setVisitorIds(getStoredIds('user_visitors', ['4', '6']));
+    setViewedIds(getStoredIds('user_viewed', ['3', '8']));
+    
     const fetchProfiles = async () => {
       setIsLoading(true);
-      const profiles = await db.getProfiles();
-      setAllProfiles(profiles);
+      const profilesFromDb = await db.getProfiles();
+      const mergedProfiles = profilesFromDb.map(p => {
+         const stored = localStorage.getItem(`user-profile-${p.id}`);
+         try {
+            return stored ? { ...p, ...JSON.parse(stored) } : p;
+         } catch (e) { 
+            console.error("Failed to parse profile from localStorage", e);
+            return p; 
+         }
+      });
+      setAllProfiles(mergedProfiles);
       setIsLoading(false);
     }
     fetchProfiles();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('user_favorites', JSON.stringify(favoriteIds));
-  }, [favoriteIds]);
+    if(isMounted) {
+        localStorage.setItem('user_favorites', JSON.stringify(favoriteIds));
+    }
+  }, [favoriteIds, isMounted]);
 
   useEffect(() => {
-    localStorage.setItem('user_visitors', JSON.stringify(visitorIds));
-  }, [visitorIds]);
+    if(isMounted) {
+        localStorage.setItem('user_visitors', JSON.stringify(visitorIds));
+    }
+  }, [visitorIds, isMounted]);
 
   useEffect(() => {
-    localStorage.setItem('user_viewed', JSON.stringify(viewedIds));
-  }, [viewedIds]);
+    if(isMounted) {
+        localStorage.setItem('user_viewed', JSON.stringify(viewedIds));
+    }
+  }, [viewedIds, isMounted]);
 
   const getProfilesFromIds = (ids: string[]) => {
     if (!allProfiles.length) return [];
-    return allProfiles
-      .filter(p => ids.includes(p.id))
-      .map(p => {
-        const stored = typeof window !== 'undefined' ? localStorage.getItem(`user-profile-${p.id}`) : null;
-        try {
-          return stored ? { ...p, ...JSON.parse(stored) } : p;
-        } catch (e) {
-          return p;
-        }
-      });
+    return allProfiles.filter(p => ids.includes(p.id));
   };
 
   const favorites = useMemo(() => getProfilesFromIds(favoriteIds), [favoriteIds, allProfiles]);
