@@ -81,12 +81,11 @@ export function Header() {
       <Button
         key={link.href}
         asChild
-        variant={pathname === link.href ? 'default' : 'ghost'}
+        variant={pathname === link.href ? 'secondary' : 'ghost'}
         className={cn(
-          'justify-start text-base transition-colors duration-200',
-          pathname === link.href
-            ? 'font-bold'
-            : 'font-semibold text-muted-foreground',
+          'justify-start text-base font-semibold text-muted-foreground transition-colors duration-200',
+          pathname === link.href &&
+            '!text-primary dark:!text-foreground',
           isMobile && 'w-full'
         )}
       >
