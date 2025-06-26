@@ -190,11 +190,11 @@ export function Header() {
               </>
             ) : (
               <>
+                <Button asChild>
+                  <Link href="/signup">Join Free</Link>
+                </Button>
                 <Button asChild variant="ghost">
                   <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/signup">Sign Up</Link>
                 </Button>
                 <ThemeSwitcher />
               </>
@@ -235,11 +235,11 @@ export function Header() {
                     </>
                   ) : (
                     <>
+                      <Button asChild className="w-full justify-start font-semibold text-base">
+                        <Link href="/signup">Join Free</Link>
+                      </Button>
                       <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
                         <Link href="/login">Login</Link>
-                      </Button>
-                      <Button asChild className="w-full justify-start font-semibold text-base">
-                        <Link href="/signup">Sign Up</Link>
                       </Button>
                     </>
                   )}
