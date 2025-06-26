@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -81,12 +82,12 @@ export function Header() {
       <Button
         key={link.href}
         asChild
-        variant="ghost"
+        variant={pathname === link.href ? 'default' : 'ghost'}
         className={cn(
-          'justify-start font-semibold text-base transition-colors duration-200',
+          'justify-start text-base transition-colors duration-200',
           pathname === link.href
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-            : 'text-muted-foreground',
+            ? 'font-bold'
+            : 'font-semibold text-muted-foreground',
           isMobile && 'w-full'
         )}
       >
