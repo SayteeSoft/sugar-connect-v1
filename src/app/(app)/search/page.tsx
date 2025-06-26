@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -126,7 +125,7 @@ export default function SearchPage() {
               </div>
               <div className="space-y-2">
                 <Label>Interests</Label>
-                <ScrollArea className="h-40 rounded-md border p-4">
+                <ScrollArea className="h-64 rounded-md border p-4">
                   <div className="space-y-2">
                     {allInterests.map((interest) => (
                       <div key={interest} className="flex items-center space-x-2">
