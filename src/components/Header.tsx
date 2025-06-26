@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -240,12 +241,12 @@ export function Header() {
           <div className="hidden items-center gap-2 md:flex">
             {isLoggedIn ? (
               <>
-                {isAdmin && (
-                   <Button asChild>
-                     <Link href="/admin">
-                       <Shield className="mr-2 h-4 w-4" /> Admin
-                     </Link>
-                   </Button>
+                {user?.role === 'Sugar Daddy' && (
+                  <Button asChild>
+                    <Link href="/payment">
+                      <Gem className="mr-2 h-4 w-4" /> Buy Credits
+                    </Link>
+                  </Button>
                 )}
                 <ThemeSwitcher />
                 {creditDisplay}
@@ -265,8 +266,12 @@ export function Header() {
           </div>
           
           <div className="flex items-center gap-2 md:hidden">
-            <ThemeSwitcher />
-            {isLoggedIn && creditDisplay}
+            {isLoggedIn && (
+              <>
+                <ThemeSwitcher />
+                {creditDisplay}
+              </>
+            )}
             {isLoggedIn ? (
               <Sheet>
                 <SheetTrigger asChild>
@@ -288,11 +293,11 @@ export function Header() {
                             </Link>
                          </Button>
                         {isAdmin && (
-                           <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
-                             <Link href="/admin">
-                               <Shield className="mr-2 h-5 w-5 text-primary" /> Admin
-                             </Link>
-                           </Button>
+                          <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
+                            <Link href="/admin">
+                              <Shield className="mr-2 h-5 w-5 text-primary" /> Admin
+                            </Link>
+                          </Button>
                         )}
                         {renderAccountMenuItems(true)}
                   </div>
@@ -313,6 +318,7 @@ export function Header() {
                         <Button asChild variant="ghost" className="w-full justify-start font-semibold text-base">
                           <Link href="/login">Login</Link>
                         </Button>
+                        <ThemeSwitcher />
                   </div>
                 </SheetContent>
               </Sheet>
