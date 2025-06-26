@@ -19,8 +19,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <Heart className="h-7 w-7 text-primary" />
-              <span className="text-xl font-headline font-bold text-primary">
+              <Heart className="h-7 w-7 text-primary dark:text-foreground" />
+              <span className="text-xl font-headline font-bold text-primary dark:text-foreground">
                 Sugar Connect
               </span>
             </Link>
