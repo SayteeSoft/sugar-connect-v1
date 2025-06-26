@@ -22,7 +22,7 @@ const AttributeItem = ({
   label: string;
   value: string | number | undefined;
 }) => {
-  if (!value) return null;
+  if (value === undefined || value === null || value === '') return null;
   return (
     <div className="flex justify-between border-b py-3 text-sm last:border-none">
       <span className="font-semibold text-foreground">{label}</span>
@@ -76,36 +76,40 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
     const fetchUser = async () => {
       setIsLoading(true);
       const dbUser = await db.getProfileById(params.id);
+
+      if (!dbUser) {
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
       
+      let finalUser = { ...dbUser };
       const storedUserJSON = localStorage.getItem(`user-profile-${params.id}`);
-      let finalUser = dbUser;
       if (storedUserJSON) {
         try {
           const storedUser = JSON.parse(storedUserJSON);
-          finalUser = { ...dbUser, ...storedUser };
+          finalUser = { ...finalUser, ...storedUser };
         } catch (e) {
           console.error("Failed to parse user from localStorage", e);
         }
       }
 
-      if (finalUser) {
-        // Ensure array fields are correctly typed before setting state
-        if (finalUser.wants && typeof finalUser.wants === 'string') {
-          finalUser.wants = (finalUser.wants as string).split(',').map(s => s.trim()).filter(Boolean);
-        } else if (!Array.isArray(finalUser.wants)) {
-          finalUser.wants = [];
-        }
-
-        if (!Array.isArray(finalUser.interests)) {
-          finalUser.interests = [];
-        }
-
-        if (!Array.isArray(finalUser.gallery)) {
-          finalUser.gallery = [];
-        }
-        
-        setUser(finalUser);
+      // Ensure array fields are correctly typed before setting state
+      if (typeof finalUser.wants === 'string') {
+        finalUser.wants = (finalUser.wants as string).split(',').map(s => s.trim()).filter(Boolean);
+      } else if (!Array.isArray(finalUser.wants)) {
+        finalUser.wants = [];
       }
+
+      if (!Array.isArray(finalUser.interests)) {
+        finalUser.interests = [];
+      }
+
+      if (!Array.isArray(finalUser.gallery)) {
+        finalUser.gallery = [];
+      }
+      
+      setUser(finalUser);
       setIsLoading(false);
     };
 
@@ -185,16 +189,16 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
             <Card>
               <CardHeader><CardTitle>Wants</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {(user.wants || []).map(want => (
-                  <Badge key={want} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
+                {(user.wants || []).map((want, index) => (
+                  <Badge key={index} variant="secondary" className="text-base px-3 py-1">{want}</Badge>
                 ))}
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Interests</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {(user.interests || []).map(interest => (
-                  <Badge key={interest} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
+                {(user.interests || []).map((interest, index) => (
+                  <Badge key={index} variant="secondary" className="text-base px-3 py-1">{interest}</Badge>
                 ))}
               </CardContent>
             </Card>
