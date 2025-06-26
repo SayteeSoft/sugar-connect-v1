@@ -91,11 +91,20 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setIsSaving(false);
 
     if (result.success && result.user) {
-      localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(result.user));
-      toast({
-        title: 'Success!',
-        description: `Profile for ${formData.name} has been updated.`,
-      });
+      try {
+        localStorage.setItem(`user-profile-${user.id}`, JSON.stringify(result.user));
+        toast({
+          title: 'Success!',
+          description: `Profile for ${formData.name} has been updated.`,
+        });
+      } catch (e) {
+        console.error("Failed to save to localStorage", e);
+        toast({
+          variant: 'destructive',
+          title: 'Save Failed',
+          description: 'Could not save profile changes. The uploaded images might be too large. Please try smaller files.'
+        });
+      }
     } else {
       toast({
         variant: 'destructive',
