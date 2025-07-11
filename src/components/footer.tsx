@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Logo } from "./icons";
 import { Button } from "./ui/button";
 import type { useLayout } from "@/hooks/use-layout";
+import { useAuth } from "@/hooks/use-auth";
 
 type FooterProps = {
     setLayoutState?: ReturnType<typeof useLayout>['setLayoutState'];
 }
 
 export function Footer({ setLayoutState }: FooterProps) {
+  const { user } = useAuth();
 
   const handleCookiePolicyClick = () => {
     if (setLayoutState) {
@@ -76,7 +78,9 @@ export function Footer({ setLayoutState }: FooterProps) {
             <ul className="mt-4 space-y-2">
               <li><Link href="/contact" className="hover:text-primary">Contact Us</Link></li>
               <li><Link href="/sitemap" className="hover:text-primary">Sitemap</Link></li>
-              <li><Link href="/admin" className="hover:text-primary">Admin</Link></li>
+              {user?.role === 'Admin' && (
+                <li><Link href="/admin" className="hover:text-primary">Admin</Link></li>
+              )}
             </ul>
           </div>
         </div>
