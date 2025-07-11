@@ -21,7 +21,7 @@ import { Skeleton } from './ui/skeleton';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
-  <>
+  <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
     <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/profile">Profile</Link>
     </Button>
@@ -34,7 +34,7 @@ const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
     <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/search">Search</Link>
     </Button>
-  </>
+  </div>
 );
 
 export function Header() {

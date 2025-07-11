@@ -20,8 +20,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-inter)', 'sans-serif'],
-        headline: ['var(--font-alegreya)', 'sans-serif'],
+        body: ['PT Sans', 'sans-serif'],
+        headline: ['Manrope', 'sans-serif'],
         code: ['monospace'],
       },
       backgroundImage: {

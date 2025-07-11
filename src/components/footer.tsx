@@ -12,7 +12,7 @@ export function Footer() {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center mt-12">
           <div>
             <h4 className="font-bold font-headline text-foreground">Site</h4>
             <ul className="mt-4 space-y-2">
@@ -41,7 +41,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} SD Connect. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Sugar Connect. All rights reserved.</p>
         </div>
       </div>
     </footer>

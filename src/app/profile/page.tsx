@@ -220,9 +220,9 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Left Column */}
-          <div className="md:col-span-1 space-y-6 sticky top-24">
+          <div className="lg:col-span-1 space-y-6 lg:sticky top-24">
             <Card>
               <CardContent className="p-6">
                 <div className="relative mb-4">
@@ -314,7 +314,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Right Column */}
-          <div className="md:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-8">
             <Card>
               <CardHeader>
                 <CardTitle>About {isEditing ? user.name : formValues.name}</CardTitle>
