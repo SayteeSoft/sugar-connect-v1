@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Heart, Lock, ShieldCheck, Headset, Users, CalendarClock, UserCheck, Star } from "lucide-react";
+import { Heart, Lock, ShieldCheck, Headset, Users, CakeSlice, HeartHandshake, Star } from "lucide-react";
 import { featuredProfiles, testimonials } from "@/lib/mock-data";
 import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
@@ -185,23 +185,35 @@ export default function Home() {
       {/* By The Numbers */}
       <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">By The Numbers</h2>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col items-center">
-              <Star className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">Average Sugar Baby</h3>
-              <p className="mt-2 text-2xl font-semibold">Age: 23</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Users className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">6x More Sugar Babies</h3>
-              <p className="mt-2 text-2xl font-semibold">than Sugar Daddies</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <CalendarClock className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">Average Time to Find a Match</h3>
-              <p className="mt-2 text-2xl font-semibold">4 Days</p>
-            </div>
+          <h2 className="text-3xl font-bold text-center font-headline text-primary">By The Numbers</h2>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <Card>
+              <CardContent className="p-6 flex flex-col items-center">
+                <div className="p-4 bg-accent rounded-full mb-4">
+                  <CakeSlice className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">Average Sugar Baby</h3>
+                <p className="mt-1 text-muted-foreground">Age: 23</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 flex flex-col items-center">
+                <div className="p-4 bg-accent rounded-full mb-4">
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">6x More Sugar Babies</h3>
+                <p className="mt-1 text-muted-foreground">than Sugar Daddies</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 flex flex-col items-center">
+                <div className="p-4 bg-accent rounded-full mb-4">
+                  <HeartHandshake className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">Average Time to Find a Match</h3>
+                <p className="mt-1 text-muted-foreground">4 Days</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
