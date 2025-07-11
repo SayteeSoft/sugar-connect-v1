@@ -75,3 +75,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .header {
+    position: relative;
+    z-index: 1;
+    padding: 12px 12px 6px;
+    background: #000 center center no-repeat;
+    background-size: cover;
+  }
+
+  @media screen and (min-width: 768px) {
+    .pb-7-r {
+        padding-bottom: 64px !important;
+    }
+  }
+}
