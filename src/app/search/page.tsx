@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -56,8 +57,13 @@ function FiltersPanel() {
 export default function SearchPage() {
   const { user } = useAuth();
   
-  const targetRole = user?.role === 'Sugar Daddy' ? 'Sugar Baby' : 'Sugar Daddy';
-  const searchResults = users.filter(u => u.role === targetRole);
+  const searchResults = users.filter(u => {
+    if (!user) return u.role !== 'Admin'; // Show non-admins if not logged in
+    if (user.role === 'Admin') return u.role !== 'Admin';
+    if (user.role === 'Sugar Daddy') return u.role === 'Sugar Baby';
+    if (user.role === 'Sugar Baby') return u.role === 'Sugar Daddy';
+    return false;
+  });
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
