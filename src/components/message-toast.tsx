@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from 'react';
@@ -16,54 +17,62 @@ export function MessageToast() {
     const [fromUser, setFromUser] = useState<User | null>(null);
     const [show, setShow] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        let timer: NodeJS.Timeout;
-        if (user?.role === 'Sugar Daddy') {
-            const generateAndShowMessage = async () => {
-                if (isGenerating || show) return;
+        // Ensure this only runs on the client to avoid hydration mismatch
+        setIsClient(true);
+    }, []);
 
-                setIsGenerating(true);
-                try {
-                    const sugarBabies = allUsers.filter(u => u.role === 'Sugar Baby');
-                    if (sugarBabies.length === 0) return;
-
-                    const randomBaby = sugarBabies[Math.floor(Math.random() * sugarBabies.length)];
-                    setFromUser(randomBaby);
-                    
-                    const result = await generateSugarBabyMessage({
-                        sugarDaddyName: user.name,
-                        sugarBabyProfile: {
-                            name: randomBaby.name,
-                            age: randomBaby.age,
-                            interests: "fashion and art", // Mock interests
-                            location: randomBaby.location,
-                        },
-                    });
-                    
-                    if (result.message) {
-                        setMessage(result.message);
-                        setShow(true);
-                    }
-                } catch (error) {
-                    console.error("Error generating message:", error);
-                } finally {
-                    setIsGenerating(false);
-                }
-            };
-            
-            // Trigger randomly, but not too often
-            timer = setInterval(() => {
-                if (Math.random() > 0.8) { // 20% chance every 20 seconds
-                   generateAndShowMessage();
-                }
-            }, 20000);
+    useEffect(() => {
+        // Wait until the component has mounted and we're on the client
+        if (!isClient || user?.role !== 'Sugar Daddy') {
+            return;
         }
 
-        return () => {
-            if (timer) clearInterval(timer);
+        const generateAndShowMessage = async () => {
+            if (isGenerating || show) return;
+
+            setIsGenerating(true);
+            try {
+                const sugarBabies = allUsers.filter(u => u.role === 'Sugar Baby');
+                if (sugarBabies.length === 0) return;
+
+                const randomBaby = sugarBabies[Math.floor(Math.random() * sugarBabies.length)];
+                setFromUser(randomBaby);
+                
+                const result = await generateSugarBabyMessage({
+                    sugarDaddyName: user.name,
+                    sugarBabyProfile: {
+                        name: randomBaby.name,
+                        age: randomBaby.age,
+                        interests: "fashion and art", // Mock interests
+                        location: randomBaby.location,
+                    },
+                });
+                
+                if (result.message) {
+                    setMessage(result.message);
+                    setShow(true);
+                }
+            } catch (error) {
+                console.error("Error generating message:", error);
+            } finally {
+                setIsGenerating(false);
+            }
         };
-    }, [user, isGenerating, show]);
+
+        // Trigger randomly, but not too often
+        const timer = setInterval(() => {
+            if (Math.random() > 0.8) { // 20% chance every 20 seconds
+                generateAndShowMessage();
+            }
+        }, 20000);
+        
+        return () => {
+            clearInterval(timer);
+        };
+    }, [user, isGenerating, show, isClient]);
 
     const handleClose = () => {
         setShow(false);
