@@ -20,7 +20,7 @@ export function ThemeSwitcher() {
 
   if (!mounted) {
     // Return a placeholder or null to avoid hydration mismatch
-    return <Button variant="ghost" size="icon" disabled></Button>;
+    return <Button variant="ghost" size="icon" className="h-[1.2rem] w-[1.2rem]"></Button>;
   }
 
   return (
