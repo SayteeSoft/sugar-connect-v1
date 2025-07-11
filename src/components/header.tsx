@@ -65,7 +65,7 @@ export function Header() {
   const renderAuthContent = () => {
     if (user) {
       return (
-        <>
+        <div className="flex items-center gap-2 md:gap-4">
           {getCreditsButton()}
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
@@ -75,7 +75,7 @@ export function Header() {
             <Heart className="h-5 w-5" />
             <span className="sr-only">Favorites</span>
           </Button>
-        </>
+        </div>
       );
     }
     return (
@@ -93,10 +93,10 @@ export function Header() {
   const renderLoadingSkeletons = () => (
       <div className="flex items-center gap-2 md:gap-4">
           <Skeleton className="h-10 w-24" />
-          <Skeleton className="h-10 w-10 rounded-full" />
+          <Skeleton className="h-10 w-10" />
+          <Skeleton className="h-10 w-10" />
       </div>
   );
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card">
@@ -118,7 +118,9 @@ export function Header() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={isClient && user ? user.avatarUrl : undefined} />
+                  {isClient && user ? (
+                    <AvatarImage src={user.avatarUrl} />
+                  ) : null}
                   <AvatarFallback>
                     <User className="h-5 w-5" />
                   </AvatarFallback>
