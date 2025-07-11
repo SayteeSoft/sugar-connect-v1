@@ -19,11 +19,11 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section 
-        className="relative w-full pt-[calc(8rem-18px)] pb-[calc(8rem-18px)] md:pt-[calc(12rem-18px)] md:pb-[calc(12rem-18px)] bg-cover bg-center bg-fixed"
+        className="relative w-full h-[60vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{backgroundImage: "url('/sd-connect-hero-background.jpg')"}}
       >
         <div className="absolute inset-0 bg-black/50" />
-        <div className="container relative mx-auto px-4 md:px-6 text-center text-white">
+        <div className="container relative mx-auto px-4 md:px-6 pb-16 text-center text-white">
           <h1 className="text-6xl md:text-8xl font-headline font-bold drop-shadow-lg">
             Sugar Connect
           </h1>
@@ -228,5 +228,7 @@ export default function Home() {
 
 
 
+
+    
 
     
