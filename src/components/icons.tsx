@@ -1,10 +1,10 @@
 import { Heart } from 'lucide-react';
 
 export const Logo = ({ className }: { className?: string }) => (
-  <div className={`flex items-center gap-2 text-2xl font-bold font-headline ${className}`}>
-    <Heart className="h-8 w-8 text-primary" fill="currentColor" />
+  <div className={`flex items-center gap-2 font-bold font-headline ${className}`}>
+    <Heart className="h-6 w-6 text-primary" />
     <span>
-        Sugar Connect
+        SD Connect
     </span>
   </div>
 );
