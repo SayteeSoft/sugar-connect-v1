@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -14,22 +15,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/icons";
-import { LogIn, LogOut, Settings, UserPlus, User, Users } from "lucide-react";
+import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
 import { Skeleton } from './ui/skeleton';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
-const NavLinks = () => (
+const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <>
-    <Button variant="ghost" asChild>
+    <Button variant={inSheet ? "ghost" : "link"} asChild>
       <Link href="/profile">Profile</Link>
     </Button>
-    <Button variant="ghost" asChild>
+    <Button variant={inSheet ? "ghost" : "link"} asChild>
       <Link href="/messages">Messages</Link>
     </Button>
-    <Button variant="ghost" asChild>
+    <Button variant={inSheet ? "ghost" : "link"} asChild>
       <Link href="/matches">Matches</Link>
     </Button>
-    <Button variant="ghost" asChild>
+    <Button variant={inSheet ? "ghost" : "link"} asChild>
       <Link href="/search">Search</Link>
     </Button>
   </>
@@ -89,21 +91,23 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
-        <div className="w-1/3">
+        <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
             <Logo />
           </Link>
         </div>
         
-        <nav className="hidden w-1/3 items-center justify-center gap-2 md:flex">
+        <nav className="hidden items-center justify-center gap-2 md:flex flex-1">
           {isClient && !loading && user && <NavLinks />}
         </nav>
 
-        <div className="flex w-1/3 items-center justify-end gap-2 md:gap-4">
+        <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : renderAuthContent()}
 
+          <ThemeSwitcher />
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
@@ -153,7 +157,24 @@ export function Header() {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <ThemeSwitcher />
+
+          {user && (
+            <div className="md:hidden">
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Menu className="h-6 w-6" />
+                        <span className="sr-only">Open menu</span>
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                    <div className="flex flex-col gap-4 py-6">
+                        <NavLinks inSheet />
+                    </div>
+                </SheetContent>
+            </Sheet>
+            </div>
+          )}
         </div>
       </div>
     </header>

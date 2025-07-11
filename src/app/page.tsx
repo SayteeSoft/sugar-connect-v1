@@ -1,20 +1,29 @@
 
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Heart, Lock, ShieldCheck, Headset, Users, CalendarClock, UserCheck, Star, ArrowRight } from "lucide-react";
+import { Heart, Lock, ShieldCheck, Headset, Users, CalendarClock, UserCheck, Star } from "lucide-react";
 import { featuredProfiles, testimonials } from "@/lib/mock-data";
 import Image from "next/image";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
+  const { user } = useAuth();
+  
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="w-full py-32 md:py-48 bg-hero text-white" style={{backgroundImage: "url('/sd-connect-hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center'}} data-ai-hint="stylish couple">
-        <div className="container mx-auto px-4 md:px-6 text-center">
+      <section 
+        className="relative w-full py-32 md:py-48 bg-cover bg-center bg-fixed"
+        style={{backgroundImage: "url('/sd-connect-hero-background.jpg')"}}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="container relative mx-auto px-4 md:px-6 text-center text-white">
           <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">
             SD Connect
           </h1>
@@ -25,14 +34,14 @@ export default function Home() {
             An exclusive platform for ambitious and attractive individuals
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button asChild size="lg" className="w-full sm:w-auto bg-gray-200/90 text-primary-foreground hover:bg-gray-200/80 text-black">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-200">
               <Link href="/signup?role=Sugar+Baby">I'm a Sugar Baby</Link>
             </Button>
-            <Button asChild size="lg" className="w-full sm:w-auto bg-gray-200/90 text-primary-foreground hover:bg-gray-200/80 text-black">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-200">
               <Link href="/signup?role=Sugar+Daddy">I'm a Sugar Daddy</Link>
             </Button>
           </div>
-          <Button asChild size="lg" className="mt-4 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+           <Button asChild size="lg" className="mt-4 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
             <Link href="/signup">
               <Heart className="mr-2 h-5 w-5" /> Find Your Match
             </Link>
@@ -65,13 +74,13 @@ export default function Home() {
       </section>
 
       {/* What Our Members Say */}
-      <section className="py-12 md:py-20 section-bg-accent">
+      <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">What Our Members Say</h2>
           <Carousel className="mt-8 max-w-4xl mx-auto" opts={{ loop: true }}>
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={index} className="md:basis-1/2">
                   <div className="p-1 h-full">
                     <Card className="flex flex-col justify-between h-full">
                       <CardContent className="pt-6">
@@ -80,7 +89,7 @@ export default function Home() {
                       <CardHeader>
                         <div className="flex items-center gap-4">
                           <Avatar>
-                            <AvatarImage src={`https://placehold.co/40x40.png`} alt={testimonial.name} />
+                            <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} />
                             <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <div>
@@ -93,8 +102,8 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden sm:flex" />
+            <CarouselNext className="hidden sm:flex" />
           </Carousel>
         </div>
       </section>
@@ -110,17 +119,17 @@ export default function Home() {
       </section>
 
       {/* What is a... */}
-      <section className="py-12 md:py-20 section-bg-accent">
+      <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">
             <Tabs defaultValue="sugar-daddy" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="sugar-daddy">Sugar Daddy</TabsTrigger>
                     <TabsTrigger value="sugar-baby">Sugar Baby</TabsTrigger>
                 </TabsList>
-                <TabsContent value="sugar-daddy" className="pt-4">
+                <TabsContent value="sugar-daddy" className="pt-4 text-center md:text-left">
                     <p>A Sugar Daddy is a successful and generous individual who is willing to provide financial support and mentorship to a partner in exchange for companionship and a mutually beneficial relationship.</p>
                 </TabsContent>
-                <TabsContent value="sugar-baby" className="pt-4">
+                <TabsContent value="sugar-baby" className="pt-4 text-center md:text-left">
                     <p>A Sugar Baby is an ambitious and attractive person who seeks a mature partner to provide them with a certain lifestyle and support their goals, in return for their company and affection.</p>
                 </TabsContent>
             </Tabs>
@@ -152,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* By The Numbers */}
-      <section className="py-12 md:py-20 section-bg-accent">
+      <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">By The Numbers</h2>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
