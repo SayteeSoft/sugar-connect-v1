@@ -19,7 +19,7 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section 
-        className="relative w-full pt-[calc(8rem-8px)] pb-[calc(8rem-8px)] md:pt-[calc(12rem-8px)] md:pb-[calc(12rem-8px)] bg-cover bg-center bg-fixed"
+        className="relative w-full pt-[calc(8rem-18px)] pb-[calc(8rem-18px)] md:pt-[calc(12rem-18px)] md:pb-[calc(12rem-18px)] bg-cover bg-center bg-fixed"
         style={{backgroundImage: "url('/sd-connect-hero-background.jpg')"}}
       >
         <div className="absolute inset-0 bg-black/50" />
@@ -227,3 +227,6 @@ export default function Home() {
     
 
 
+
+
+    
