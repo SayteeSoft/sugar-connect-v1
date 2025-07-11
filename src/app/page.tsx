@@ -154,7 +154,7 @@ export default function Home() {
             <Card>
               <CardContent className="p-6 text-center flex flex-col items-center">
                   <div className="p-4 rounded-full bg-accent mb-4">
-                    <ShieldCheck className="h-8 w-8 text-primary" />
+                    <ShieldCheck className="h-8 w-8 text-icon-primary" />
                   </div>
                   <h3 className="text-xl font-bold">Verified Members</h3>
                   <p className="mt-2 text-muted-foreground">Video verification allows you to know that potential dates look like their photos.</p>
@@ -163,7 +163,7 @@ export default function Home() {
             <Card>
                <CardContent className="p-6 text-center flex flex-col items-center">
                   <div className="p-4 rounded-full bg-accent mb-4">
-                    <Lock className="h-8 w-8 text-primary" />
+                    <Lock className="h-8 w-8 text-icon-primary" />
                   </div>
                   <h3 className="text-xl font-bold">Secure Accounts</h3>
                   <p className="mt-2 text-muted-foreground">Industry-leading account protection helps keep your profile and information safe.</p>
@@ -172,7 +172,7 @@ export default function Home() {
             <Card>
               <CardContent className="p-6 text-center flex flex-col items-center">
                   <div className="p-4 rounded-full bg-accent mb-4">
-                    <Headset className="h-8 w-8 text-primary" />
+                    <Headset className="h-8 w-8 text-icon-primary" />
                   </div>
                   <h3 className="text-xl font-bold">24/7 Support</h3>
                   <p className="mt-2 text-muted-foreground">We have a dedicated team of customer service agents to support you.</p>
@@ -190,7 +190,7 @@ export default function Home() {
             <Card>
               <CardContent className="p-6 flex flex-col items-center">
                 <div className="p-4 bg-accent rounded-full mb-4">
-                  <CakeSlice className="h-8 w-8 text-primary" />
+                  <CakeSlice className="h-8 w-8 text-icon-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Average Sugar Baby</h3>
                 <p className="mt-1 text-muted-foreground">Age: 23</p>
@@ -199,7 +199,7 @@ export default function Home() {
             <Card>
               <CardContent className="p-6 flex flex-col items-center">
                 <div className="p-4 bg-accent rounded-full mb-4">
-                  <Users className="h-8 w-8 text-primary" />
+                  <Users className="h-8 w-8 text-icon-primary" />
                 </div>
                 <h3 className="text-xl font-bold">6x More Sugar Babies</h3>
                 <p className="mt-1 text-muted-foreground">than Sugar Daddies</p>
@@ -208,7 +208,7 @@ export default function Home() {
             <Card>
               <CardContent className="p-6 flex flex-col items-center">
                 <div className="p-4 bg-accent rounded-full mb-4">
-                  <HeartHandshake className="h-8 w-8 text-primary" />
+                  <HeartHandshake className="h-8 w-8 text-icon-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Average Time to Find a Match</h3>
                 <p className="mt-1 text-muted-foreground">4 Days</p>
