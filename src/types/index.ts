@@ -37,6 +37,7 @@ export interface Profile {
 
 export interface Testimonial {
   name: string;
+  role: Role;
   quote: string;
   avatarUrl: string;
 }

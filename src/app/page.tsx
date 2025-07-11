@@ -80,26 +80,28 @@ export default function Home() {
       <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">What Our Members Say</h2>
-          <Carousel className="mt-8 max-w-4xl mx-auto" opts={{ loop: true }}>
+          <Carousel className="mt-8 max-w-6xl mx-auto" opts={{ loop: true }}>
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:basis-1/2">
+                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                   <div className="p-1 h-full">
-                    <Card className="flex flex-col justify-between h-full">
-                      <CardContent className="pt-6">
-                        <p className="italic">&quot;{testimonial.quote}&quot;</p>
-                      </CardContent>
-                      <CardHeader>
-                        <div className="flex items-center gap-4">
-                          <Avatar>
-                            <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} />
-                            <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <CardTitle className="text-base">{testimonial.name}</CardTitle>
-                          </div>
+                    <Card className="flex flex-col justify-between h-full p-6">
+                      <div>
+                        <div className="flex gap-0.5 text-primary mb-4">
+                            {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 fill-current" />)}
                         </div>
-                      </CardHeader>
+                        <p className="italic text-muted-foreground">&quot;{testimonial.quote}&quot;</p>
+                      </div>
+                      <div className="flex items-center gap-4 mt-6">
+                        <Avatar>
+                          <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} />
+                          <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold">{testimonial.name}</p>
+                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                        </div>
+                      </div>
                     </Card>
                   </div>
                 </CarouselItem>
