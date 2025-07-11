@@ -44,7 +44,7 @@ export function Header() {
   }, []);
 
   const getCreditsButton = () => {
-    if (loading || !user) return null;
+    if (!user) return null;
 
     switch (user.role) {
       case 'Sugar Daddy':
@@ -62,44 +62,41 @@ export function Header() {
     }
   };
 
-  const renderContent = () => {
-    if (!isClient || loading) {
-       return (
-            <div className="flex items-center gap-4">
-                <Skeleton className="h-10 w-24" />
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <Skeleton className="h-10 w-10 rounded-full" />
-            </div>
-       )
-    }
-
+  const renderAuthContent = () => {
     if (user) {
-        return (
-            <>
-              {getCreditsButton()}
-              <Button variant="ghost" size="icon">
-                <Bell className="h-5 w-5" />
-                <span className="sr-only">Notifications</span>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Heart className="h-5 w-5" />
-                <span className="sr-only">Favorites</span>
-              </Button>
-            </>
-        )
+      return (
+        <>
+          {getCreditsButton()}
+          <Button variant="ghost" size="icon">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifications</span>
+          </Button>
+          <Button variant="ghost" size="icon">
+            <Heart className="h-5 w-5" />
+            <span className="sr-only">Favorites</span>
+          </Button>
+        </>
+      );
     }
-
     return (
-        <div className="flex items-center gap-2">
-             <Button variant="ghost" asChild>
-                <Link href="/login">Sign In</Link>
-            </Button>
-            <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-            </Button>
-        </div>
-    )
-  }
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" asChild>
+          <Link href="/login">Sign In</Link>
+        </Button>
+        <Button asChild>
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+      </div>
+    );
+  };
+  
+  const renderLoadingSkeletons = () => (
+      <div className="flex items-center gap-2 md:gap-4">
+          <Skeleton className="h-10 w-24" />
+          <Skeleton className="h-10 w-10 rounded-full" />
+      </div>
+  );
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card">
@@ -115,13 +112,13 @@ export function Header() {
         </nav>
 
         <div className="flex w-1/3 items-center justify-end gap-2 md:gap-4">
-          {renderContent()}
+          {(!isClient || loading) ? renderLoadingSkeletons() : renderAuthContent()}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={isClient ? user?.avatarUrl : undefined} />
+                  <AvatarImage src={isClient && user ? user.avatarUrl : undefined} />
                   <AvatarFallback>
                     <User className="h-5 w-5" />
                   </AvatarFallback>
