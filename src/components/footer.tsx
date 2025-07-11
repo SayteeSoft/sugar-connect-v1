@@ -3,7 +3,7 @@ import { Logo } from "./icons";
 
 export function Footer() {
   return (
-    <footer className="bg-background text-muted-foreground">
+    <footer className="bg-card text-muted-foreground">
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="flex flex-col items-center text-center">
             <Logo className="text-primary text-xl" />
