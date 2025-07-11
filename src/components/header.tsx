@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
 import { Logo } from "@/components/icons";
 import { Bell, Heart, LogIn, LogOut, Settings, UserPlus, User, Users } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
+import { Skeleton } from './ui/skeleton';
 
 const NavLinks = () => (
   <>
@@ -35,6 +37,11 @@ const NavLinks = () => (
 
 export function Header() {
   const { user, logout, loading } = useAuth();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getCreditsButton = () => {
     if (loading || !user) return null;
@@ -55,21 +62,19 @@ export function Header() {
     }
   };
 
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card">
-      <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
-        <div className="w-1/3">
-          <Link href="/" className="flex items-center">
-            <Logo />
-          </Link>
-        </div>
-        
-        <nav className="hidden w-1/3 items-center justify-center gap-2 md:flex">
-          {!loading && user && <NavLinks />}
-        </nav>
+  const renderContent = () => {
+    if (!isClient || loading) {
+       return (
+            <div className="flex items-center gap-4">
+                <Skeleton className="h-10 w-24" />
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-10 w-10 rounded-full" />
+            </div>
+       )
+    }
 
-        <div className="flex w-1/3 items-center justify-end gap-2 md:gap-4">
-          {!loading && user && (
+    if (user) {
+        return (
             <>
               {getCreditsButton()}
               <Button variant="ghost" size="icon">
@@ -81,13 +86,42 @@ export function Header() {
                 <span className="sr-only">Favorites</span>
               </Button>
             </>
-          )}
+        )
+    }
+
+    return (
+        <div className="flex items-center gap-2">
+             <Button variant="ghost" asChild>
+                <Link href="/login">Sign In</Link>
+            </Button>
+            <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+            </Button>
+        </div>
+    )
+  }
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-card">
+      <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
+        <div className="w-1/3">
+          <Link href="/" className="flex items-center">
+            <Logo />
+          </Link>
+        </div>
+        
+        <nav className="hidden w-1/3 items-center justify-center gap-2 md:flex">
+          {isClient && !loading && user && <NavLinks />}
+        </nav>
+
+        <div className="flex w-1/3 items-center justify-end gap-2 md:gap-4">
+          {renderContent()}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={user?.avatarUrl} />
+                  <AvatarImage src={isClient ? user?.avatarUrl : undefined} />
                   <AvatarFallback>
                     <User className="h-5 w-5" />
                   </AvatarFallback>
@@ -95,7 +129,7 @@ export function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {loading ? (
+              {(!isClient || loading) ? (
                 <DropdownMenuLabel>Loading...</DropdownMenuLabel>
               ) : user ? (
                 <>
