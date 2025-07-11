@@ -52,7 +52,7 @@ export default function Home() {
       {/* Featured Profiles */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">Featured Profiles</h2>
+          <h2 className="text-3xl font-bold text-center font-headline text-primary">Featured Profiles</h2>
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {featuredProfiles.map((profile) => (
               <Card key={profile.id} className="overflow-hidden group">
@@ -79,7 +79,7 @@ export default function Home() {
       {/* What Our Members Say */}
       <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">What Our Members Say</h2>
+          <h2 className="text-3xl font-bold text-center font-headline text-primary">What Our Members Say</h2>
           <Carousel className="mt-8 max-w-6xl mx-auto" opts={{ loop: true }}>
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
@@ -116,7 +116,7 @@ export default function Home() {
       {/* What is a Sugar Relationship? */}
       <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-6 max-w-3xl text-center">
-            <h2 className="text-3xl font-bold font-headline">What is a Sugar Relationship?</h2>
+            <h2 className="text-3xl font-bold font-headline text-primary">What is a Sugar Relationship?</h2>
             <p className="mt-4 text-muted-foreground">
                 Sugar dating, in its modern form, has elevated the world of traditional dating relationships, making it more satisfying for both partners. Like-minded people can find each other and explore relationships on their own terms, free from the judgement they may feel from their friends, family, or wider society.
             </p>
@@ -147,9 +147,9 @@ export default function Home() {
       </section>
 
       {/* High Level Security */}
-      <section className="py-12 md:py-20 bg-muted">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline text-foreground">High Level Security & Privacy</h2>
+          <h2 className="text-3xl font-bold text-center font-headline text-primary">High Level Security & Privacy</h2>
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card>
               <CardContent className="p-6 text-center flex flex-col items-center">
