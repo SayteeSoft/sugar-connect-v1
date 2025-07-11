@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/icons";
-import { Bell, Heart, LogIn, LogOut, Search, Settings, UserPlus, User, Mail, Users } from "lucide-react";
+import { Bell, Heart, LogIn, LogOut, Settings, UserPlus, User, Users } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
 
 const NavLinks = () => (
@@ -37,7 +37,7 @@ export function Header() {
   const { user, logout, loading } = useAuth();
 
   const getCreditsButton = () => {
-    if (!user) return null;
+    if (loading || !user) return null;
 
     switch (user.role) {
       case 'Sugar Daddy':
@@ -64,11 +64,11 @@ export function Header() {
           </Link>
         </div>
         
-        <nav className="w-1/3 hidden md:flex items-center justify-center gap-2">
-          {user && <NavLinks />}
+        <nav className="hidden w-1/3 items-center justify-center gap-2 md:flex">
+          {!loading && user && <NavLinks />}
         </nav>
 
-        <div className="w-1/3 flex items-center justify-end gap-2 md:gap-4">
+        <div className="flex w-1/3 items-center justify-end gap-2 md:gap-4">
           {!loading && user && (
             <>
               {getCreditsButton()}
