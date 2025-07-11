@@ -6,6 +6,7 @@ import React, { createContext, useContext, useState, useMemo, Dispatch, SetState
 type LayoutState = {
     showCookiePolicy: boolean;
     showPrivacyPolicy: boolean;
+    showTermsOfUse: boolean;
 };
 
 type LayoutContextType = {
@@ -19,6 +20,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     const [layoutState, setLayoutState] = useState<LayoutState>({
         showCookiePolicy: false,
         showPrivacyPolicy: false,
+        showTermsOfUse: false,
     });
 
     const value = useMemo(() => ({ layoutState, setLayoutState }), [layoutState]);

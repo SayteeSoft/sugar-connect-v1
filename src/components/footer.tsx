@@ -24,6 +24,12 @@ export function Footer({ setLayoutState }: FooterProps) {
     }
   }
 
+  const handleTermsOfUseClick = () => {
+    if (setLayoutState) {
+        setLayoutState(prevState => ({ ...prevState, showTermsOfUse: true }));
+    }
+  }
+
   return (
     <footer className="bg-card text-muted-foreground">
       <div className="container mx-auto px-4 md:px-6 py-12">
@@ -57,7 +63,11 @@ export function Footer({ setLayoutState }: FooterProps) {
                     Privacy Policy
                 </Button>
               </li>
-              <li><Link href="/policies/terms" className="hover:text-primary">Terms of Use</Link></li>
+              <li>
+                <Button variant="link" className="p-0 text-muted-foreground hover:text-primary hover:no-underline" onClick={handleTermsOfUseClick}>
+                    Terms of Use
+                </Button>
+              </li>
             </ul>
           </div>
 

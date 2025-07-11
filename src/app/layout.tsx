@@ -12,6 +12,7 @@ import { CookieBanner } from '@/components/cookie-banner';
 import { LayoutProvider, useLayout } from '@/hooks/use-layout';
 import { CookiePolicy } from '@/components/cookie-policy';
 import { PrivacyPolicy } from '@/components/privacy-policy';
+import { TermsOfUse } from '@/components/terms-of-use';
 
 
 function AppContent({ children }: { children: React.ReactNode }) {
@@ -34,6 +35,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
       <PrivacyPolicy
         open={layoutState.showPrivacyPolicy}
         onOpenChange={(open) => setLayoutState(prevState => ({ ...prevState, showPrivacyPolicy: open }))}
+      />
+      <TermsOfUse
+        open={layoutState.showTermsOfUse}
+        onOpenChange={(open) => setLayoutState(prevState => ({ ...prevState, showTermsOfUse: open }))}
       />
     </>
   );
