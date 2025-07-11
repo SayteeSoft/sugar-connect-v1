@@ -27,6 +27,9 @@ export default function Home() {
           <h1 className="text-6xl md:text-8xl font-headline font-bold drop-shadow-lg">
             Sugar Connect
           </h1>
+          <h2 className="mt-4 text-3xl md:text-4xl font-headline drop-shadow-md">
+            For Sugar Daddy and Sugar Baby
+          </h2>
           <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
             An exclusive platform for ambitious and attractive individuals
           </p>
@@ -222,3 +225,4 @@ export default function Home() {
     
 
     
+
