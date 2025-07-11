@@ -17,8 +17,17 @@ export default function MessagesPage() {
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
-        // Always show Sugar Babies
-        return users.filter(u => u.role === 'Sugar Baby');
+        
+        if (currentUser.role === 'Admin') {
+            return users.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
+        }
+        if (currentUser.role === 'Sugar Daddy') {
+            return users.filter(u => u.role === 'Sugar Baby');
+        }
+        if (currentUser.role === 'Sugar Baby') {
+            return users.filter(u => u.role === 'Sugar Daddy');
+        }
+        return [];
     }, [currentUser]);
 
     const [activeConversation, setActiveConversation] = useState<User | null>(null);
