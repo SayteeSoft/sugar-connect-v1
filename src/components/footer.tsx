@@ -56,19 +56,19 @@ export function Footer({ setLayoutState }: FooterProps) {
             <h4 className="font-bold font-headline text-foreground">Policies</h4>
             <ul className="mt-4 space-y-2">
               <li>
-                <Button variant="link" className="p-0 h-auto font-normal text-muted-foreground hover:text-primary hover:no-underline" onClick={handleCookiePolicyClick}>
+                <button className="hover:text-primary" onClick={handleCookiePolicyClick}>
                     Cookie Policy
-                </Button>
+                </button>
               </li>
               <li>
-                <Button variant="link" className="p-0 h-auto font-normal text-muted-foreground hover:text-primary hover:no-underline" onClick={handlePrivacyPolicyClick}>
+                <button className="hover:text-primary" onClick={handlePrivacyPolicyClick}>
                     Privacy Policy
-                </Button>
+                </button>
               </li>
               <li>
-                <Button variant="link" className="p-0 h-auto font-normal text-muted-foreground hover:text-primary hover:no-underline" onClick={handleTermsOfUseClick}>
+                <button className="hover:text-primary" onClick={handleTermsOfUseClick}>
                     Terms of Use
-                </Button>
+                </button>
               </li>
             </ul>
           </div>
