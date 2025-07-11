@@ -12,7 +12,6 @@ import { users, profiles } from "@/lib/mock-data";
 import { notFound, useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
-import { useMemo } from "react";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     if (!value && value !== 0) return null;
@@ -34,8 +33,8 @@ export default function OtherUserProfilePage({ params: { id } }: OtherUserProfil
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
 
-  const user: User | undefined = useMemo(() => users.find(u => u.id === id), [id]);
-  const userProfile: Profile | undefined = useMemo(() => profiles.find(p => p.userId === id), [id]);
+  const user: User | undefined = users.find(u => u.id === id);
+  const userProfile: Profile | undefined = profiles.find(p => p.userId === id);
 
   if (loading) {
     return (
