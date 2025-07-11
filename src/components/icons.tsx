@@ -1,3 +1,4 @@
+
 import { Heart } from 'lucide-react';
 
 export const Logo = ({ className }: { className?: string }) => (
