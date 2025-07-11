@@ -27,10 +27,7 @@ export default function Home() {
           <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">
             Sugar Connect
           </h1>
-           <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
-            SD Connect is 'Sugar Daddy' Connect
-          </p>
-          <p className="mt-1 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
+          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
             An exclusive platform for ambitious and attractive individuals
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
