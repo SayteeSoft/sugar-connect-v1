@@ -29,14 +29,16 @@ export default function PurchaseCreditsPage() {
                      <RadioGroup defaultValue={creditPackages[0].credits.toString()}>
                         <div className="space-y-4">
                         {creditPackages.map((pkg) => (
-                            <RadioGroupItem key={pkg.credits} value={pkg.credits.toString()} id={pkg.credits.toString()} className="peer sr-only" />
-                            <Label htmlFor={pkg.credits.toString()} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
-                                <div>
-                                    <p className="font-bold">{pkg.credits} Credits</p>
-                                    {pkg.bonus && <p className="text-sm text-primary">{pkg.bonus}</p>}
-                                </div>
-                                <p className="font-semibold">${pkg.price}</p>
-                            </Label>
+                            <React.Fragment key={pkg.credits}>
+                                <RadioGroupItem value={pkg.credits.toString()} id={pkg.credits.toString()} className="peer sr-only" />
+                                <Label htmlFor={pkg.credits.toString()} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                                    <div>
+                                        <p className="font-bold">{pkg.credits} Credits</p>
+                                        {pkg.bonus && <p className="text-sm text-primary">{pkg.bonus}</p>}
+                                    </div>
+                                    <p className="font-semibold">${pkg.price}</p>
+                                </Label>
+                            </React.Fragment>
                         ))}
                         </div>
                      </RadioGroup>
@@ -51,10 +53,12 @@ export default function PurchaseCreditsPage() {
                      <RadioGroup defaultValue={paymentMethods[0].id}>
                         <div className="space-y-4">
                          {paymentMethods.map((method) => (
-                            <RadioGroupItem key={method.id} value={method.id} id={method.id} className="peer sr-only" />
-                             <Label htmlFor={method.id} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
-                                <p className="font-semibold">{method.name}</p>
-                            </Label>
+                             <React.Fragment key={method.id}>
+                                <RadioGroupItem value={method.id} id={method.id} className="peer sr-only" />
+                                 <Label htmlFor={method.id} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                                    <p className="font-semibold">{method.name}</p>
+                                </Label>
+                             </React.Fragment>
                          ))}
                          </div>
                      </RadioGroup>
