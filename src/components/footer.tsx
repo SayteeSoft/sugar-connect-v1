@@ -1,7 +1,23 @@
+
+"use client";
+
 import Link from "next/link";
 import { Logo } from "./icons";
+import { Button } from "./ui/button";
+import type { useLayout } from "@/hooks/use-layout";
 
-export function Footer() {
+type FooterProps = {
+    setLayoutState?: ReturnType<typeof useLayout>['setLayoutState'];
+}
+
+export function Footer({ setLayoutState }: FooterProps) {
+
+  const handleCookiePolicyClick = () => {
+    if (setLayoutState) {
+        setLayoutState(prevState => ({ ...prevState, showCookiePolicy: true }));
+    }
+  }
+
   return (
     <footer className="bg-card text-muted-foreground">
       <div className="container mx-auto px-4 md:px-6 py-12">
@@ -25,6 +41,11 @@ export function Footer() {
           <div>
             <h4 className="font-bold font-headline text-foreground">Policies</h4>
             <ul className="mt-4 space-y-2">
+              <li>
+                <Button variant="link" className="p-0 text-muted-foreground hover:text-primary" onClick={handleCookiePolicyClick}>
+                    Cookie Policy
+                </Button>
+              </li>
               <li><Link href="/policies/privacy" className="hover:text-primary">Privacy Policy</Link></li>
               <li><Link href="/policies/terms" className="hover:text-primary">Terms of Use</Link></li>
             </ul>

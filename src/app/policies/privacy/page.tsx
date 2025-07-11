@@ -1,0 +1,18 @@
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function PrivacyPolicyPage() {
+  return (
+    <div className="container mx-auto px-4 md:px-6 py-8">
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-3xl font-headline">Privacy Policy</CardTitle>
+                <CardDescription>How we handle your data.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p>Content for the Privacy Policy page will go here.</p>
+            </CardContent>
+        </Card>
+    </div>
+  );
+}
