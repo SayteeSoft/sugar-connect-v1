@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/icons";
-import { Bell, Heart, LogIn, LogOut, Settings, UserPlus, User, Users } from "lucide-react";
+import { LogIn, LogOut, Settings, UserPlus, User, Users } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
 import { Skeleton } from './ui/skeleton';
 
@@ -67,14 +67,6 @@ export function Header() {
       return (
         <div className="flex items-center gap-2 md:gap-4">
           {getCreditsButton()}
-          <Button variant="ghost" size="icon">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Heart className="h-5 w-5" />
-            <span className="sr-only">Favorites</span>
-          </Button>
         </div>
       );
     }
@@ -93,8 +85,6 @@ export function Header() {
   const renderLoadingSkeletons = () => (
       <div className="flex items-center gap-2 md:gap-4">
           <Skeleton className="h-10 w-24" />
-          <Skeleton className="h-10 w-10" />
-          <Skeleton className="h-10 w-10" />
       </div>
   );
 
