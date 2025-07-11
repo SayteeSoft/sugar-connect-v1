@@ -40,13 +40,12 @@ export async function POST(req: Request) {
   try {
     const [fields, files] = await form.parse(req);
     
-    // For now, we assume a single user is being updated based on a known ID.
-    // In a real app, this would come from the authenticated session.
-    // Let's find the user in our mock data. For this example, let's assume we can find them.
-    // A real implementation needs an ID from the client. Let's assume user '1'.
-    // A better approach would be to get the user from a session token.
-    // We'll just update the first user for demonstration. Let's find 'James' (id: '2')
-    const userIdToUpdate = '2'; // This should be dynamic based on session in a real app.
+    const userIdToUpdate = fields.userId?.[0];
+
+    if (!userIdToUpdate) {
+        return NextResponse.json({ message: 'User ID is missing.' }, { status: 400 });
+    }
+
     const userIndex = users.findIndex(u => u.id === userIdToUpdate);
     const profileIndex = profiles.findIndex(p => p.userId === userIdToUpdate);
 
@@ -109,5 +108,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Error updating profile' }, { status: 500 });
   }
 }
-
-    

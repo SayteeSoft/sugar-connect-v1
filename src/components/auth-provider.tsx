@@ -104,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const formData = new FormData();
 
     // Append all non-file fields to formData
+    formData.append('userId', userId); // Add userId to the form data
     Object.entries(data).forEach(([key, value]) => {
       if (key === 'wants' || key === 'interests') {
         // These are arrays of objects, so stringify them
