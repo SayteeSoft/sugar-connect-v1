@@ -19,6 +19,7 @@ import { profiles } from "@/lib/mock-data";
 import { notFound } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -42,11 +43,11 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
-    if (!value) return null;
+    if (!value && value !== 0) return null;
     return (
         <div className="grid gap-1.5">
             <Label className="text-muted-foreground">{label}</Label>
-            <p className="text-sm">{value}</p>
+            <p className="text-sm">{String(value)}</p>
         </div>
     )
 }
@@ -56,13 +57,14 @@ export default function ProfilePage() {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
 
-  const userProfile = profiles.find(p => p.userId === user?.id);
+  // Find the profile that matches the logged-in user's ID
+  const userProfile = user ? profiles.find(p => p.userId === user.id) : undefined;
 
-  const { control, handleSubmit, reset, formState: { errors }, getValues } = useForm<ProfileFormValues>({
+  const { control, handleSubmit, reset, getValues, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
-      role: "Sugar Baby",
+      role: "Sugar Baby", // Default role
       location: "",
       about: "",
       wants: [],
@@ -81,6 +83,7 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
+    // When the user and their profile are loaded, populate the form
     if (user && userProfile) {
       reset({
         name: user.name,
@@ -103,31 +106,60 @@ export default function ProfilePage() {
     }
   }, [user, userProfile, reset]);
 
-  if (loading) {
-    return <div className="container mx-auto p-8">Loading...</div>;
-  }
-
-  if (!user) {
-    notFound();
-    return null;
-  }
-  
-  if (!userProfile) {
-    return <div className="container mx-auto p-8">Profile not found.</div>;
-  }
-
   const onSubmit = (data: ProfileFormValues) => {
+    // In a real app, you would send this data to your backend API
     console.log("Profile saved:", data);
     toast({
       title: "Profile Saved!",
       description: "Your profile has been successfully updated.",
     });
-    setIsEditing(false);
+    setIsEditing(false); // Switch to view mode after saving
   };
 
   const handleCancel = () => {
-      reset(); // Resets form to original values
-      setIsEditing(false);
+      reset(); // Revert any changes in the form
+      setIsEditing(false); // Switch back to view mode
+  }
+  
+  if (loading) {
+    return (
+        <div className="container mx-auto px-4 md:px-6 py-8">
+            <div className="flex justify-between items-center mb-6">
+                <Skeleton className="h-9 w-40" />
+                <Skeleton className="h-10 w-32" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                 <div className="lg:col-span-1 space-y-8">
+                    <Card>
+                        <CardContent className="p-4">
+                            <Skeleton className="w-full aspect-square rounded-lg mb-4" />
+                            <div className="space-y-4">
+                                <Skeleton className="h-6 w-3/4" />
+                                <Skeleton className="h-10 w-full" />
+                                <Skeleton className="h-6 w-3/4" />
+                                <Skeleton className="h-10 w-full" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                 </div>
+                 <div className="lg:col-span-2 space-y-8">
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-48 w-full" />
+                 </div>
+            </div>
+        </div>
+    );
+  }
+
+  if (!user) {
+    // This will render the not-found.tsx page if the user is not logged in.
+    notFound();
+    return null;
+  }
+  
+  if (!userProfile) {
+    // This could happen if a user exists but has no corresponding profile entry.
+    return <div className="container mx-auto p-8">Profile not found. Please contact support.</div>;
   }
 
   const formValues = getValues();
@@ -156,6 +188,7 @@ export default function ProfilePage() {
                     width={400}
                     height={400}
                     className="rounded-lg w-full aspect-square object-cover"
+                    data-ai-hint="profile photo"
                   />
                   {isEditing && (
                     <Button type="button" variant="secondary" size="icon" className="absolute top-2 right-2 rounded-full">
@@ -205,11 +238,11 @@ export default function ProfilePage() {
                       </div>
                     </>
                   ) : (
-                    <>
+                    <div className="space-y-4">
                         <ViewField label="Name" value={formValues.name} />
                         <ViewField label="Role" value={formValues.role} />
                         <ViewField label="Location" value={formValues.location} />
-                    </>
+                    </div>
                   )}
 
                   <div>
@@ -267,6 +300,7 @@ export default function ProfilePage() {
                               {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"><X className="h-3 w-3" /></button>}
                           </Badge>
                       ))}
+                      {isEditing && <Input placeholder="Add a want..." className="h-8 border-none focus-visible:ring-0" onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}/>}
                   </div>
                 </div>
                  <div>
@@ -278,6 +312,7 @@ export default function ProfilePage() {
                               {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"><X className="h-3 w-3" /></button>}
                           </Badge>
                       ))}
+                       {isEditing && <Input placeholder="Add an interest..." className="h-8 border-none focus-visible:ring-0" onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}/>}
                   </div>
                 </div>
               </CardContent>
@@ -289,7 +324,7 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="relative group">
-                      <Image src="https://placehold.co/400x400.png" alt="Gallery image" width={200} height={200} className="rounded-md w-full aspect-square object-cover"/>
+                      <Image src="https://placehold.co/400x400.png" alt="Gallery image" width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
                        {isEditing && (
                         <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Trash2 className="h-4 w-4" />
@@ -336,7 +371,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="body-type"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="body-type"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Slim">Slim</SelectItem>
                                             <SelectItem value="Athletic">Athletic</SelectItem>
@@ -354,7 +389,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="ethnicity"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="ethnicity"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="White/Caucasian">White/Caucasian</SelectItem>
                                             <SelectItem value="Black/African Decent">Black/African Decent</SelectItem>
@@ -376,7 +411,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="hair-color"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="hair-color"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Brown">Brown</SelectItem>
                                             <SelectItem value="Black">Black</SelectItem>
@@ -397,7 +432,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="eye-color"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="eye-color"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Brown">Brown</SelectItem>
                                             <SelectItem value="Blue">Blue</SelectItem>
@@ -416,7 +451,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="smoker"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="smoker"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="No">No</SelectItem>
                                             <SelectItem value="Socially">Socially</SelectItem>
@@ -434,7 +469,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="drinker"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="drinker"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                              <SelectItem value="No">No</SelectItem>
                                              <SelectItem value="Socially">Socially</SelectItem>
@@ -452,7 +487,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="piercings"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="piercings"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="No">No</SelectItem>
                                             <SelectItem value="Yes">Yes</SelectItem>
@@ -468,7 +503,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => (
                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger id="tattoos"><SelectValue/></SelectTrigger>
+                                        <SelectTrigger id="tattoos"><SelectValue placeholder="Select..." /></SelectTrigger>
                                         <SelectContent>
                                            <SelectItem value="No">No</SelectItem>
                                            <SelectItem value="Yes">Yes</SelectItem>
