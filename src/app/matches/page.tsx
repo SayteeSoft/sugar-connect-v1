@@ -56,9 +56,9 @@ export default function MatchesPage() {
         return [];
     }, [user]);
 
-    const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers]);
-    const visitors = useMemo(() => filteredUsers.slice(2, 4), [filteredUsers]);
-    const viewed = useMemo(() => filteredUsers.slice(4, 6), [filteredUsers]);
+    const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers, user]);
+    const visitors = useMemo(() => filteredUsers.slice(2, 4), [filteredUsers, user]);
+    const viewed = useMemo(() => filteredUsers.slice(4, 6), [filteredUsers, user]);
     
     if (loading) {
         return (
