@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,7 +13,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="w-full py-32 md:py-48 bg-hero text-white" style={{backgroundImage: "url('https://placehold.co/1920x1080.png')", backgroundSize: 'cover', backgroundPosition: 'center'}} data-ai-hint="stylish couple">
+      <section className="w-full py-32 md:py-48 bg-hero text-white" style={{backgroundImage: "url('/sd-connect-hero-background.jpg')", backgroundSize: 'cover', backgroundPosition: 'center'}} data-ai-hint="stylish couple">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">
             SD Connect
