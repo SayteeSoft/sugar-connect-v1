@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Edit, MessageCircle, Heart } from "lucide-react";
+import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import { users, profiles } from "@/lib/mock-data";
 import { notFound, useRouter } from "next/navigation";
@@ -17,9 +17,9 @@ import { useMemo } from "react";
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     if (!value && value !== 0) return null;
     return (
-        <div className="grid gap-1.5">
-            <Label className="text-muted-foreground">{label}</Label>
-            <p className="text-sm">{String(value)}</p>
+        <div className="flex justify-between items-center text-sm">
+            <p className="text-muted-foreground">{label}</p>
+            <p className="font-medium">{String(value)}</p>
         </div>
     )
 }
@@ -40,10 +40,6 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
   if (loading) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <Skeleton className="h-9 w-40" />
-                <Skeleton className="h-10 w-32" />
-            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                  <div className="lg:col-span-1 space-y-8">
                     <Card>
@@ -80,24 +76,11 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
   
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
-        <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold font-headline">{user.name}'s Profile</h1>
-             <div className="flex gap-2">
-                <Button>
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Message
-                </Button>
-                 <Button variant="outline">
-                    <Heart className="mr-2 h-4 w-4" />
-                    Favorite
-                </Button>
-            </div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Left Column */}
-          <div className="lg:col-span-1 space-y-8">
+          <div className="md:col-span-1 space-y-6 sticky top-24">
             <Card>
-              <CardContent className="p-4">
+              <CardContent className="p-6">
                 <div className="relative mb-4">
                   <Image
                     src={user.avatarUrl}
@@ -107,19 +90,47 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
                     className="rounded-lg w-full aspect-square object-cover"
                     data-ai-hint="profile photo"
                   />
+                  <Badge variant="secondary" className="absolute top-3 left-3 bg-primary/80 text-primary-foreground backdrop-blur-sm">
+                      <CheckCircle className="h-4 w-4 mr-1"/>
+                      Verified
+                  </Badge>
                 </div>
-                <div className="space-y-4">
-                    <ViewField label="Name" value={user.name} />
-                    <ViewField label="Role" value={user.role} />
-                    <ViewField label="Location" value={user.location} />
-                    <ViewField label="Email" value={user.email} />
+                <div className="text-center space-y-4">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
+                            {user.name}
+                            {user.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
+                        </h1>
+                        <Badge variant="outline" className="border-primary text-primary">{user.role}</Badge>
+                    </div>
+
+                    <div className="text-sm text-muted-foreground space-y-1 text-left">
+                        <div className="flex items-center gap-2">
+                           <MapPin className="h-4 w-4" />
+                           <span>{user.location}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <Mail className="h-4 w-4" />
+                           <span>{user.email}</span>
+                        </div>
+                    </div>
                 </div>
               </CardContent>
             </Card>
+             <div className="flex gap-2">
+                <Button className="w-full">
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Message
+                </Button>
+                 <Button variant="outline" className="w-full">
+                    <Heart className="mr-2 h-4 w-4" />
+                    Favorite
+                </Button>
+            </div>
           </div>
 
           {/* Right Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="md:col-span-2 space-y-8">
             <Card>
               <CardHeader>
                 <CardTitle>About {user.name}</CardTitle>
@@ -135,16 +146,16 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label className="text-muted-foreground">Wants</Label>
-                  <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
+                  <Label className="text-sm font-medium">Wants</Label>
+                  <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
                       {userProfile.wants.length > 0 ? userProfile.wants.map((want, index) => (
                           <Badge key={index} variant="secondary">{want}</Badge>
                       )) : <p className="text-sm text-muted-foreground">No wants specified.</p>}
                   </div>
                 </div>
                  <div>
-                  <Label className="text-muted-foreground">Interests</Label>
-                  <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
+                  <Label className="text-sm font-medium">Interests</Label>
+                  <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
                       {userProfile.interests.length > 0 ? userProfile.interests.map((interest, index) => (
                           <Badge key={index} variant="secondary">{interest}</Badge>
                       )) : <p className="text-sm text-muted-foreground">No interests specified.</p>}
@@ -157,10 +168,8 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
               <CardHeader>
                   <CardTitle>Gallery</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="relative group">
-                      <Image src="https://placehold.co/400x400.png" alt="Gallery image" width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
-                  </div>
+              <CardContent>
+                 <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
               </CardContent>
             </Card>
 
@@ -168,7 +177,7 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
               <CardHeader>
                   <CardTitle>Attributes</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <CardContent className="space-y-3">
                 <ViewField label="Age" value={user.age} />
                 <ViewField label="Height (cm)" value={userProfile.attributes.height} />
                 <ViewField label="Body Type" value={userProfile.attributes.bodyType} />

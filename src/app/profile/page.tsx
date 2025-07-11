@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Camera, PlusCircle, Trash2, X, Edit } from "lucide-react";
+import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { profiles } from "@/lib/mock-data";
@@ -45,9 +45,9 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     if (!value && value !== 0) return null;
     return (
-        <div className="grid gap-1.5">
-            <Label className="text-muted-foreground">{label}</Label>
-            <p className="text-sm">{String(value)}</p>
+        <div className="flex justify-between items-center text-sm">
+            <p className="text-muted-foreground">{label}</p>
+            <p className="font-medium">{String(value)}</p>
         </div>
     )
 }
@@ -181,12 +181,8 @@ export default function ProfilePage() {
   if (loading) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <Skeleton className="h-9 w-40" />
-                <Skeleton className="h-10 w-32" />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                 <div className="lg:col-span-1 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div className="md:col-span-1 space-y-8">
                     <Card>
                         <CardContent className="p-4">
                             <Skeleton className="w-full aspect-square rounded-lg mb-4" />
@@ -199,7 +195,7 @@ export default function ProfilePage() {
                         </CardContent>
                     </Card>
                  </div>
-                 <div className="lg:col-span-2 space-y-8">
+                 <div className="md:col-span-2 space-y-8">
                     <Skeleton className="h-32 w-full" />
                     <Skeleton className="h-48 w-full" />
                  </div>
@@ -224,20 +220,11 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold font-headline">My Profile</h1>
-            {!isEditing && (
-                 <Button type="button" onClick={() => setIsEditing(true)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Profile
-                </Button>
-            )}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Left Column */}
-          <div className="lg:col-span-1 space-y-8">
+          <div className="md:col-span-1 space-y-6 sticky top-24">
             <Card>
-              <CardContent className="p-4">
+              <CardContent className="p-6">
                 <div className="relative mb-4">
                   <Image
                     src={user.avatarUrl}
@@ -247,83 +234,87 @@ export default function ProfilePage() {
                     className="rounded-lg w-full aspect-square object-cover"
                     data-ai-hint="profile photo"
                   />
-                  {isEditing && (
-                    <Button type="button" variant="secondary" size="icon" className="absolute top-2 right-2 rounded-full">
+                  {isEditing ? (
+                    <Button type="button" variant="secondary" size="icon" className="absolute top-3 left-3 rounded-full">
                         <Camera className="h-5 w-5" />
                     </Button>
-                  )}
-                </div>
-                <div className="space-y-4">
-                  {isEditing ? (
-                    <>
-                      <div>
-                        <Label htmlFor="name">Name</Label>
-                        <Controller
-                          name="name"
-                          control={control}
-                          render={({ field }) => <Input id="name" {...field} />}
-                        />
-                        {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
-                      </div>
-                      <div>
-                        <Label htmlFor="role">Role</Label>
-                        <Controller
-                            name="role"
-                            control={control}
-                            render={({ field }) => (
-                                <Select onValueChange={field.onChange} value={field.value} disabled={user.role !== 'Admin'}>
-                                    <SelectTrigger id="role">
-                                    <SelectValue placeholder="Select a role" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
-                                        <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                        <SelectItem value="Admin">Admin</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="location">Location</Label>
-                        <Controller
-                            name="location"
-                            control={control}
-                            render={({ field }) => <Input id="location" {...field} />}
-                        />
-                         {errors.location && <p className="text-destructive text-sm mt-1">{errors.location.message}</p>}
-                      </div>
-                    </>
                   ) : (
-                    <div className="space-y-4">
-                        <ViewField label="Name" value={formValues.name} />
-                        <ViewField label="Role" value={formValues.role} />
-                        <ViewField label="Location" value={formValues.location} />
-                    </div>
-                  )}
-
-                  <div>
-                    <Label htmlFor="email" className={isEditing ? '' : 'text-muted-foreground'}>Email Address</Label>
-                    <Input id="email" defaultValue={user.email} disabled />
-                     {isEditing && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Email cannot be changed here.
-                        </p>
-                    )}
-                  </div>
-                  {isEditing && (
-                    <div className="flex gap-2 pt-2">
-                        <Button type="submit" className="w-full">Save Profile</Button>
-                        <Button type="button" variant="outline" className="w-full" onClick={handleCancel}>Cancel</Button>
-                    </div>
+                    <Badge variant="secondary" className="absolute top-3 left-3 bg-primary/80 text-primary-foreground backdrop-blur-sm">
+                        <CheckCircle className="h-4 w-4 mr-1"/>
+                        Verified
+                    </Badge>
                   )}
                 </div>
+                {isEditing ? (
+                    <div className="space-y-4">
+                        <div>
+                            <Label htmlFor="name">Name</Label>
+                            <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => <Input id="name" {...field} />}
+                            />
+                            {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="location">Location</Label>
+                            <Controller
+                                name="location"
+                                control={control}
+                                render={({ field }) => <Input id="location" {...field} />}
+                            />
+                            {errors.location && <p className="text-destructive text-sm mt-1">{errors.location.message}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="email" className='text-muted-foreground'>Email Address</Label>
+                            <Input id="email" defaultValue={user.email} disabled />
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Email cannot be changed.
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="text-center space-y-4">
+                        <div className="space-y-1">
+                            <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
+                                {formValues.name}
+                                {formValues.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
+                            </h1>
+                            <Badge variant="outline" className="border-primary text-primary">{formValues.role}</Badge>
+                        </div>
+                        <div className="text-sm text-muted-foreground space-y-1 text-left">
+                            <div className="flex items-center gap-2">
+                               <MapPin className="h-4 w-4" />
+                               <span>{formValues.location}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                               <Mail className="h-4 w-4" />
+                               <span>{user.email}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                 
               </CardContent>
+              {!isEditing && (
+                <CardContent className="p-6 pt-0">
+                    <Button type="button" variant="outline" className="w-full" onClick={() => setIsEditing(true)}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit Profile
+                    </Button>
+                </CardContent>
+              )}
             </Card>
+            {isEditing && (
+                <div className="flex gap-2">
+                    <Button type="submit" className="w-full">Save Changes</Button>
+                    <Button type="button" variant="outline" className="w-full" onClick={handleCancel}>Cancel</Button>
+                </div>
+              )}
           </div>
 
           {/* Right Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="md:col-span-2 space-y-8">
             <Card>
               <CardHeader>
                 <CardTitle>About {isEditing ? user.name : formValues.name}</CardTitle>
@@ -349,7 +340,7 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label>Wants</Label>
+                  <Label className="text-sm font-medium">Wants</Label>
                   <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
                       {wantsFields.map((field, index) => (
                           <Badge key={field.id} variant="secondary" className="pr-1">
@@ -361,7 +352,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
                  <div>
-                  <Label>Interests</Label>
+                  <Label className="text-sm font-medium">Interests</Label>
                   <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
                       {interestsFields.map((field, index) => (
                           <Badge key={field.id} variant="secondary" className="pr-1">
@@ -379,21 +370,25 @@ export default function ProfilePage() {
               <CardHeader>
                   <CardTitle>Gallery</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="relative group">
-                      <Image src="https://placehold.co/400x400.png" alt="Gallery image" width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
-                       {isEditing && (
-                        <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
-                       )}
-                  </div>
-                  {isEditing && (
-                    <button type="button" className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                        <PlusCircle className="h-8 w-8" />
-                        <span className="text-sm mt-1">Add Photo</span>
-                    </button>
-                  )}
+              <CardContent>
+                {isEditing ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {/* 
+                          <div className="relative group">
+                              <Image src="https://placehold.co/400x400.png" alt="Gallery image" width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
+                               <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                          </div>
+                        */}
+                        <button type="button" className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <PlusCircle className="h-8 w-8" />
+                            <span className="text-sm mt-1">Add Photo</span>
+                        </button>
+                    </div>
+                ) : (
+                    <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
+                )}
               </CardContent>
             </Card>
 
@@ -401,7 +396,7 @@ export default function ProfilePage() {
               <CardHeader>
                   <CardTitle>Attributes</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <CardContent className={isEditing ? "grid grid-cols-2 gap-x-6 gap-y-4" : "space-y-3"}>
                 {isEditing ? (
                     <>
                       <div>
