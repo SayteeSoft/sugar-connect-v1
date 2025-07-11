@@ -19,7 +19,7 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section 
-        className="relative w-full h-[60vh] flex items-center justify-center bg-cover bg-center bg-fixed"
+        className="relative w-full h-[70vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{backgroundImage: "url('/sd-connect-hero-background.jpg')"}}
       >
         <div className="absolute inset-0 bg-black/50" />
