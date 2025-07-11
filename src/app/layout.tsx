@@ -6,6 +6,7 @@ import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { MessageToast } from '@/components/message-toast';
 import { ThemeProvider } from '@/components/theme-provider';
+import { CookieBanner } from '@/components/cookie-banner';
 
 export const metadata: Metadata = {
   title: 'Sugar Connect',
@@ -39,6 +40,7 @@ export default function RootLayout({
             </div>
             <Toaster />
             <MessageToast />
+            <CookieBanner />
           </AuthProvider>
         </ThemeProvider>
       </body>
