@@ -24,7 +24,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="container relative mx-auto px-4 md:px-6 text-center text-white">
-          <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">
+          <h1 className="text-6xl md:text-8xl font-headline font-bold drop-shadow-lg">
             Sugar Connect
           </h1>
           <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
@@ -218,5 +218,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
