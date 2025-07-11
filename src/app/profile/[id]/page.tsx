@@ -30,12 +30,12 @@ interface OtherUserProfilePageProps {
     };
 }
 
-export default function OtherUserProfilePage({ params }: OtherUserProfilePageProps) {
+export default function OtherUserProfilePage({ params: { id } }: OtherUserProfilePageProps) {
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
 
-  const user: User | undefined = useMemo(() => users.find(u => u.id === params.id), [params.id]);
-  const userProfile: Profile | undefined = useMemo(() => profiles.find(p => p.userId === params.id), [params.id]);
+  const user: User | undefined = useMemo(() => users.find(u => u.id === id), [id]);
+  const userProfile: Profile | undefined = useMemo(() => profiles.find(p => p.userId === id), [id]);
 
   if (loading) {
     return (
@@ -64,7 +64,7 @@ export default function OtherUserProfilePage({ params }: OtherUserProfilePagePro
   }
 
   // If the current user is viewing their own profile, redirect to the editable /profile page
-  if (currentUser && currentUser.id === params.id) {
+  if (currentUser && currentUser.id === id) {
     router.push('/profile');
     return null; // Render nothing while redirecting
   }
