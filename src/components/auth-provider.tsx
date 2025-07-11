@@ -101,54 +101,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<User> => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const userIndex = users.findIndex(u => u.id === userId);
-            const profileIndex = profiles.findIndex(p => p.userId === userId);
+    const formData = new FormData();
 
-            if (userIndex === -1 || profileIndex === -1) {
-                reject(new Error("User or profile not found"));
-                return;
-            }
-            
-            // Update user object
-            const updatedUser: User = { 
-                ...users[userIndex],
-                name: data.name,
-                location: data.location,
-                age: data.age,
-                role: data.role,
-            };
-            users[userIndex] = updatedUser;
-
-            // Update profile object
-            profiles[profileIndex] = {
-                ...profiles[profileIndex],
-                about: data.about || '',
-                wants: data.wants?.map(w => w.value) || [],
-                interests: data.interests?.map(i => i.value) || [],
-                attributes: {
-                    height: data.height,
-                    bodyType: data.bodyType,
-                    ethnicity: data.ethnicity,
-                    hairColor: data.hairColor,
-                    eyeColor: data.eyeColor,
-                    smoker: data.smoker,
-                    drinker: data.drinker,
-                    piercings: data.piercings,
-                    tattoos: data.tattoos,
-                },
-            };
-
-            // Update state and local storage if it's the currently logged-in user
-            if (user?.id === userId) {
-                setUser(updatedUser);
-                localStorage.setItem('user', JSON.stringify(updatedUser));
-            }
-
-            resolve(updatedUser);
-        }, 500);
+    // Append all non-file fields to formData
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'wants' || key === 'interests') {
+        // These are arrays of objects, so stringify them
+        formData.append(key, JSON.stringify(value.map((item: any) => item.value)));
+      } else if (key !== 'avatar' && key !== 'gallery' && value !== undefined && value !== null) {
+        formData.append(key, String(value));
+      }
     });
+
+    // Append files
+    if (data.avatar instanceof File) {
+      formData.append('avatar', data.avatar);
+    }
+    
+    if (data.gallery && data.gallery.length > 0) {
+        data.gallery.forEach((file, index) => {
+            if (file instanceof File) {
+                formData.append(`gallery`, file);
+            }
+        });
+    }
+
+    const response = await fetch('/api/profile', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update profile.");
+    }
+    
+    const updatedUserData = await response.json();
+
+    // Update state and local storage if it's the currently logged-in user
+    if (user?.id === userId) {
+        setUser(updatedUserData.user);
+        localStorage.setItem('user', JSON.stringify(updatedUserData.user));
+    }
+    
+    // Also update the in-memory mock data so the app is consistent
+    const userIndex = users.findIndex(u => u.id === userId);
+    if(userIndex !== -1) users[userIndex] = updatedUserData.user;
+
+    const profileIndex = profiles.findIndex(p => p.userId === userId);
+    if(profileIndex !== -1) profiles[profileIndex] = updatedUserData.profile;
+
+    return updatedUserData.user;
+
   }, [user]);
 
   const authContextValue = useMemo<AuthContextType>(() => ({
@@ -163,6 +167,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={authContextValue}>
       {children}
-    </AuthContext.Provider>
+    </Auth-Provider>
   );
 }
+
+    

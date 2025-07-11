@@ -42,8 +42,20 @@ export interface Testimonial {
   avatarUrl: string;
 }
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+const fileSchema = z
+  .instanceof(File)
+  .optional()
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+  .refine(
+    (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  );
+
 // We can infer the type from the zod schema used in the profile page
-const profileSchema = z.object({
+const profileFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
   location: z.string().min(2, "Location is required."),
@@ -60,6 +72,10 @@ const profileSchema = z.object({
   drinker: z.enum(["Yes", "Socially", "Sometimes", "No"]).optional(),
   piercings: z.enum(["Yes", "No"]).optional(),
   tattoos: z.enum(["Yes", "No"]).optional(),
+  avatar: fileSchema,
+  gallery: z.array(fileSchema).optional(),
 });
 
-export type ProfileFormValues = z.infer<typeof profileSchema>;
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+    
