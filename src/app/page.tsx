@@ -18,7 +18,7 @@ export default function Home() {
             Sugar Connect
           </h1>
           <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto drop-shadow-md">
-            Sugar Connect is 'Sugar Daddy' Connect
+            Find your mutually beneficial relationship.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-white/90">
