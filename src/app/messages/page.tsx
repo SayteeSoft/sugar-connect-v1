@@ -23,8 +23,15 @@ export default function MessagesPage() {
              return users.filter(u => u.role !== 'Admin' && u.id !== currentUser.id);
         }
         
-        const targetRole = currentUser.role === 'Sugar Daddy' ? 'Sugar Baby' : 'Sugar Daddy';
-        return users.filter(u => u.role === targetRole && u.id !== currentUser.id);
+        if (currentUser.role === 'Sugar Daddy') {
+            return users.filter(u => u.role === 'Sugar Baby');
+        }
+
+        if (currentUser.role === 'Sugar Baby') {
+            return users.filter(u => u.role === 'Sugar Daddy');
+        }
+
+        return [];
     }, [currentUser]);
 
     const [activeConversation, setActiveConversation] = useState<User | null>(null);
