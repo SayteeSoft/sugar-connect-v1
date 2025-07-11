@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -10,9 +11,11 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import type { Role } from '@/types';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function SignupPage() {
     const router = useRouter();
+    const { signup } = useAuth();
     const searchParams = useSearchParams();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -35,14 +38,18 @@ export default function SignupPage() {
         }
         setError('');
         setLoading(true);
-        // Mock signup logic
-        setTimeout(() => {
-            console.log('New user signed up:', { email, role });
-            // In a real app, you would create the user and then log them in.
-            // For this mock, we just redirect to login.
+        try {
+            const user = await signup(email, password, role);
+            if (user) {
+                router.push('/profile');
+            } else {
+                setError('An account with this email already exists.');
+            }
+        } catch (err) {
+            setError('An unexpected error occurred. Please try again.');
+        } finally {
             setLoading(false);
-            router.push('/login');
-        }, 1500);
+        }
     };
 
   return (

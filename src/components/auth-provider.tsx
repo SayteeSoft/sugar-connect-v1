@@ -1,9 +1,14 @@
+
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { AuthContext, AuthContextType } from '@/hooks/use-auth';
-import { users } from '@/lib/mock-data';
-import type { User } from '@/types';
+import { users as initialUsers, profiles as initialProfiles } from '@/lib/mock-data';
+import type { User, Profile, Role } from '@/types';
+
+// Make a mutable copy for in-memory operations
+let users: User[] = [...initialUsers];
+let profiles: Profile[] = [...initialProfiles];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -43,12 +48,65 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user');
   }, []);
 
+  const signup = useCallback(async (email: string, pass: string, role: Role): Promise<User | null> => {
+    setLoading(true);
+    // In a real app, you'd call an API to create a user.
+    // Here we'll just add them to our in-memory array.
+    
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const existingUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            if (existingUser) {
+                setLoading(false);
+                resolve(null); // User already exists
+                return;
+            }
+
+            const newId = String(users.length + 1);
+            const newProfileId = `p${newId}`;
+
+            const newUser: User = {
+                id: newId,
+                email,
+                name: 'New User',
+                age: 18,
+                location: 'Not specified',
+                role,
+                credits: role === 'Sugar Daddy' ? 10 : 'unlimited',
+                avatarUrl: 'https://placehold.co/400x400.png',
+                profileId: newProfileId
+            };
+
+            const newProfile: Profile = {
+                id: newProfileId,
+                userId: newId,
+                about: "",
+                wants: [],
+                interests: [],
+                gallery: [],
+                attributes: {},
+            };
+            
+            users = [...users, newUser];
+            profiles = [...profiles, newProfile];
+
+            // For mock purposes, we log the user in immediately after signup
+            setUser(newUser);
+            localStorage.setItem('user', JSON.stringify(newUser));
+            
+            setLoading(false);
+            resolve(newUser);
+        }, 1500);
+    });
+  }, []);
+
   const authContextValue = useMemo<AuthContextType>(() => ({
     user,
     login,
     logout,
+    signup,
     loading,
-  }), [user, login, logout, loading]);
+  }), [user, login, logout, signup, loading]);
 
   return (
     <AuthContext.Provider value={authContextValue}>

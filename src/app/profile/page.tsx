@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
@@ -26,8 +26,8 @@ const profileSchema = z.object({
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
   location: z.string().min(2, "Location is required."),
   about: z.string().optional(),
-  wants: z.array(z.string()).optional(),
-  interests: z.array(z.string()).optional(),
+  wants: z.array(z.object({ value: z.string() })).optional(),
+  interests: z.array(z.object({ value: z.string() })).optional(),
   age: z.coerce.number().min(18, "You must be at least 18."),
   height: z.coerce.number().optional(),
   bodyType: z.enum(["Slim", "Athletic", "Average", "Curvy"]).optional(),
@@ -56,6 +56,9 @@ export default function ProfilePage() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [wantsInput, setWantsInput] = useState("");
+  const [interestsInput, setInterestsInput] = useState("");
+
 
   // Find the profile that matches the logged-in user's ID
   const userProfile = user ? profiles.find(p => p.userId === user.id) : undefined;
@@ -70,17 +73,19 @@ export default function ProfilePage() {
       wants: [],
       interests: [],
       age: 18,
-      height: undefined,
-      bodyType: undefined,
-      ethnicity: undefined,
-      hairColor: undefined,
-      eyeColor: undefined,
-      smoker: undefined,
-      drinker: undefined,
-      piercings: undefined,
-      tattoos: undefined,
     }
   });
+  
+  const { fields: wantsFields, append: appendWant, remove: removeWant } = useFieldArray({
+    control,
+    name: "wants",
+  });
+
+  const { fields: interestsFields, append: appendInterest, remove: removeInterest } = useFieldArray({
+    control,
+    name: "interests",
+  });
+
 
   useEffect(() => {
     // When the user and their profile are loaded, populate the form
@@ -90,8 +95,8 @@ export default function ProfilePage() {
         role: user.role,
         location: user.location,
         about: userProfile.about,
-        wants: userProfile.wants,
-        interests: userProfile.interests,
+        wants: userProfile.wants.map(w => ({ value: w })),
+        interests: userProfile.interests.map(i => ({ value: i })),
         age: user.age,
         height: userProfile.attributes.height,
         bodyType: userProfile.attributes.bodyType,
@@ -109,6 +114,19 @@ export default function ProfilePage() {
   const onSubmit = (data: ProfileFormValues) => {
     // In a real app, you would send this data to your backend API
     console.log("Profile saved:", data);
+
+    // Update the mock data in memory (for demonstration)
+    if (user && userProfile) {
+        user.name = data.name;
+        user.location = data.location;
+        user.age = data.age;
+        userProfile.about = data.about || '';
+        userProfile.wants = data.wants?.map(w => w.value) || [];
+        userProfile.interests = data.interests?.map(i => i.value) || [];
+        // ... update other fields ...
+    }
+
+
     toast({
       title: "Profile Saved!",
       description: "Your profile has been successfully updated.",
@@ -117,10 +135,45 @@ export default function ProfilePage() {
   };
 
   const handleCancel = () => {
-      reset(); // Revert any changes in the form
+      // Revert any changes in the form by re-populating it from original data
+      if (user && userProfile) {
+        reset({
+            name: user.name,
+            role: user.role,
+            location: user.location,
+            about: userProfile.about,
+            wants: userProfile.wants.map(w => ({ value: w })),
+            interests: userProfile.interests.map(i => ({ value: i })),
+            age: user.age,
+            height: userProfile.attributes.height,
+            bodyType: userProfile.attributes.bodyType,
+            ethnicity: userProfile.attributes.ethnicity,
+            hairColor: userProfile.attributes.hairColor,
+            eyeColor: userProfile.attributes.eyeColor,
+            smoker: userProfile.attributes.smoker,
+            drinker: userProfile.attributes.drinker,
+            piercings: userProfile.attributes.piercings,
+            tattoos: userProfile.attributes.tattoos,
+        });
+      }
       setIsEditing(false); // Switch back to view mode
   }
   
+  const handleAddWant = () => {
+    if (wantsInput.trim()) {
+      appendWant({ value: wantsInput.trim() });
+      setWantsInput("");
+    }
+  };
+
+  const handleAddInterest = () => {
+    if (interestsInput.trim()) {
+      appendInterest({ value: interestsInput.trim() });
+      setInterestsInput("");
+    }
+  };
+
+
   if (loading) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
@@ -250,7 +303,7 @@ export default function ProfilePage() {
                     <Input id="email" defaultValue={user.email} disabled />
                      {isEditing && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          Email cannot be changed here. <Link href="/settings" className="underline hover:text-primary">Change here.</Link>
+                          Email cannot be changed here.
                         </p>
                     )}
                   </div>
@@ -294,25 +347,25 @@ export default function ProfilePage() {
                 <div>
                   <Label>Wants</Label>
                   <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
-                      {(formValues.wants || []).map(want => (
-                          <Badge key={want} variant="secondary" className={isEditing ? 'pr-1' : ''}>
-                              {want}
-                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"><X className="h-3 w-3" /></button>}
+                      {wantsFields.map((field, index) => (
+                          <Badge key={field.id} variant="secondary" className="pr-1">
+                              {field.value}
+                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5" onClick={() => removeWant(index)}><X className="h-3 w-3" /></button>}
                           </Badge>
                       ))}
-                      {isEditing && <Input placeholder="Add a want..." className="h-8 border-none focus-visible:ring-0" onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}/>}
+                      {isEditing && <Input value={wantsInput} onChange={(e) => setWantsInput(e.target.value)} placeholder="Add a want..." className="h-8 border-none focus-visible:ring-0 flex-1" onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddWant(); } }}/>}
                   </div>
                 </div>
                  <div>
                   <Label>Interests</Label>
                   <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
-                      {(formValues.interests || []).map(interest => (
-                          <Badge key={interest} variant="secondary" className={isEditing ? 'pr-1' : ''}>
-                              {interest}
-                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"><X className="h-3 w-3" /></button>}
+                      {interestsFields.map((field, index) => (
+                          <Badge key={field.id} variant="secondary" className="pr-1">
+                              {field.value}
+                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5" onClick={() => removeInterest(index)}><X className="h-3 w-3" /></button>}
                           </Badge>
                       ))}
-                       {isEditing && <Input placeholder="Add an interest..." className="h-8 border-none focus-visible:ring-0" onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}/>}
+                       {isEditing && <Input value={interestsInput} onChange={(e) => setInterestsInput(e.target.value)} placeholder="Add an interest..." className="h-8 border-none focus-visible:ring-0 flex-1" onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddInterest(); } }}/>}
                   </div>
                 </div>
               </CardContent>
