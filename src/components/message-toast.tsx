@@ -83,8 +83,8 @@ export function MessageToast() {
     if (!show || !message || !fromUser) return null;
 
     return (
-        <div className="fixed bottom-5 right-5 z-50 animate-in slide-in-from-bottom-5 fade-in-50">
-            <Card className="w-80 shadow-2xl">
+        <div className="fixed top-20 right-5 z-50 animate-in slide-in-from-top-5 fade-in-50">
+            <Card className="w-96 shadow-2xl">
                 <CardHeader className="flex flex-row items-center justify-between p-4">
                     <CardTitle className="text-base">New Message</CardTitle>
                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleClose}>
