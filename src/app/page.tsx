@@ -14,9 +14,9 @@ export default function Home() {
       {/* Hero Section */}
       <section className="w-full py-32 md:py-48 bg-hero text-white" data-ai-hint="stylish couple city">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">Sugar Connect</h1>
+          <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">SD Connect</h1>
           <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto drop-shadow-md">
-            An exclusive platform for ambitious and attractive individuals
+            SD Connect is 'Sugar Daddy' Connect
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-white/90">
