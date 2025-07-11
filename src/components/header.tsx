@@ -103,7 +103,7 @@ export function Header() {
           {isClient && !loading && user && <NavLinks />}
         </nav>
 
-        <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
+        <div className="flex items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : renderAuthContent()}
 
           <ThemeSwitcher />
