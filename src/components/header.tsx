@@ -22,16 +22,16 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <>
-    <Button variant={inSheet ? "ghost" : "link"} asChild>
+    <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/profile">Profile</Link>
     </Button>
-    <Button variant={inSheet ? "ghost" : "link"} asChild>
+    <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/messages">Messages</Link>
     </Button>
-    <Button variant={inSheet ? "ghost" : "link"} asChild>
+    <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/matches">Matches</Link>
     </Button>
-    <Button variant={inSheet ? "ghost" : "link"} asChild>
+    <Button variant="ghost" className="text-muted-foreground hover:text-primary" asChild>
       <Link href="/search">Search</Link>
     </Button>
   </>
@@ -91,7 +91,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-card">
       <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
