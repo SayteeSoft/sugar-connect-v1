@@ -12,20 +12,23 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="w-full py-32 md:py-48 bg-hero text-white" data-ai-hint="stylish couple city">
+      <section className="w-full py-32 md:py-48 bg-hero text-white" style={{backgroundImage: "url('https://placehold.co/1920x1080.png')", backgroundSize: 'cover', backgroundPosition: 'center'}} data-ai-hint="stylish couple">
         <div className="container mx-auto px-4 md:px-6 text-center">
           <h1 className="text-5xl md:text-7xl font-headline font-bold drop-shadow-lg">
-            Sugar Connect
+            SD Connect
           </h1>
-          <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto drop-shadow-md">
-            Find your mutually beneficial relationship.
+           <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
+            SD Connect is 'Sugar Daddy' Connect
+          </p>
+          <p className="mt-1 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
+            An exclusive platform for ambitious and attractive individuals
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-white/90">
-              <Link href="/signup?role=Sugar+Baby">I&apos;m a Sugar Baby</Link>
+            <Button asChild size="lg" className="w-full sm:w-auto bg-gray-200/90 text-primary-foreground hover:bg-gray-200/80 text-black">
+              <Link href="/signup?role=Sugar+Baby">I'm a Sugar Baby</Link>
             </Button>
-            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-white/90">
-              <Link href="/signup?role=Sugar+Daddy">I&apos;m a Sugar Daddy</Link>
+            <Button asChild size="lg" className="w-full sm:w-auto bg-gray-200/90 text-primary-foreground hover:bg-gray-200/80 text-black">
+              <Link href="/signup?role=Sugar+Daddy">I'm a Sugar Daddy</Link>
             </Button>
           </div>
           <Button asChild size="lg" className="mt-4 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
@@ -43,15 +46,17 @@ export default function Home() {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {featuredProfiles.map((profile) => (
               <Card key={profile.id} className="overflow-hidden group">
-                <div className="relative">
-                  <Image src={profile.avatarUrl} alt={profile.name} width={400} height={400} className="object-cover w-full h-64" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
-                  <div className="absolute inset-0 bg-black/20 flex items-end p-4">
-                    <div className="text-white">
-                      <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
-                      <p className="text-sm">{profile.location}</p>
+                <Link href={`/profile/${profile.id}`}>
+                  <div className="relative">
+                    <Image src={profile.avatarUrl} alt={profile.name} width={400} height={400} className="object-cover w-full h-60" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
+                    <div className="absolute inset-0 bg-black/20 flex items-end p-4">
+                      <div className="text-white">
+                        <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
+                        <p className="text-sm">{profile.location}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </Card>
             ))}
           </div>
