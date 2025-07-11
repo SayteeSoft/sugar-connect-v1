@@ -59,11 +59,14 @@ export default function Home() {
                 <Link href={`/profile/${profile.id}`}>
                   <div className="relative">
                     <Image src={profile.avatarUrl} alt={profile.name} width={250} height={250} className="object-cover w-full h-[250px]" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
-                    <div className="absolute inset-0 bg-black/20 flex items-end p-4">
-                      <div className="text-white">
-                        <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 p-4 text-white">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
+                           {profile.name === 'Darianna' && <Star className="h-4 w-4 text-yellow-400 fill-current" />}
+                           <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        </div>
                         <p className="text-sm">{profile.location}</p>
-                      </div>
                     </div>
                   </div>
                 </Link>
