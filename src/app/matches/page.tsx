@@ -50,8 +50,10 @@ export default function MatchesPage() {
         if (user.role === 'Sugar Baby') {
             return users.filter(u => u.role === 'Sugar Daddy');
         }
-        // For Admin, show all users except other admins
-        return users.filter(u => u.role !== 'Admin');
+        if (user.role === 'Admin') {
+            return users.filter(u => u.role !== 'Admin' && u.id !== user.id);
+        }
+        return [];
     }, [user]);
 
     const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers]);
