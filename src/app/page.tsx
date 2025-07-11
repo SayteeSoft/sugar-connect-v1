@@ -125,18 +125,23 @@ export default function Home() {
 
       {/* What is a... */}
       <section className="py-12 md:py-20 bg-muted">
-        <div className="container mx-auto px-4 md:px-6 max-w-2xl">
+        <div className="container mx-auto px-4 md:px-6 max-w-2xl text-center">
+            <h2 className="text-3xl font-bold font-headline mb-8 text-primary">What is a...</h2>
             <Tabs defaultValue="sugar-daddy" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="sugar-daddy">Sugar Daddy</TabsTrigger>
-                    <TabsTrigger value="sugar-baby">Sugar Baby</TabsTrigger>
+                <TabsList className="bg-transparent p-0 justify-center gap-8">
+                    <TabsTrigger value="sugar-daddy" className="data-[state=active]:bg-card data-[state=active]:shadow-sm">Sugar Daddy</TabsTrigger>
+                    <TabsTrigger value="sugar-baby" className="data-[state=active]:bg-card data-[state=active]:shadow-sm">Sugar Baby</TabsTrigger>
                 </TabsList>
-                <TabsContent value="sugar-daddy" className="pt-4 text-center md:text-left">
-                    <p>A Sugar Daddy is a successful and generous individual who is willing to provide financial support and mentorship to a partner in exchange for companionship and a mutually beneficial relationship.</p>
-                </TabsContent>
-                <TabsContent value="sugar-baby" className="pt-4 text-center md:text-left">
-                    <p>A Sugar Baby is an ambitious and attractive person who seeks a mature partner to provide them with a certain lifestyle and support their goals, in return for their company and affection.</p>
-                </TabsContent>
+                <Card className="mt-6 text-left">
+                  <CardContent className="p-6">
+                    <TabsContent value="sugar-daddy" className="m-0">
+                        <p className="text-muted-foreground">A Sugar Daddy is a successful and generous individual who is willing to provide financial support and mentorship to a partner in exchange for companionship and a mutually beneficial relationship.</p>
+                    </TabsContent>
+                    <TabsContent value="sugar-baby" className="m-0">
+                        <p className="text-muted-foreground">A Sugar Baby is an ambitious and attractive person who seeks a mature partner to provide them with a certain lifestyle and support their goals, in return for their company and affection.</p>
+                    </TabsContent>
+                  </CardContent>
+                </Card>
             </Tabs>
         </div>
       </section>
