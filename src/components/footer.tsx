@@ -42,7 +42,7 @@ export function Footer({ setLayoutState }: FooterProps) {
             <h4 className="font-bold font-headline text-foreground">Policies</h4>
             <ul className="mt-4 space-y-2">
               <li>
-                <Button variant="link" className="p-0 text-muted-foreground hover:text-primary" onClick={handleCookiePolicyClick}>
+                <Button variant="link" className="p-0 text-muted-foreground hover:text-primary hover:no-underline" onClick={handleCookiePolicyClick}>
                     Cookie Policy
                 </Button>
               </li>
