@@ -8,7 +8,7 @@ import { MessageToast } from '@/components/message-toast';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'SD Connect',
+  title: 'Sugar Connect',
   description: 'An exclusive platform for ambitious and attractive individuals',
 };
 
