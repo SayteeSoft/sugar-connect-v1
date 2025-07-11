@@ -4,7 +4,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { AuthContext, AuthContextType } from '@/hooks/use-auth';
 import { users as initialUsers, profiles as initialProfiles } from '@/lib/mock-data';
-import type { User, Profile, Role } from '@/types';
+import type { User, Profile, Role, ProfileFormValues } from '@/types';
 
 // Make a mutable copy for in-memory operations
 let users: User[] = [...initialUsers];
@@ -100,13 +100,65 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<User> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const userIndex = users.findIndex(u => u.id === userId);
+            const profileIndex = profiles.findIndex(p => p.userId === userId);
+
+            if (userIndex === -1 || profileIndex === -1) {
+                reject(new Error("User or profile not found"));
+                return;
+            }
+            
+            // Update user object
+            const updatedUser: User = { 
+                ...users[userIndex],
+                name: data.name,
+                location: data.location,
+                age: data.age,
+                role: data.role,
+            };
+            users[userIndex] = updatedUser;
+
+            // Update profile object
+            profiles[profileIndex] = {
+                ...profiles[profileIndex],
+                about: data.about || '',
+                wants: data.wants?.map(w => w.value) || [],
+                interests: data.interests?.map(i => i.value) || [],
+                attributes: {
+                    height: data.height,
+                    bodyType: data.bodyType,
+                    ethnicity: data.ethnicity,
+                    hairColor: data.hairColor,
+                    eyeColor: data.eyeColor,
+                    smoker: data.smoker,
+                    drinker: data.drinker,
+                    piercings: data.piercings,
+                    tattoos: data.tattoos,
+                },
+            };
+
+            // Update state and local storage if it's the currently logged-in user
+            if (user?.id === userId) {
+                setUser(updatedUser);
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+            }
+
+            resolve(updatedUser);
+        }, 500);
+    });
+  }, [user]);
+
   const authContextValue = useMemo<AuthContextType>(() => ({
     user,
     login,
     logout,
     signup,
     loading,
-  }), [user, login, logout, signup, loading]);
+    updateUser,
+  }), [user, login, logout, signup, loading, updateUser]);
 
   return (
     <AuthContext.Provider value={authContextValue}>

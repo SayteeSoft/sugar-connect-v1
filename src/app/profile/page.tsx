@@ -53,7 +53,7 @@ const ViewField = ({ label, value }: { label: string, value?: string | number | 
 }
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading, updateUser } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [wantsInput, setWantsInput] = useState("");
@@ -111,27 +111,31 @@ export default function ProfilePage() {
     }
   }, [user, userProfile, reset]);
 
-  const onSubmit = (data: ProfileFormValues) => {
-    // In a real app, you would send this data to your backend API
-    console.log("Profile saved:", data);
-
-    // Update the mock data in memory (for demonstration)
-    if (user && userProfile) {
-        user.name = data.name;
-        user.location = data.location;
-        user.age = data.age;
-        userProfile.about = data.about || '';
-        userProfile.wants = data.wants?.map(w => w.value) || [];
-        userProfile.interests = data.interests?.map(i => i.value) || [];
-        // ... update other fields ...
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (!user || !userProfile || !updateUser) {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not save profile. User not found.",
+        });
+        return;
     }
 
-
-    toast({
-      title: "Profile Saved!",
-      description: "Your profile has been successfully updated.",
-    });
-    setIsEditing(false); // Switch to view mode after saving
+    try {
+        await updateUser(user.id, data);
+        toast({
+          title: "Profile Saved!",
+          description: "Your profile has been successfully updated.",
+        });
+        setIsEditing(false); // Switch to view mode after saving
+    } catch(error) {
+        console.error("Failed to save profile", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "An unexpected error occurred while saving.",
+        });
+    }
   };
 
   const handleCancel = () => {
