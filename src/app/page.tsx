@@ -48,7 +48,7 @@ export default function Home() {
               <Card key={profile.id} className="overflow-hidden group">
                 <Link href={`/profile/${profile.id}`}>
                   <div className="relative">
-                    <Image src={profile.avatarUrl} alt={profile.name} width={230} height={230} className="object-cover w-full h-[230px]" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
+                    <Image src={profile.avatarUrl} alt={profile.name} width={250} height={250} className="object-cover w-full h-[250px]" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
                     <div className="absolute inset-0 bg-black/20 flex items-end p-4">
                       <div className="text-white">
                         <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
