@@ -67,27 +67,11 @@
     --sidebar-border: 220 10% 30%;
     --sidebar-ring: 300 80% 80%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.bg-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080.png');
-  background-size: cover;
-  background-position: center;
-}
-
-[data-ai-hint~="stylish"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/800080/E6E6FA.png');
-}
-
-.section-bg-accent {
-    @apply bg-accent/50 dark:bg-accent/20;
 }

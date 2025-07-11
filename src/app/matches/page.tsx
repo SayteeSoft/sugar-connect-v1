@@ -44,21 +44,13 @@ export default function MatchesPage() {
 
     const filteredUsers = useMemo(() => {
         if (!user) return [];
-        if (user.role === 'Sugar Daddy') {
-            return users.filter(u => u.role === 'Sugar Baby');
-        }
-        if (user.role === 'Sugar Baby') {
-            return users.filter(u => u.role === 'Sugar Daddy');
-        }
-        if (user.role === 'Admin') {
-            return users.filter(u => u.role !== 'Admin' && u.id !== user.id);
-        }
-        return [];
+        // Always show sugar babies
+        return users.filter(u => u.role === 'Sugar Baby');
     }, [user]);
 
-    const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers, user]);
-    const visitors = useMemo(() => filteredUsers.slice(2, 4), [filteredUsers, user]);
-    const viewed = useMemo(() => filteredUsers.slice(4, 6), [filteredUsers, user]);
+    const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers]);
+    const visitors = useMemo(() => filteredUsers.slice(2, 4), [filteredUsers]);
+    const viewed = useMemo(() => filteredUsers.slice(4, 6), [filteredUsers]);
     
     if (loading) {
         return (
