@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { users } from "@/lib/mock-data";
@@ -14,7 +14,12 @@ import { useAuth } from '@/hooks/use-auth';
 
 export default function MessagesPage() {
     const { user: currentUser } = useAuth();
-    const conversations = users.filter(u => u.role !== 'Admin' && u.id !== currentUser?.id).slice(0, 4);
+    
+    const conversations = useMemo(() => {
+        if (!currentUser) return [];
+        return users.filter(u => u.role === 'Sugar Baby' && u.id !== currentUser.id);
+    }, [currentUser]);
+
     const [activeConversation, setActiveConversation] = useState<User | null>(conversations[0] || null);
     
     const handleConversationClick = (user: User) => {
