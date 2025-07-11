@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { users } from "@/lib/mock-data";
@@ -17,10 +17,23 @@ export default function MessagesPage() {
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
-        return users.filter(u => u.role === 'Sugar Baby' && u.id !== currentUser.id);
+
+        if (currentUser.role === 'Admin') {
+             // Admin sees everyone except other admins
+             return users.filter(u => u.role !== 'Admin' && u.id !== currentUser.id);
+        }
+        
+        const targetRole = currentUser.role === 'Sugar Daddy' ? 'Sugar Baby' : 'Sugar Daddy';
+        return users.filter(u => u.role === targetRole && u.id !== currentUser.id);
     }, [currentUser]);
 
-    const [activeConversation, setActiveConversation] = useState<User | null>(conversations[0] || null);
+    const [activeConversation, setActiveConversation] = useState<User | null>(null);
+
+    useEffect(() => {
+        if (conversations.length > 0 && !activeConversation) {
+            setActiveConversation(conversations[0]);
+        }
+    }, [conversations, activeConversation]);
     
     const handleConversationClick = (user: User) => {
         setActiveConversation(user);
