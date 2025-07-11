@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import { users, profiles } from "@/lib/mock-data";
-import { notFound, useRouter } from "next/navigation";
+import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
 
@@ -23,13 +23,9 @@ const ViewField = ({ label, value }: { label: string, value?: string | number | 
     )
 }
 
-interface OtherUserProfilePageProps {
-    params: {
-        id: string;
-    };
-}
-
-export default function OtherUserProfilePage({ params: { id } }: OtherUserProfilePageProps) {
+export default function OtherUserProfilePage() {
+  const params = useParams();
+  const id = params.id as string;
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
 
