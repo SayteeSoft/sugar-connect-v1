@@ -25,7 +25,6 @@ export function Footer() {
           <div>
             <h4 className="font-bold font-headline text-foreground">Policies</h4>
             <ul className="mt-4 space-y-2">
-              <li><Link href="/policies/cookies" className="hover:text-primary">Cookie Policy</Link></li>
               <li><Link href="/policies/privacy" className="hover:text-primary">Privacy Policy</Link></li>
               <li><Link href="/policies/terms" className="hover:text-primary">Terms of Use</Link></li>
             </ul>
