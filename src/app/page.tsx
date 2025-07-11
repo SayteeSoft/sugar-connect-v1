@@ -24,7 +24,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="container relative mx-auto px-4 md:px-6 pb-16 text-center text-white">
-          <h1 className="text-6xl md:text-8xl font-headline font-extrabold drop-shadow-lg">
+          <h1 className="text-6xl md:text-8xl font-extrabold drop-shadow-lg">
             Sugar Connect
           </h1>
           <h2 className="mt-4 text-3xl md:text-4xl font-headline drop-shadow-md">
@@ -34,10 +34,10 @@ export default function Home() {
             An exclusive platform for ambitious and attractive individuals
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100 font-bold">
               <Link href="/signup?role=Sugar+Baby">I'm a Sugar Baby</Link>
             </Button>
-            <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
+            <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100 font-bold">
               <Link href="/signup?role=Sugar+Daddy">I'm a Sugar Daddy</Link>
             </Button>
           </div>
@@ -236,3 +236,6 @@ export default function Home() {
     
 
 
+
+
+    
