@@ -17,21 +17,8 @@ export default function MessagesPage() {
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
-
-        if (currentUser.role === 'Admin') {
-             // Admin sees everyone except other admins
-             return users.filter(u => u.role !== 'Admin' && u.id !== currentUser.id);
-        }
-        
-        if (currentUser.role === 'Sugar Daddy') {
-            return users.filter(u => u.role === 'Sugar Baby');
-        }
-
-        if (currentUser.role === 'Sugar Baby') {
-            return users.filter(u => u.role === 'Sugar Daddy');
-        }
-
-        return [];
+        // Always show Sugar Babies
+        return users.filter(u => u.role === 'Sugar Baby');
     }, [currentUser]);
 
     const [activeConversation, setActiveConversation] = useState<User | null>(null);
@@ -48,15 +35,15 @@ export default function MessagesPage() {
 
     if (!currentUser) {
         return (
-            <div className="container mx-auto px-4 md:px-6 py-8 flex items-center justify-center">
+            <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 md:px-6 py-8">
                 <p>Please log in to see your messages.</p>
             </div>
         )
     }
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
-        <Card className="w-full max-w-4xl h-[70vh] flex shadow-lg">
+    <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 md:px-6 py-8">
+        <Card className="h-[70vh] w-full max-w-4xl flex shadow-lg">
             {/* Left Panel: Conversations List */}
             <div className="w-1/3 border-r flex flex-col">
                 <div className="p-4 border-b">
