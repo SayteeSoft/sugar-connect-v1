@@ -147,25 +147,37 @@ export default function Home() {
       </section>
 
       {/* High Level Security */}
-      <section className="py-12 md:py-20">
+      <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">High Level Security & Privacy</h2>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col items-center">
-              <UserCheck className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">Verified Members</h3>
-              <p className="mt-2 text-muted-foreground">Video verification allows you to know that potential dates look like their photos.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Lock className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">Secure Accounts</h3>
-              <p className="mt-2 text-muted-foreground">Industry-leading account protection helps keep your profile and information safe.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Headset className="h-12 w-12 text-primary" />
-              <h3 className="mt-4 text-xl font-bold">24/7 Support</h3>
-              <p className="mt-2 text-muted-foreground">We have a dedicated team of customer service agents to support you.</p>
-            </div>
+          <h2 className="text-3xl font-bold text-center font-headline text-foreground">High Level Security & Privacy</h2>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card>
+              <CardContent className="p-6 text-center flex flex-col items-center">
+                  <div className="p-4 rounded-full bg-accent mb-4">
+                    <ShieldCheck className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold">Verified Members</h3>
+                  <p className="mt-2 text-muted-foreground">Video verification allows you to know that potential dates look like their photos.</p>
+              </CardContent>
+            </Card>
+            <Card>
+               <CardContent className="p-6 text-center flex flex-col items-center">
+                  <div className="p-4 rounded-full bg-accent mb-4">
+                    <Lock className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold">Secure Accounts</h3>
+                  <p className="mt-2 text-muted-foreground">Industry-leading account protection helps keep your profile and information safe.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center flex flex-col items-center">
+                  <div className="p-4 rounded-full bg-accent mb-4">
+                    <Headset className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold">24/7 Support</h3>
+                  <p className="mt-2 text-muted-foreground">We have a dedicated team of customer service agents to support you.</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
