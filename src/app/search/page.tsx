@@ -13,6 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Heart, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import type { User } from '@/types';
 
 function FiltersPanel() {
   return (
@@ -57,18 +58,25 @@ function FiltersPanel() {
 export default function SearchPage() {
   const { user } = useAuth();
   
-  const searchResults = users.filter(u => {
-    if (!user) return u.role !== 'Admin'; // Show non-admins if not logged in
-    if (user.role === 'Admin') return u.role !== 'Admin';
+  const searchResults = users.filter((u: User) => {
+    if (u.role === 'Admin') return false; // Exclude admins from search results always
+    if (!user) return true; // If no user is logged in, show everyone (except Admins)
+    if (user.role === 'Admin') return true; // Admin sees everyone (except other Admins)
     if (user.role === 'Sugar Daddy') return u.role === 'Sugar Baby';
     if (user.role === 'Sugar Baby') return u.role === 'Sugar Daddy';
     return false;
   });
 
+
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
       <h1 className="text-3xl font-bold font-headline mb-6">Discover Your Match</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="md:col-span-1 lg:col-span-1">
+          <div className="sticky top-20">
+            <FiltersPanel />
+          </div>
+        </div>
         <div className="md:col-span-2 lg:col-span-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {searchResults.map(profile => (
@@ -91,11 +99,6 @@ export default function SearchPage() {
                 </div>
               </Card>
             ))}
-          </div>
-        </div>
-        <div className="md:col-span-1 lg:col-span-1">
-          <div className="sticky top-20">
-            <FiltersPanel />
           </div>
         </div>
       </div>
