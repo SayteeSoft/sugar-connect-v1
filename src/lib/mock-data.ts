@@ -51,24 +51,141 @@ export const interestOptions = [
 
 // Mock user and profile data for UI component development where API data isn't needed.
 // This is NOT the source of truth for the application.
-// NOTE: This data is now fetched from the API on relevant pages.
-// Leaving a slimmed down version for any remaining components that might reference it.
-export const mockUsers = [
+export const mockUsers: Omit<User, 'passwordHash'>[] = [
     {
       "id": "1",
       "name": "Admin",
       "email": "saytee.software@gmail.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 49,
       "location": "London, UK",
-      "role": "Admin" as Role,
+      "role": "Admin",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
+    },
+    {
+      "id": "4",
+      "name": "Darianna",
+      "email": "darianna.art@example.com",
+      "age": 22,
+      "location": "London, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
+      "profileId": "p4"
+    },
+    {
+      "id": "5",
+      "name": "Kateryna",
+      "email": "kate.marketing@example.com",
+      "age": 24,
+      "location": "Birmingham, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p5"
+    },
+    {
+      "id": "3",
+      "name": "Mark",
+      "email": "mark.investor@example.com",
+      "age": 45,
+      "location": "Edinburgh, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "profileId": "p3"
+    },
+    {
+      "id": "6",
+      "name": "Sofia",
+      "email": "sofia@gmail.com",
+      "age": 26,
+      "location": "Cartagena, CO",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p6"
+    },
+    {
+      "id": "7",
+      "name": "James",
+      "email": "james@gmail.com",
+      "age": 38,
+      "location": "Medellín, CO",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "profileId": "p7"
+    },
+    {
+      "id": "8",
+      "name": "Vanessa",
+      "email": "vanessa@gmail.com",
+      "age": 21,
+      "location": "Frankfurt, DE",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p8"
+    },
+    {
+      "id": "9",
+      "name": "Richard",
+      "email": "richard@gmail.com",
+      "age": 49,
+      "location": "London, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "profileId": "p9"
+    },
+    {
+      "id": "10",
+      "name": "Olivia",
+      "email": "olivia@gmail.com",
+      "age": 23,
+      "location": "Medellín, CO",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p10"
+    },
+    {
+      "id": "11",
+      "name": "William",
+      "email": "william@gmail.com",
+      "age": 45,
+      "location": "Cardiff, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "profileId": "p11"
+    },
+    {
+      "id": "12",
+      "name": "Cecilia",
+      "email": "cecilia@gmail.com",
+      "age": 25,
+      "location": "Rio, Brazil",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p12"
+    },
+    {
+      "id": "13",
+      "name": "George",
+      "email": "george@gmail.com",
+      "age": 55,
+      "location": "London, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "profileId": "p13"
     }
-] as User[];
+];
 
 export const mockProfiles: Profile[] = [];
-
 
 export const featuredProfiles = mockUsers.filter(u => u.role !== 'Admin').slice(0, 4);
