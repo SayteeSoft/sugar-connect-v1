@@ -2,12 +2,20 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { users, profiles } from '@/lib/mock-data'; // Using mock data as a "database"
 import type { User, Profile } from '@/types';
 
+const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const uploadDir = path.join(process.cwd(), '/public/uploads');
 
-// Helper function to ensure the upload directory exists.
+const readData = async () => {
+    const fileContent = await fs.readFile(dataPath, 'utf-8');
+    return JSON.parse(fileContent);
+};
+
+const writeData = async (data: any) => {
+    await fs.writeFile(dataPath, JSON.stringify(data, null, 2), 'utf-8');
+};
+
 const ensureUploadDirExists = async () => {  
   try {
     await fs.access(uploadDir);
@@ -20,6 +28,9 @@ export async function POST(req: Request) {
   await ensureUploadDirExists();
   
   try {
+    const db = await readData();
+    let { users, profiles } = db;
+
     const formData = await req.formData();
     
     const userIdToUpdate = formData.get('userId') as string;
@@ -28,8 +39,8 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: 'User ID is missing.' }, { status: 400 });
     }
 
-    const userIndex = users.findIndex(u => u.id === userIdToUpdate);
-    const profileIndex = profiles.findIndex(p => p.userId === userIdToUpdate);
+    const userIndex = users.findIndex((u: User) => u.id === userIdToUpdate);
+    const profileIndex = profiles.findIndex((p: Profile) => p.userId === userIdToUpdate);
 
     if (userIndex === -1 || profileIndex === -1) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -38,12 +49,10 @@ export async function POST(req: Request) {
     const userToUpdate: User = { ...users[userIndex] };
     const profileToUpdate: Profile = { ...profiles[profileIndex] };
 
-    // Ensure attributes object exists
     if (!profileToUpdate.attributes) {
         profileToUpdate.attributes = {};
     }
 
-    // Update text fields
     userToUpdate.name = (formData.get('name') as string) || userToUpdate.name;
     userToUpdate.email = (formData.get('email') as string) || userToUpdate.email;
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
@@ -60,21 +69,16 @@ export async function POST(req: Request) {
     if (wantsString) {
       try {
         profileToUpdate.wants = JSON.parse(wantsString);
-      } catch {
-        // Ignore if parsing fails
-      }
+      } catch {}
     }
 
     const interestsString = formData.get('interests') as string;
     if (interestsString) {
       try {
         profileToUpdate.interests = JSON.parse(interestsString);
-      } catch {
-        // Ignore if parsing fails
-      }
+      } catch {}
     }
     
-    // Helper to handle form fields that could be empty strings
     const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
         if (field === undefined || field === null || typeof field !== 'string' || field.trim() === '') {
             return undefined;
@@ -82,17 +86,15 @@ export async function POST(req: Request) {
         return field;
     };
 
-    // Update all attributes from the form
     profileToUpdate.attributes.height = toStringOrUndefined(formData.get('height'));
-    profileToUpdate.attributes.bodyType = formData.get('bodyType') as Profile['attributes']['bodyType'] || undefined;
-    profileToUpdate.attributes.ethnicity = formData.get('ethnicity') as Profile['attributes']['ethnicity'] || undefined;
-    profileToUpdate.attributes.hairColor = formData.get('hairColor') as Profile['attributes']['hairColor'] || undefined;
-    profileToUpdate.attributes.eyeColor = formData.get('eyeColor') as Profile['attributes']['eyeColor'] || undefined;
-    profileToUpdate.attributes.smoker = formData.get('smoker') as Profile['attributes']['smoker'] || undefined;
-    profileToUpdate.attributes.drinker = formData.get('drinker') as Profile['attributes']['drinker'] || undefined;
-    profileToUpdate.attributes.piercings = formData.get('piercings') as Profile['attributes']['piercings'] || undefined;
-    profileToUpdate.attributes.tattoos = formData.get('tattoos') as Profile['attributes']['tattoos'] || undefined;
-
+    profileToUpdate.attributes.bodyType = (formData.get('bodyType') as Profile['attributes']['bodyType']) || undefined;
+    profileToUpdate.attributes.ethnicity = (formData.get('ethnicity') as Profile['attributes']['ethnicity']) || undefined;
+    profileToUpdate.attributes.hairColor = (formData.get('hairColor') as Profile['attributes']['hairColor']) || undefined;
+    profileToUpdate.attributes.eyeColor = (formData.get('eyeColor') as Profile['attributes']['eyeColor']) || undefined;
+    profileToUpdate.attributes.smoker = (formData.get('smoker') as Profile['attributes']['smoker']) || undefined;
+    profileToUpdate.attributes.drinker = (formData.get('drinker') as Profile['attributes']['drinker']) || undefined;
+    profileToUpdate.attributes.piercings = (formData.get('piercings') as Profile['attributes']['piercings']) || undefined;
+    profileToUpdate.attributes.tattoos = (formData.get('tattoos') as Profile['attributes']['tattoos']) || undefined;
 
     const writeFile = async (file: File) => {
         const buffer = Buffer.from(await file.arrayBuffer());
@@ -101,31 +103,28 @@ export async function POST(req: Request) {
         return `/uploads/${filename}`;
     };
 
-    // Update avatar if a new one was uploaded
     const avatarFile = formData.get('avatar') as File | null;
     if (avatarFile && avatarFile.size > 0) {
         userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
 
-    // Update gallery if new images were uploaded
     const galleryFiles = formData.getAll('gallery') as File[];
-    if (galleryFiles && galleryFiles.length > 0) {
-        const newImagePaths: string[] = [];
-        for (const file of galleryFiles) {
-            if (file && file.size > 0) {
-                const path = await writeFile(file);
-                newImagePaths.push(path);
-            }
-        }
-
-        if (newImagePaths.length > 0) {
-             profileToUpdate.gallery = [...(profileToUpdate.gallery || []), ...newImagePaths];
+    const newImagePaths: string[] = [];
+    for (const file of galleryFiles) {
+        if (file instanceof File && file.size > 0) {
+            const path = await writeFile(file);
+            newImagePaths.push(path);
         }
     }
+
+    if (newImagePaths.length > 0) {
+        profileToUpdate.gallery = [...(profileToUpdate.gallery || []), ...newImagePaths];
+    }
     
-    // "Save" the updated data back to our mock data store
     users[userIndex] = userToUpdate;
     profiles[profileIndex] = profileToUpdate;
+
+    await writeData({ users, profiles });
 
     return NextResponse.json({ 
         message: 'Profile updated successfully',

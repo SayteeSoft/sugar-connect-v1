@@ -6,9 +6,9 @@ import { AuthContext, AuthContextType } from '@/hooks/use-auth';
 import { users as initialUsers, profiles as initialProfiles } from '@/lib/mock-data';
 import type { User, Profile, Role, ProfileFormValues } from '@/types';
 
-// Make a mutable copy for in-memory operations
-let users: User[] = [...initialUsers];
-let profiles: Profile[] = [...initialProfiles];
+// Let's make our "DB" mutable to simulate updates
+let users: User[] = JSON.parse(JSON.stringify(initialUsers));
+let profiles: Profile[] = JSON.parse(JSON.stringify(initialProfiles));
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -18,7 +18,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Simulate checking for a logged-in user in local storage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      // Let's re-verify the user against our "database" on load
+      const userInDb = users.find(u => u.id === parsedUser.id);
+      if (userInDb) {
+        setUser(userInDb);
+      } else {
+        // User was in local storage but not in our DB, so clear it
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);
@@ -104,35 +112,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const formData = new FormData();
     formData.append('userId', userId);
 
-    // Iterate over all keys in the form data
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
             const value = data[key as keyof ProfileFormValues];
 
-            // Skip file inputs, they will be handled separately
-            if (key === 'avatar' || key === 'gallery') {
-                continue;
-            }
+            if (key === 'avatar' || key === 'gallery') continue;
 
             if (key === 'wants' || key === 'interests') {
-                // Handle array of objects for multi-select
                 if (Array.isArray(value)) {
                     const stringValues = value.map((item: any) => item.value);
                     formData.append(key, JSON.stringify(stringValues));
                 }
-            } else if (value !== undefined && value !== null) {
-                // Append other fields
+            } else if (value !== undefined && value !== null && value !== '') {
                 formData.append(key, String(value));
             }
         }
     }
 
-    // Append file if it exists
     if (data.avatar instanceof File) {
       formData.append('avatar', data.avatar);
     }
     
-    // Append gallery files if they exist
     if (data.gallery && data.gallery.length > 0) {
         data.gallery.forEach((file) => {
             if (file instanceof File) {
@@ -151,34 +151,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(errorData.message || "Failed to update profile.");
     }
     
-    const updatedUserData = await response.json();
+    const { user: updatedUser, profile: updatedProfile } = await response.json();
 
-    // Update state and local storage if it's the currently logged-in user
     if (user?.id === userId) {
-        setUser(updatedUserData.user);
-        localStorage.setItem('user', JSON.stringify(updatedUserData.user));
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
     }
     
-    // Also update the in-memory mock data so the app is consistent
     const userIndex = users.findIndex(u => u.id === userId);
-    if(userIndex !== -1) users[userIndex] = updatedUserData.user;
+    if(userIndex !== -1) users[userIndex] = updatedUser;
 
     const profileIndex = profiles.findIndex(p => p.userId === userId);
-    if(profileIndex !== -1) profiles[profileIndex] = updatedUserData.profile;
+    if(profileIndex !== -1) profiles[profileIndex] = updatedProfile;
 
-    return updatedUserData.user;
+    return updatedUser;
 
   }, [user]);
 
   const deleteUser = useCallback(async (userId: string): Promise<void> => {
-    // In a real app, this would be an API call.
-    // For our mock data, we filter the arrays.
-    
     const userToDelete = users.find(u => u.id === userId);
     if (!userToDelete) {
         throw new Error("User not found");
     }
-    // Prevent admin from being deleted
     if (userToDelete.role === 'Admin') {
         throw new Error("Admin accounts cannot be deleted.");
     }
@@ -186,7 +180,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     users = users.filter(u => u.id !== userId);
     profiles = profiles.filter(p => p.userId !== userId);
     
-    // If the deleted user is the currently logged-in user, log them out.
     if (user?.id === userId) {
         logout();
     }
