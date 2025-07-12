@@ -20,42 +20,9 @@ import { notFound } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { ProfileFormValues as ProfileFormSchema } from "@/types";
+import { ProfileFormValues as ProfileFormSchema, profileFormSchema } from "@/types";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-const fileSchema = z
-  .instanceof(File)
-  .optional()
-  .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-  .refine(
-    (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
-    "Only .jpg, .jpeg, .png and .webp formats are supported."
-  );
-  
-const profileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
-  location: z.string().min(2, "Location is required."),
-  about: z.string().optional(),
-  wants: z.array(z.object({ value: z.string() })).optional(),
-  interests: z.array(z.object({ value: z.string() })).optional(),
-  age: z.coerce.number().min(18, "You must be at least 18."),
-  height: z.coerce.number().optional(),
-  bodyType: z.enum(["Slim", "Athletic", "Average", "Curvy"]).optional(),
-  ethnicity: z.enum(["White/Caucasian", "Black/African Decent", "North/African Decent", "East Asian", "South Asian", "Hispanic/Latino", "Middle Eastern", "Native America/Indegenious"]).optional(),
-  hairColor: z.enum(["Brown", "Black", "Blonde", "Chestnut", "Grey", "Auburn", "Red"]).optional(),
-  eyeColor: z.enum(["Blue", "Brown", "Green", "Grey", "Hazel"]).optional(),
-  smoker: z.enum(["Yes", "Socially", "Sometimes", "No"]).optional(),
-  drinker: z.enum(["Yes", "Socially", "Sometimes", "No"]).optional(),
-  piercings: z.enum(["Yes", "No"]).optional(),
-  tattoos: z.enum(["Yes", "No"]).optional(),
-  avatar: fileSchema,
-  gallery: z.array(fileSchema).optional(),
-});
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
@@ -83,7 +50,7 @@ export default function ProfilePage() {
   const userProfile = user ? profiles.find(p => p.userId === user.id) : undefined;
 
   const { control, handleSubmit, reset, getValues, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
       role: "Sugar Baby", // Default role
@@ -495,11 +462,11 @@ export default function ProfilePage() {
                              {errors.age && <p className="text-destructive text-sm mt-1">{errors.age.message}</p>}
                       </div>
                       <div>
-                          <Label htmlFor="height">Height (cm)</Label>
+                          <Label htmlFor="height">Height</Label>
                             <Controller
                                 name="height"
                                 control={control}
-                                render={({ field }) => <Input id="height" type="number" {...field} value={field.value ?? ''} />}
+                                render={({ field }) => <Input id="height" type="text" {...field} value={field.value ?? ''} />}
                             />
                       </div>
                        <div>
@@ -654,7 +621,7 @@ export default function ProfilePage() {
                   ) : (
                     <>
                         <ViewField label="Age" value={formValues.age} />
-                        <ViewField label="Height (cm)" value={formValues.height} />
+                        <ViewField label="Height" value={formValues.height} />
                         <ViewField label="Body Type" value={formValues.bodyType} />
                         <ViewField label="Ethnicity" value={formValues.ethnicity} />
                         <ViewField label="Hair Color" value={formValues.hairColor} />

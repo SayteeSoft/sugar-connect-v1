@@ -27,7 +27,7 @@ export interface Profile {
     hairColor?: 'Brown' | 'Black' | 'Blonde' | 'Chestnut' | 'Grey' | 'Auburn' | 'Red';
     smoker?: 'Yes' | 'Socially' | 'Sometimes' | 'No';
     piercings?: 'Yes' | 'No';
-    height?: number; // in cm
+    height?: string;
     ethnicity?: 'Black/African Decent' | 'North/African Decent' | 'East Asian' | 'South Asian' | 'Hispanic/Latino' | 'Middle Eastern' | 'Native America/Indegenious' | 'White/Caucasian';
     eyeColor?: 'Blue' | 'Brown' | 'Green' | 'Grey' | 'Hazel';
     drinker?: 'Yes' | 'Socially' | 'Sometimes' | 'No';
@@ -55,7 +55,7 @@ const fileSchema = z
   );
 
 // We can infer the type from the zod schema used in the profile page
-const profileFormSchema = z.object({
+export const profileFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
   location: z.string().min(2, "Location is required."),
@@ -63,7 +63,7 @@ const profileFormSchema = z.object({
   wants: z.array(z.object({ value: z.string() })).optional(),
   interests: z.array(z.object({ value: z.string() })).optional(),
   age: z.coerce.number().min(18, "You must be at least 18."),
-  height: z.coerce.number().optional(),
+  height: z.string().optional(),
   bodyType: z.enum(["Slim", "Athletic", "Average", "Curvy"]).optional(),
   ethnicity: z.enum(["White/Caucasian", "Black/African Decent", "North/African Decent", "East Asian", "South Asian", "Hispanic/Latino", "Middle Eastern", "Native America/Indegenious"]).optional(),
   hairColor: z.enum(["Brown", "Black", "Blonde", "Chestnut", "Grey", "Auburn", "Red"]).optional(),
@@ -77,5 +77,3 @@ const profileFormSchema = z.object({
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
-
-    

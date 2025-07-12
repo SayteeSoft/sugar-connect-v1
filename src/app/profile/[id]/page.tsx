@@ -173,7 +173,7 @@ export default function OtherUserProfilePage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <ViewField label="Age" value={user.age} />
-                <ViewField label="Height (cm)" value={userProfile.attributes.height} />
+                <ViewField label="Height" value={userProfile.attributes.height} />
                 <ViewField label="Body Type" value={userProfile.attributes.bodyType} />
                 <ViewField label="Ethnicity" value={userProfile.attributes.ethnicity} />
                 <ViewField label="Hair Color" value={userProfile.attributes.hairColor} />

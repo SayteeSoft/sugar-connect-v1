@@ -73,16 +73,15 @@ export async function POST(req: Request) {
       }
     }
     
-    const toNumberOrUndefined = (field?: FormDataEntryValue | null): number | undefined => {
+    const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
         if (field === undefined || field === null || typeof field !== 'string' || field.trim() === '') {
             return undefined;
         }
-        const num = Number(field);
-        return isNaN(num) ? undefined : num;
+        return field;
     };
 
     const newAttributes: Partial<Profile['attributes']> = {
-        height: toNumberOrUndefined(formData.get('height')),
+        height: toStringOrUndefined(formData.get('height')),
         bodyType: formData.get('bodyType') as Profile['attributes']['bodyType'] || undefined,
         ethnicity: formData.get('ethnicity') as Profile['attributes']['ethnicity'] || undefined,
         hairColor: formData.get('hairColor') as Profile['attributes']['hairColor'] || undefined,
