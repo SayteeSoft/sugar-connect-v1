@@ -6,7 +6,8 @@ import data from './data.json';
 // The initial state is loaded from this file, and then updated
 // in memory and via the API for persistence during local development.
 export let users: User[] = data.users as User[];
-export let profiles: Profile[] = data.profiles;
+export let profiles: Profile[] = data.profiles as Profile[];
+// export let profiles: Profile[] = data.profiles;
 
 
 export const testimonials: Testimonial[] = [
