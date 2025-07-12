@@ -36,6 +36,7 @@
     --sidebar-ring: 300 100% 25.1%;
 
     --icon-primary: 300 100% 25.1%;
+    --heart-icon-color: 300 100% 25.1%;
   }
  
   .dark {
@@ -45,8 +46,8 @@
     --card-foreground: 220 10% 95%;
     --popover: 220 10% 20%;
     --popover-foreground: 220 10% 95%;
-    --primary: 300 100% 25.1%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 300 80% 80%; /* #f5a3f5 */
+    --primary-foreground: 300 100% 10%;
     --secondary: 220 10% 25%;
     --secondary-foreground: 220 10% 95%;
     --muted: 220 10% 25%;
@@ -70,6 +71,7 @@
     --sidebar-ring: 300 80% 80%;
 
     --icon-primary: 300 100% 25.1%;
+    --heart-icon-color: 300 80% 80%; /* #f5a3f5 */
   }
 
   * {
@@ -83,5 +85,8 @@
 @layer utilities {
   .text-icon-primary {
     color: hsl(var(--icon-primary));
+  }
+  .text-heart-icon {
+    color: hsl(var(--heart-icon-color));
   }
 }
