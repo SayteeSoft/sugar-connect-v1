@@ -57,6 +57,7 @@ const fileSchema = z
 // We can infer the type from the zod schema used in the profile page
 export const profileFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
+  email: z.string().email("Please enter a valid email address."),
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
   location: z.string().min(2, "Location is required."),
   about: z.string().optional(),

@@ -45,6 +45,7 @@ export async function POST(req: Request) {
 
     // Update text fields
     userToUpdate.name = (formData.get('name') as string) || userToUpdate.name;
+    userToUpdate.email = (formData.get('email') as string) || userToUpdate.email;
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     

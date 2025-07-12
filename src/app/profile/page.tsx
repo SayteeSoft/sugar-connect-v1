@@ -52,6 +52,7 @@ export default function ProfilePage() {
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
+      email: "",
       role: "Sugar Baby", // Default role
       location: "",
       about: "",
@@ -73,6 +74,7 @@ export default function ProfilePage() {
     if (user && userProfile) {
       reset({
         name: user.name,
+        email: user.email,
         role: user.role,
         location: user.location,
         about: userProfile.about,
@@ -156,6 +158,7 @@ export default function ProfilePage() {
       if (user && userProfile) {
         reset({
             name: user.name,
+            email: user.email,
             role: user.role,
             location: user.location,
             about: userProfile.about,
@@ -301,11 +304,13 @@ export default function ProfilePage() {
                             {errors.location && <p className="text-destructive text-sm mt-1">{errors.location.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor="email" className='text-muted-foreground'>Email Address</Label>
-                            <Input id="email" defaultValue={user.email} disabled />
-                            <p className="text-xs text-muted-foreground mt-1">
-                                Email cannot be changed.
-                            </p>
+                            <Label htmlFor="email">Email Address</Label>
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => <Input id="email" {...field} />}
+                            />
+                            {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
                         </div>
                     </div>
                 ) : (
@@ -324,7 +329,7 @@ export default function ProfilePage() {
                             </div>
                             <div className="flex items-center gap-2">
                                <Mail className="h-4 w-4" />
-                               <span>{user.email}</span>
+                               <span>{formValues.email}</span>
                             </div>
                         </div>
                     </div>
@@ -659,6 +664,4 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
 
