@@ -127,7 +127,7 @@ export default function AdminPage() {
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
                         <span>{u.name}</span>
-                        <Badge variant={u.role === 'Admin' ? 'destructive' : u.role === 'Sugar Baby' ? 'secondary' : 'default'}>
+                        <Badge variant={u.role === 'Admin' ? 'destructive' : 'default'}>
                             {u.role === 'Sugar Daddy' ? 'Daddy' : u.role === 'Sugar Baby' ? 'Baby' : 'Admin'}
                         </Badge>
                     </div>
