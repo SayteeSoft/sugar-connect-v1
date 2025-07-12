@@ -75,8 +75,17 @@ export async function POST(req: Request) {
       profileToUpdate.interests = JSON.parse(fields.interests[0]);
     }
     
+    // Helper to safely convert form field to number or undefined
+    const toNumberOrUndefined = (field?: string): number | undefined => {
+        if (field === undefined || field === null || field.trim() === '') {
+            return undefined;
+        }
+        const num = Number(field);
+        return isNaN(num) ? undefined : num;
+    };
+
     const newAttributes: Partial<Profile['attributes']> = {
-        height: fields.height?.[0] ? Number(fields.height[0]) : undefined,
+        height: toNumberOrUndefined(fields.height?.[0]),
         bodyType: fields.bodyType?.[0] as Profile['attributes']['bodyType'] || undefined,
         ethnicity: fields.ethnicity?.[0] as Profile['attributes']['ethnicity'] || undefined,
         hairColor: fields.hairColor?.[0] as Profile['attributes']['hairColor'] || undefined,
@@ -91,7 +100,7 @@ export async function POST(req: Request) {
     Object.keys(newAttributes).forEach(key => {
         const typedKey = key as keyof typeof newAttributes;
         const value = newAttributes[typedKey];
-        if (value !== undefined && value !== null && (typeof value !== 'number' || !Number.isNaN(value))) {
+        if (value !== undefined && value !== null) {
             (profileToUpdate.attributes as any)[typedKey] = value;
         }
     });
