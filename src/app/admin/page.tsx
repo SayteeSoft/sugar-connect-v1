@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import {
   Table,
@@ -37,12 +37,37 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { User } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { getStore } from '@netlify/blobs';
+
 
 export default function AdminPage() {
     const { user, loading, deleteUser } = useAuth();
     const router = useRouter();
     const { toast } = useToast();
-    const [users, setUsers] = useState<User[]>(initialUsers);
+    const [users, setUsers] = useState<User[]>([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            // In a real app, you might have an API route to get all users.
+            // For now, we'll read directly from the blob store on the client,
+            // which is not ideal for security but works for this architecture.
+            try {
+                 const store = getStore('data');
+                 const data = await store.get('users-db', { type: 'json' });
+                 if (data?.users) {
+                     setUsers(data.users);
+                 }
+            } catch (error) {
+                console.error("Failed to fetch users from blob store:", error);
+                // Fallback to mock data if blob store fails
+                setUsers(initialUsers);
+            }
+        };
+
+        if (user?.role === 'Admin') {
+            fetchUsers();
+        }
+    }, [user]);
 
     if (loading) {
         return <div className="container mx-auto p-8">Loading...</div>;

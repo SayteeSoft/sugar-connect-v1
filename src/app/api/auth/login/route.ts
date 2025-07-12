@@ -1,34 +1,61 @@
 
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import type { User } from '@/types';
 import { getStore } from '@netlify/blobs';
 import bcrypt from 'bcrypt';
 
-const dataPath = path.join(process.cwd(), 'src/lib/data.json');
-const DB_KEY = 'db.json';
+const DB_KEY = 'users-db';
 
 const readData = async () => {
-    // Check if running in a production Netlify environment.
-    // NETLIFY_CONTEXT is a build-time variable set by Netlify.
-    if (process.env.NETLIFY_CONTEXT === 'production') {
-        const store = getStore('data');
-        const data = await store.get(DB_KEY, { type: 'json' });
-        // If no data in blob store, return a default structure
-        return data || { users: [], profiles: [] };
-    }
+    const store = getStore('data');
+    const data = await store.get(DB_KEY, { type: 'json' });
+    if (data) return data;
 
-    // Otherwise, use local file system for development
-    try {
-        const fileContent = await fs.readFile(dataPath, 'utf-8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        // If the file doesn't exist locally, return default structure
-        console.error("Could not read local data.json:", error);
-        return { users: [], profiles: [] };
-    }
+    // If no data, seed with the initial admin user
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash('password123', salt);
+    
+    const initialData = {
+        users: [
+             {
+                "id": "1",
+                "name": "Admin",
+                "email": "saytee.software@gmail.com",
+                "passwordHash": passwordHash,
+                "age": 49,
+                "location": "London, UK",
+                "role": "Admin",
+                "credits": "unlimited",
+                "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+                "profileId": "p1"
+            }
+        ],
+        profiles: [
+            {
+                "id": "p1",
+                "userId": "1",
+                "about": "Site administrator.",
+                "wants": [],
+                "interests": [],
+                "gallery": [],
+                "attributes": {
+                    "height": "6'0\"",
+                    "bodyType": "Athletic",
+                    "ethnicity": "Black/African Decent",
+                    "hairColor": "Black",
+                    "eyeColor": "Brown",
+                    "smoker": "No",
+                    "drinker": "No",
+                    "piercings": "No",
+                    "tattoos": "No"
+                }
+            }
+        ]
+    };
+    await store.setJSON(DB_KEY, initialData);
+    return initialData;
 };
+
 
 export async function POST(req: Request) {
     try {
@@ -53,7 +80,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: 'Invalid credentials.' }, { status: 401 });
         }
 
-        // Do not send the password hash to the client
         const { passwordHash, ...userToReturn } = user;
 
         return NextResponse.json({ 
@@ -61,8 +87,7 @@ export async function POST(req: Request) {
             user: userToReturn,
         }, { status: 200 });
 
-    } catch (error)
-        {
+    } catch (error) {
         console.error('Login error:', error);
         return NextResponse.json({ message: 'An internal server error occurred.' }, { status: 500 });
     }

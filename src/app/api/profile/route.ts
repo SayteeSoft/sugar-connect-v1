@@ -6,40 +6,21 @@ import type { User, Profile, Role } from '@/types';
 import { getStore } from '@netlify/blobs';
 import bcrypt from 'bcrypt';
 
-const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const uploadDir = path.join(process.cwd(), 'public/uploads');
-const DB_KEY = 'db.json';
+const DB_KEY = 'users-db';
 
 const readData = async () => {
-    // If in production on Netlify, use Blob store
-    if (process.env.NETLIFY_CONTEXT === 'production') {
-        const store = getStore('data');
-        const data = await store.get(DB_KEY, { type: 'json' });
-        // If no data, return default structure
-        return data || { users: [], profiles: [] };
-    }
-
-    // Otherwise, use local file system for development
-    try {
-        const fileContent = await fs.readFile(dataPath, 'utf-8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        // If the file doesn't exist locally, return default structure
-        return { users: [], profiles: [] };
-    }
+    const store = getStore('data');
+    const data = await store.get(DB_KEY, { type: 'json' });
+    // If no data, return default structure. The login route will handle seeding.
+    return data || { users: [], profiles: [] };
 };
 
 const writeData = async (data: any) => {
-    // If in production on Netlify, use Blob store
-    if (process.env.NETLIFY_CONTEXT === 'production') {
-        const store = getStore('data');
-        await store.setJSON(DB_KEY, data);
-        return;
-    }
-    
-    // Otherwise, use local file system for development
-    await fs.writeFile(dataPath, JSON.stringify(data, null, 2), 'utf-8');
+    const store = getStore('data');
+    await store.setJSON(DB_KEY, data);
 };
+
 
 const ensureUploadDirExists = async () => {  
   try {
@@ -58,7 +39,6 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
     
-    // Handle new user creation
     const isNewUser = formData.get('isNewUser') === 'true';
     if (isNewUser) {
         const newUserString = formData.get('user') as string;
@@ -85,7 +65,6 @@ export async function POST(req: Request) {
 
         await writeData({ users, profiles });
 
-        // Don't send the hash back to the client
         const { passwordHash: _, ...userToReturn } = userWithHash;
 
         return NextResponse.json({ 
@@ -95,8 +74,6 @@ export async function POST(req: Request) {
         }, { status: 201 });
     }
 
-
-    // Handle existing user update
     const userIdToUpdate = formData.get('userId') as string;
 
     if (!userIdToUpdate) {
@@ -223,7 +200,6 @@ export async function DELETE(req: Request) {
             return NextResponse.json({ message: 'User not found.' }, { status: 404 });
         }
 
-        // Protect the administrator account from being deleted
         if (userToDelete.email === 'saytee.software@gmail.com') {
             return NextResponse.json({ message: 'Cannot delete administrator account.' }, { status: 403 });
         }

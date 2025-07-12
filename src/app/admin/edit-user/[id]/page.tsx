@@ -11,11 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { users as allUsers, profiles as allProfiles } from "@/lib/mock-data";
 import { notFound, useParams, useRouter } from "next/navigation";
-import type { ProfileFormValues, Role } from "@/types";
+import type { ProfileFormValues, Role, User, Profile } from "@/types";
+import { getStore } from "@netlify/blobs";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -35,9 +35,9 @@ export default function EditUserPage() {
   const params = useParams();
   const id = params.id as string;
 
-  // In a real app, this data would be fetched from an API.
-  const userToEdit = allUsers.find(u => u.id === id);
-  const userProfileToEdit = allProfiles.find(p => p.userId === id);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  const [userProfileToEdit, setUserProfileToEdit] = useState<Profile | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<EditUserFormValues>({
     resolver: zodResolver(profileSchema),
@@ -49,28 +49,44 @@ export default function EditUserPage() {
       age: 18,
     }
   });
-  
-  useEffect(() => {
-    if (userToEdit && userProfileToEdit) {
-      reset({
-        name: userToEdit.name,
-        role: userToEdit.role,
-        location: userToEdit.location,
-        about: userProfileToEdit.about,
-        age: userToEdit.age,
-      });
-    }
-  }, [userToEdit, userProfileToEdit, reset]);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+        if (!id) return;
+        setDataLoading(true);
+        try {
+            const store = getStore('data');
+            const data = await store.get('users-db', { type: 'json' });
+            const foundUser = data?.users?.find((u: User) => u.id === id);
+            const foundProfile = data?.profiles?.find((p: Profile) => p.userId === id);
+            
+            if (foundUser && foundProfile) {
+                setUserToEdit(foundUser);
+                setUserProfileToEdit(foundProfile);
+                reset({
+                    name: foundUser.name,
+                    role: foundUser.role,
+                    location: foundUser.location,
+                    about: foundProfile.about,
+                    age: foundUser.age,
+                });
+            }
+        } catch (error) {
+            console.error("Failed to fetch user to edit:", error);
+        } finally {
+            setDataLoading(false);
+        }
+    };
+    fetchUser();
+  }, [id, reset]);
+  
   const onSubmit = async (data: EditUserFormValues) => {
-    // This is a simplified submission. In a real app, the `updateUser`
-    // function would likely have permission checks.
     if (!updateUser) {
         toast({ title: "Error", description: "Update function not available.", variant: "destructive" });
         return;
     }
     try {
-        await updateUser(id, data as ProfileFormValues); // We cast here, it's not ideal but works for mock
+        await updateUser(id, data as ProfileFormValues);
         toast({
             title: "User Profile Saved!",
             description: `${data.name}'s profile has been successfully updated.`,
@@ -81,7 +97,7 @@ export default function EditUserPage() {
     }
   };
 
-  if (loading || !userToEdit) {
+  if (loading || dataLoading || !userToEdit) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
             <Card className="max-w-2xl mx-auto">
@@ -101,7 +117,6 @@ export default function EditUserPage() {
     );
   }
 
-  // Ensure only admins can access this page
   if (currentUser?.role !== 'Admin') {
     notFound();
     return null;

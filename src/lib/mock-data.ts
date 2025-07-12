@@ -1,14 +1,81 @@
 
 import type { User, Profile, Testimonial } from '@/types';
-import data from './data.json';
+// This file now provides static data for UI elements but is NOT the source of truth for users/profiles.
+// The source of truth is the Netlify Blob store, managed via API routes.
 
-// In a real app, you'd fetch this data from a database.
-// The initial state is loaded from this file, and then updated
-// in memory and via the API for persistence during local development.
-export let users: User[] = data.users as User[];
-export let profiles: Profile[] = data.profiles as Profile[];
-// export let profiles: Profile[] = data.profiles;
-
+// Mock data for display purposes only. This will become outdated as the blob store is updated.
+// We keep it here to prevent breaking UI components that might still reference it directly.
+export let users: User[] = [
+    {
+      "id": "1",
+      "name": "Admin",
+      "email": "saytee.software@gmail.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 49,
+      "location": "London, UK",
+      "role": "Admin",
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p1"
+    },
+    {
+      "id": "4",
+      "name": "Darianna",
+      "email": "darianna.art@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 22,
+      "location": "London, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p4"
+    },
+    {
+      "id": "5",
+      "name": "Kateryna",
+      "email": "kate.marketing@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 24,
+      "location": "Birmingham, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p5"
+    },
+     {
+      "id": "3",
+      "name": "Mark",
+      "email": "mark.investor@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 45,
+      "location": "Edinburgh, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p3"
+    }
+];
+export let profiles: Profile[] = [
+     {
+      "id": "p1",
+      "userId": "1",
+      "about": "Site administrator.",
+      "wants": [],
+      "interests": [],
+      "gallery": [],
+      "attributes": {
+        "height": "6'0\"",
+        "bodyType": "Athletic",
+        "ethnicity": "Black/African Decent",
+        "hairColor": "Black",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    }
+];
 
 export const testimonials: Testimonial[] = [
     { name: 'Darianna', role: 'Sugar Baby', quote: "Art student with a love for adventure and exploring new cultures.", avatarUrl: 'https://placehold.co/40x40.png' },
