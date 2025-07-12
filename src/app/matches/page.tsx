@@ -55,7 +55,7 @@ export default function MatchesPage() {
     if (loading) {
         return (
              <div className="container mx-auto px-4 md:px-6 py-8 max-w-4xl">
-                <div className="text-center mb-8">
+                <div className="text-center mb-6">
                     <Skeleton className="h-9 w-1/3 mx-auto" />
                     <Skeleton className="h-4 w-2/3 mx-auto mt-4" />
                 </div>
@@ -74,41 +74,43 @@ export default function MatchesPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 md:px-6 py-8 max-w-4xl">
-            <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold font-headline">Matches</h1>
+        <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
+            <div className="text-center mb-6">
+                <h1 className="text-4xl font-bold font-headline text-primary">Matches</h1>
                 <p className="text-muted-foreground mt-2">Browse your favorites, see who visited your profile, and who you have viewed.</p>
             </div>
 
-            <Tabs defaultValue="favorites" className="w-full">
-                <TabsList className="flex justify-center bg-transparent p-0">
-                    <TabsTrigger value="favorites" className="mx-1 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
-                        <Heart className="mr-2 h-4 w-4" />
-                        Favorites
-                    </TabsTrigger>
-                    <TabsTrigger value="visitors" className="mx-1 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
-                        <Users className="mr-2 h-4 w-4" />
-                        Visitors
-                    </TabsTrigger>
-                    <TabsTrigger value="viewed" className="mx-1 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
-                        <Eye className="mr-2 h-4 w-4" />
-                        Viewed
-                    </TabsTrigger>
-                </TabsList>
-                <Card className="mt-6">
-                    <CardContent className="p-0">
-                        <TabsContent value="favorites" className="m-0">
-                            {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
-                        </TabsContent>
-                        <TabsContent value="visitors" className="m-0">
-                            {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
-                        </TabsContent>
-                        <TabsContent value="viewed" className="m-0">
-                            {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
-                        </TabsContent>
-                    </CardContent>
-                </Card>
-            </Tabs>
+            <Card>
+                <CardContent className="p-6">
+                    <Tabs defaultValue="favorites" className="w-full">
+                        <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="favorites">
+                                <Heart className="mr-2 h-4 w-4" />
+                                Favorites
+                            </TabsTrigger>
+                            <TabsTrigger value="visitors">
+                                <Users className="mr-2 h-4 w-4" />
+                                Visitors
+                            </TabsTrigger>
+                            <TabsTrigger value="viewed">
+                                <Eye className="mr-2 h-4 w-4" />
+                                Viewed
+                            </TabsTrigger>
+                        </TabsList>
+                        <div className="mt-6">
+                            <TabsContent value="favorites">
+                                {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
+                            </TabsContent>
+                            <TabsContent value="visitors">
+                                {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
+                            </TabsContent>
+                            <TabsContent value="viewed">
+                                {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
+                            </TabsContent>
+                        </div>
+                    </Tabs>
+                </CardContent>
+            </Card>
         </div>
     );
 }
