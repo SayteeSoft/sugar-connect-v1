@@ -80,17 +80,25 @@ export async function POST(req: Request) {
 
     // Update avatar if a new one was uploaded
     const avatarFile = files.avatar?.[0];
-    if (avatarFile) {
+    if (avatarFile?.filepath) {
         userToUpdate.avatarUrl = `/uploads/${path.basename(avatarFile.filepath)}`;
     }
 
     // Update gallery if new images were uploaded
     const galleryFiles = files.gallery;
     if (galleryFiles && galleryFiles.length > 0) {
-        const newImagePaths = galleryFiles.map(file => `/uploads/${path.basename(file.filepath)}`);
+        const newImagePaths = galleryFiles.map(file => {
+             if (file.filepath) {
+                return `/uploads/${path.basename(file.filepath)}`;
+            }
+            return null;
+        }).filter((path): path is string => path !== null);
+
         // In a real app, you'd merge this with existing gallery, handle removals, etc.
         // For now, we'll just overwrite.
-        profileToUpdate.gallery = newImagePaths;
+        if (newImagePaths.length > 0) {
+             profileToUpdate.gallery = newImagePaths;
+        }
     }
     
     // "Save" the updated data back to our mock data store
