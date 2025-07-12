@@ -14,11 +14,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
-    if (!value && value !== 0) return null;
     return (
         <div className="flex justify-between items-center text-sm">
             <p className="text-muted-foreground">{label}</p>
-            <p className="font-medium">{String(value)}</p>
+            <p className="font-medium">{value ? String(value) : <span className="text-muted-foreground/70">Not specified</span>}</p>
         </div>
     )
 }
