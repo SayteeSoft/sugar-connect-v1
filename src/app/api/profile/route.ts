@@ -5,7 +5,7 @@ import path from 'path';
 import type { User, Profile } from '@/types';
 
 const dataPath = path.join(process.cwd(), 'src/lib/data.json');
-const uploadDir = path.join(process.cwd(), '/public/uploads');
+const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const readData = async () => {
     try {
@@ -171,4 +171,41 @@ export async function POST(req: Request) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return NextResponse.json({ message: `Error updating profile: ${errorMessage}` }, { status: 500 });
   }
+}
+
+
+export async function DELETE(req: Request) {
+    try {
+        const { userId } = await req.json();
+
+        if (!userId) {
+            return NextResponse.json({ message: 'User ID is required.' }, { status: 400 });
+        }
+
+        const db = await readData();
+        let { users, profiles } = db;
+        
+        const userToDelete = users.find((u: User) => u.id === userId);
+
+        if (!userToDelete) {
+            return NextResponse.json({ message: 'User not found.' }, { status: 404 });
+        }
+
+        // Protect the administrator account from being deleted
+        if (userToDelete.email === 'saytee.software@gmail.com') {
+            return NextResponse.json({ message: 'Cannot delete administrator account.' }, { status: 403 });
+        }
+
+        const updatedUsers = users.filter((u: User) => u.id !== userId);
+        const updatedProfiles = profiles.filter((p: Profile) => p.userId !== userId);
+
+        await writeData({ users: updatedUsers, profiles: updatedProfiles });
+
+        return NextResponse.json({ message: 'User deleted successfully.' }, { status: 200 });
+
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        return NextResponse.json({ message: `Error deleting user: ${errorMessage}` }, { status: 500 });
+    }
 }

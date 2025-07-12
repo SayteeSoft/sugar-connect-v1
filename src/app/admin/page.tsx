@@ -36,10 +36,12 @@ import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { User } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminPage() {
-    const { user, loading } = useAuth();
+    const { user, loading, deleteUser } = useAuth();
     const router = useRouter();
+    const { toast } = useToast();
     const [users, setUsers] = useState<User[]>(initialUsers);
 
     if (loading) {
@@ -51,11 +53,23 @@ export default function AdminPage() {
         return null;
     }
 
-    const handleDelete = (userId: string) => {
-        // In a real app, you would also call an API to delete the user from the database.
-        // For this mock data setup, we just filter the state.
-        // This logic will need to be made more robust if using a real DB.
-        setUsers(currentUsers => currentUsers.filter(u => u.id !== userId));
+    const handleDelete = async (userId: string) => {
+        if (!deleteUser) return;
+        try {
+            await deleteUser(userId);
+            setUsers(currentUsers => currentUsers.filter(u => u.id !== userId));
+            toast({
+                title: "User Deleted",
+                description: "The user has been successfully deleted.",
+            });
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+            toast({
+                title: "Error",
+                description: `Failed to delete user: ${errorMessage}`,
+                variant: "destructive",
+            });
+        }
     };
 
   return (

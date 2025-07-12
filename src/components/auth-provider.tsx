@@ -46,11 +46,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Let's simplify and just use a local find for now, as the API doesn't support it.
     // This part is still mock-logic.
-    const response = await fetch('/api/profile'); // A non-existent endpoint to get all users
-    // This won't work yet. Let's find another way.
-    // We can't fetch all users without an endpoint.
-    // The login will have to be "optimistic" and we'll trust local storage.
-    // The previous implementation had a mock `users` array. Let's go back to that temporarily.
     const { users: allUsers } = await import('@/lib/mock-data');
 
 
@@ -186,12 +181,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const deleteUser = useCallback(async (userId: string): Promise<void> => {
-    // This is still a mock implementation as there is no DELETE API endpoint
+    const response = await fetch('/api/profile', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete user.");
+    }
+
+    // If the deleted user is the currently logged-in user, log them out.
     if (user?.id === userId) {
         logout();
     }
-    // In a real app, you would make an API call here.
-    console.log(`User ${userId} deleted (mock).`);
   }, [user, logout]);
 
 
