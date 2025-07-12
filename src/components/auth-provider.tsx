@@ -23,13 +23,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initializeAuth();
   }, []);
 
-  const login = useCallback(async (email: string, pass: string): Promise<SafeUser | null> => {
+  const login = useCallback(async (email: string, password: string): Promise<SafeUser | null> => {
     setLoading(true);
     try {
         const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password: pass }),
+            body: JSON.stringify({ email, password }),
         });
 
         if (!response.ok) {
