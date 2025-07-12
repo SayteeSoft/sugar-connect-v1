@@ -65,14 +65,14 @@ export default function GlossaryPage() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
-      <Card className="max-w-4xl mx-auto shadow-lg">
-        <CardHeader className="text-center pb-8">
-          <CardTitle className="text-3xl md:text-4xl font-headline text-primary">Glossary of Terms</CardTitle>
-          <CardDescription className="text-lg">
+       <div className="text-center mb-6">
+        <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Glossary of Terms</h1>
+        <p className="text-muted-foreground text-lg mt-2">
             Understand the language of the sugar dating world.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-6 md:px-10">
+        </p>
+      </div>
+      <Card className="max-w-4xl mx-auto shadow-lg">
+        <CardContent className="p-6 md:p-10">
             <div className="relative mb-8">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input 
