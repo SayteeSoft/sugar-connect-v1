@@ -318,7 +318,7 @@ export default function ProfilePage() {
                 </div>
                 {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message}</p>}
                 {isEditing ? (
-                    <div className="space-y-4">
+                    <div className="space-y-4 text-center">
                         <div>
                             <Label htmlFor="name">Name</Label>
                             <Controller
@@ -354,12 +354,12 @@ export default function ProfilePage() {
                             </h1>
                             <Badge variant="outline" className="border-primary text-primary">{formValues.role}</Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground space-y-1 text-left">
-                            <div className="flex items-center gap-2">
+                        <div className="text-sm text-muted-foreground space-y-1">
+                            <div className="flex items-center justify-center gap-2">
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center justify-center gap-2">
                                <Mail className="h-4 w-4" />
                                <span>{user.email}</span>
                             </div>
