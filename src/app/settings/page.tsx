@@ -1,9 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,10 +25,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
-
 export default function SettingsPage() {
     const { user, deleteUser } = useAuth();
-    const router = useRouter();
     const { toast } = useToast();
 
     const handleDeleteAccount = async () => {
@@ -52,67 +48,85 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="container mx-auto max-w-2xl px-4 md:px-6 py-8">
-            <h1 className="text-3xl font-bold font-headline mb-6">Settings</h1>
-            <div className="space-y-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Change Password</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="current-password">Current Password</Label>
-                            <Input id="current-password" type="password" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="new-password">New Password</Label>
-                            <Input id="new-password" type="password" />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="confirm-password">Confirm New Password</Label>
-                            <Input id="confirm-password" type="password" />
-                        </div>
-                        <Button>Update Password</Button>
-                    </CardContent>
-                </Card>
+        <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-4xl font-bold font-headline text-primary">Settings</CardTitle>
+                    <CardDescription className="text-muted-foreground mt-2">Manage your account settings, preferences, and more.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-10">
+                        <section>
+                            <h2 className="text-2xl font-bold font-headline text-primary mb-4">Account</h2>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Change Password</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="current-password">Current Password</Label>
+                                        <Input id="current-password" type="password" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="new-password">New Password</Label>
+                                        <Input id="new-password" type="password" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="confirm-password">Confirm New Password</Label>
+                                        <Input id="confirm-password" type="password" />
+                                    </div>
+                                    <Button>Update Password</Button>
+                                </CardContent>
+                            </Card>
+                        </section>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Language Settings</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">Language selection coming soon.</p>
-                        <Button className="mt-4">Save Language</Button>
-                    </CardContent>
-                </Card>
+                        <section>
+                            <h2 className="text-2xl font-bold font-headline text-primary mb-4">Preferences</h2>
+                             <Card>
+                                <CardHeader>
+                                    <CardTitle>Language Settings</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground">Language selection coming soon.</p>
+                                    <Button className="mt-4" disabled>Save Language</Button>
+                                </CardContent>
+                            </Card>
+                        </section>
 
-                <Card className="border-destructive">
-                    <CardHeader>
-                        <CardTitle className="text-destructive">Danger Zone</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm mb-4">Deleting your account is permanent and cannot be undone.</p>
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="destructive">Delete Account</Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete your account
-                                    and remove all your data from our servers.
-                                </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteAccount}>Continue</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </CardContent>
-                </Card>
-            </div>
+                        <section>
+                            <h2 className="text-2xl font-bold font-headline text-destructive mb-4">Danger Zone</h2>
+                            <Card className="border-destructive">
+                                <CardHeader>
+                                    <CardTitle>Delete Account</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-sm mb-4 text-muted-foreground">
+                                        Permanently delete your account and all of your content. This action is not reversible.
+                                    </p>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="destructive">Delete My Account</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete your account
+                                                and remove all your data from our servers.
+                                            </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={handleDeleteAccount}>Continue</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </CardContent>
+                            </Card>
+                        </section>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }
