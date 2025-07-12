@@ -53,12 +53,12 @@ const SitemapSection = ({ title, pages }: { title: string, pages: typeof mainPag
 export default function SitemapPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
+        <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold font-headline text-primary">Sitemap</h1>
+            <p className="text-muted-foreground mt-2">Navigate through all the pages available on Sugar Connect.</p>
+        </div>
         <Card>
-            <CardHeader className="text-center">
-                <CardTitle className="text-4xl font-bold font-headline text-primary">Sitemap</CardTitle>
-                <CardDescription className="text-muted-foreground mt-2">Navigate through all the pages available on Sugar Connect.</CardDescription>
-            </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
                 <div className="space-y-10">
                     <SitemapSection title="Main Pages" pages={mainPages} />
                     <SitemapSection title="User Account" pages={userAccountPages} />
