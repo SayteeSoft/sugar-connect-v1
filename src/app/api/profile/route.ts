@@ -33,7 +33,9 @@ export async function POST(req: Request) {
       maxFiles: 10,
       maxFileSize: 10 * 1024 * 1024, // 10MB
       filename: (name, ext, part) => {
-        return `${Date.now()}_${Math.round(Math.random() * 1E9)}${ext}`;
+        // The part argument contains original filename, etc.
+        // This is the correct signature.
+        return `${Date.now()}_${part.originalFilename}`;
       },
   });
 
@@ -65,14 +67,27 @@ export async function POST(req: Request) {
     userToUpdate.name = fields.name?.[0] || userToUpdate.name;
     userToUpdate.location = fields.location?.[0] || userToUpdate.location;
     userToUpdate.age = Number(fields.age?.[0]) || userToUpdate.age;
-    userToUpdate.role = fields.role?.[0] as User['role'] || userToUpdate.role;
+    
+    const roleValue = fields.role?.[0];
+    if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
+      userToUpdate.role = roleValue;
+    }
     
     profileToUpdate.about = fields.about?.[0] || profileToUpdate.about;
+
     if (fields.wants?.[0]) {
-      profileToUpdate.wants = JSON.parse(fields.wants[0]);
+      try {
+        profileToUpdate.wants = JSON.parse(fields.wants[0]);
+      } catch {
+        // Ignore if parsing fails
+      }
     }
     if (fields.interests?.[0]) {
-      profileToUpdate.interests = JSON.parse(fields.interests[0]);
+      try {
+        profileToUpdate.interests = JSON.parse(fields.interests[0]);
+      } catch {
+        // Ignore if parsing fails
+      }
     }
     
     // Helper to safely convert form field to number or undefined
@@ -100,7 +115,7 @@ export async function POST(req: Request) {
     Object.keys(newAttributes).forEach(key => {
         const typedKey = key as keyof typeof newAttributes;
         const value = newAttributes[typedKey];
-        if (value !== undefined && value !== null) {
+        if (value !== undefined) {
             (profileToUpdate.attributes as any)[typedKey] = value;
         }
     });
@@ -116,7 +131,7 @@ export async function POST(req: Request) {
     const galleryFiles = files.gallery;
     if (galleryFiles && galleryFiles.length > 0) {
         const newImagePaths = galleryFiles.map(file => {
-             if (file.filepath) {
+             if (file?.filepath) {
                 return `/uploads/${path.basename(file.filepath)}`;
             }
             return null;
@@ -139,6 +154,7 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error('Error processing form:', error);
-    return NextResponse.json({ message: 'Error updating profile' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ message: `Error updating profile: ${errorMessage}` }, { status: 500 });
   }
 }
