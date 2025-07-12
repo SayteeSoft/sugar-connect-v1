@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
@@ -14,13 +14,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { profiles } from "@/lib/mock-data";
+import { profiles, wantOptions, interestOptions } from "@/lib/mock-data";
 import { notFound } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProfileFormValues as ProfileFormSchema, profileFormSchema } from "@/types";
+import { MultiSelect } from "@/components/ui/multi-select";
+
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
@@ -38,8 +39,6 @@ export default function ProfilePage() {
   const { user, loading, updateUser } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
-  const [wantsInput, setWantsInput] = useState("");
-  const [interestsInput, setInterestsInput] = useState("");
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -63,16 +62,6 @@ export default function ProfilePage() {
     }
   });
   
-  const { fields: wantsFields, append: appendWant, remove: removeWant } = useFieldArray({
-    control,
-    name: "wants",
-  });
-
-  const { fields: interestsFields, append: appendInterest, remove: removeInterest } = useFieldArray({
-    control,
-    name: "interests",
-  });
-
   const { fields: galleryFields, append: appendGallery, remove: removeGallery } = useFieldArray({
     control, name: "gallery"
   });
@@ -86,8 +75,8 @@ export default function ProfilePage() {
         role: user.role,
         location: user.location,
         about: userProfile.about,
-        wants: userProfile.wants.map(w => ({ value: w })),
-        interests: userProfile.interests.map(i => ({ value: i })),
+        wants: userProfile.wants,
+        interests: userProfile.interests,
         age: user.age,
         height: userProfile.attributes.height,
         bodyType: userProfile.attributes.bodyType,
@@ -169,8 +158,8 @@ export default function ProfilePage() {
             role: user.role,
             location: user.location,
             about: userProfile.about,
-            wants: userProfile.wants.map(w => ({ value: w })),
-            interests: userProfile.interests.map(i => ({ value: i })),
+            wants: userProfile.wants,
+            interests: userProfile.interests,
             age: user.age,
             height: userProfile.attributes.height,
             bodyType: userProfile.attributes.bodyType,
@@ -188,20 +177,6 @@ export default function ProfilePage() {
       setIsEditing(false); // Switch back to view mode
   }
   
-  const handleAddWant = () => {
-    if (wantsInput.trim()) {
-      appendWant({ value: wantsInput.trim() });
-      setWantsInput("");
-    }
-  };
-
-  const handleAddInterest = () => {
-    if (interestsInput.trim()) {
-      appendInterest({ value: interestsInput.trim() });
-      setInterestsInput("");
-    }
-  };
-
 
   if (loading) {
     return (
@@ -380,27 +355,49 @@ export default function ProfilePage() {
               <CardContent className="space-y-4">
                 <div>
                   <Label className="text-sm font-medium">Wants</Label>
-                  <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
-                      {wantsFields.map((field, index) => (
-                          <Badge key={field.id} variant="secondary" className="pr-1">
-                              {field.value}
-                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5" onClick={() => removeWant(index)}><X className="h-3 w-3" /></button>}
-                          </Badge>
-                      ))}
-                      {isEditing && <Input value={wantsInput} onChange={(e) => setWantsInput(e.target.value)} placeholder="Add a want..." className="h-8 border-none focus-visible:ring-0 flex-1" onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddWant(); } }}/>}
-                  </div>
+                  {isEditing ? (
+                    <Controller
+                        name="wants"
+                        control={control}
+                        render={({ field }) => (
+                            <MultiSelect
+                                options={wantOptions}
+                                selected={field.value || []}
+                                onChange={field.onChange}
+                                placeholder="Select what you're looking for..."
+                            />
+                        )}
+                    />
+                  ) : (
+                     <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
+                        {formValues.wants && formValues.wants.length > 0 ? formValues.wants.map((want, index) => (
+                            <Badge key={index} variant="secondary">{want}</Badge>
+                        )) : <p className="text-sm text-muted-foreground">No wants specified.</p>}
+                    </div>
+                  )}
                 </div>
                  <div>
                   <Label className="text-sm font-medium">Interests</Label>
-                  <div className="flex flex-wrap gap-2 items-center p-2 border rounded-md min-h-10">
-                      {interestsFields.map((field, index) => (
-                          <Badge key={field.id} variant="secondary" className="pr-1">
-                              {field.value}
-                              {isEditing && <button type="button" className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5" onClick={() => removeInterest(index)}><X className="h-3 w-3" /></button>}
-                          </Badge>
-                      ))}
-                       {isEditing && <Input value={interestsInput} onChange={(e) => setInterestsInput(e.target.value)} placeholder="Add an interest..." className="h-8 border-none focus-visible:ring-0 flex-1" onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddInterest(); } }}/>}
-                  </div>
+                   {isEditing ? (
+                    <Controller
+                        name="interests"
+                        control={control}
+                        render={({ field }) => (
+                            <MultiSelect
+                                options={interestOptions}
+                                selected={field.value || []}
+                                onChange={field.onChange}
+                                placeholder="Select your interests..."
+                            />
+                        )}
+                    />
+                  ) : (
+                     <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
+                        {formValues.interests && formValues.interests.length > 0 ? formValues.interests.map((interest, index) => (
+                            <Badge key={index} variant="secondary">{interest}</Badge>
+                        )) : <p className="text-sm text-muted-foreground">No interests specified.</p>}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

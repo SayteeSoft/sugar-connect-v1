@@ -11,11 +11,11 @@ export const users: User[] = [
 
 export const profiles: Profile[] = [
   { id: 'p1', userId: '1', about: 'Site administrator.', wants: [], interests: [], gallery: [], attributes: {} },
-  { id: 'p2', userId: '2', about: 'Tech CEO who works hard and plays harder.', wants: ['Mentorship', 'Travel'], interests: ['Fine dining', 'Technology', 'Yachting'], gallery: [], attributes: { height: 185, bodyType: 'Athletic', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
-  { id: 'p3', userId: '3', about: 'Investor and lover of the great outdoors.', wants: ['Adventure', 'Companionship'], interests: ['Hiking', 'Investing', 'Wine tasting'], gallery: [], attributes: { height: 180, bodyType: 'Average', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
-  { id: 'p4', userId: '4', about: 'Art student with a love for adventure and exploring new cultures.', wants: ['Financial support', 'Travel'], interests: ['Painting', 'Museums', 'Photography'], gallery: [], attributes: { height: 165, bodyType: 'Slim', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
-  { id: 'p5', userId: '5', about: 'Recent graduate starting my career in marketing.', wants: ['Mentorship', 'Networking'], interests: ['Social media', 'Fashion', 'Concerts'], gallery: [], attributes: { height: 170, bodyType: 'Average', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
-  { id: 'p6', userId: '6', about: 'Fashion designer with an eye for beauty and a heart for adventure.', wants: ['Luxury lifestyle', 'Spoiling'], interests: ['Haute couture', 'Skiing', 'Art galleries'], gallery: [], attributes: { height: 168, bodyType: 'Slim', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
+  { id: 'p2', userId: '2', about: 'Tech CEO who works hard and plays harder.', wants: ['Mentorship', 'Travel'], interests: ['Fine dining', 'Technology', 'Yachting'], gallery: [], attributes: { height: `6'1"`, bodyType: 'Athletic', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
+  { id: 'p3', userId: '3', about: 'Investor and lover of the great outdoors.', wants: ['Adventure', 'Companionship'], interests: ['Hiking', 'Investing', 'Wine tasting'], gallery: [], attributes: { height: `5'11"`, bodyType: 'Average', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
+  { id: 'p4', userId: '4', about: 'Art student with a love for adventure and exploring new cultures.', wants: ['Financial support', 'Travel'], interests: ['Painting', 'Museums', 'Photography'], gallery: [], attributes: { height: `5'5"`, bodyType: 'Slim', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
+  { id: 'p5', userId: '5', about: 'Recent graduate starting my career in marketing.', wants: ['Mentorship', 'Networking'], interests: ['Social media', 'Fashion', 'Concerts'], gallery: [], attributes: { height: `5'7"`, bodyType: 'Average', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
+  { id: 'p6', userId: '6', about: 'Fashion designer with an eye for beauty and a heart for adventure.', wants: ['Luxury lifestyle', 'Spoiling'], interests: ['Haute couture', 'Skiing', 'Art galleries'], gallery: [], attributes: { height: `5'6"`, bodyType: 'Slim', ethnicity: 'White/Caucasian', hairColor: 'Brown', eyeColor: 'Brown', smoker: 'No', drinker: 'Socially', piercings: 'No', tattoos: 'No' } },
 ];
 
 export const testimonials: Testimonial[] = [
@@ -27,3 +27,40 @@ export const testimonials: Testimonial[] = [
 ];
 
 export const featuredProfiles = users.filter(u => u.role !== 'Admin').slice(0, 4);
+
+export const wantOptions = [
+    { value: "Mentorship", label: "Mentorship" },
+    { value: "Financial Support", label: "Financial Support" },
+    { value: "Networking", label: "Networking" },
+    { value: "Travel", label: "Travel" },
+    { value: "Luxury Lifestyle", label: "Luxury Lifestyle" },
+    { value: "Shopping Sprees", label: "Shopping Sprees" },
+    { value: "Fine Dining", label: "Fine Dining" },
+    { value: "No Strings Attached", label: "No Strings Attached" },
+    { value: "Discreet Arrangement", label: "Discreet Arrangement" },
+    { value: "Emotional Connection", label: "Emotional Connection" },
+    { value: "Companionship", label: "Companionship" },
+    { value: "Adventure", label: "Adventure" },
+];
+
+export const interestOptions = [
+    { value: "Art", label: "Art" },
+    { value: "Travel", label: "Travel" },
+    { value: "Fine Dining", label: "Fine Dining" },
+    { value: "Theatre", label: "Theatre" },
+    { value: "Wine Tasting", label: "Wine Tasting" },
+    { value: "Sports", label: "Sports" },
+    { value: "Music", label: "Music" },
+    { value: "Movies", label: "Movies" },
+    { value: "Reading", label: "Reading" },
+    { value: "Cooking", label: "Cooking" },
+    { value: "Fitness", label: "Fitness" },
+    { value: "Photography", label: "Photography" },
+    { value: "Fashion", label: "Fashion" },
+    { value: "Technology", label: "Technology" },
+    { value: "Yachting", label: "Yachting" },
+    { value: "Investing", label: "Investing" },
+    { value: "Museums", label: "Museums" },
+    { value: "Concerts", label: "Concerts" },
+    { value: "Skiing", label: "Skiing" },
+];
