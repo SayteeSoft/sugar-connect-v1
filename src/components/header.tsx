@@ -15,10 +15,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/icons";
-import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu } from "lucide-react";
+import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu, Sun, Moon } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
 import { Skeleton } from './ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { useTheme } from 'next-themes';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
@@ -39,11 +40,16 @@ const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
 
 export function Header() {
   const { user, logout, loading } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const getCreditsButton = () => {
     if (!user) return null;
@@ -96,8 +102,6 @@ export function Header() {
 
         <div className="flex items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : renderAuthContent()}
-
-          <ThemeSwitcher />
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -125,10 +129,17 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={toggleTheme}>
+                    {theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+                    <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                  </DropdownMenuItem>
                   {user.role === 'Admin' && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin"><Users className="mr-2 h-4 w-4" />Admin</Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin"><Users className="mr-2 h-4 w-4" />Admin</Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>
@@ -143,6 +154,11 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
+                  </DropdownMenuItem>
+                   <DropdownMenuSeparator />
+                   <DropdownMenuItem onClick={toggleTheme}>
+                    {theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+                    <span>Toggle Theme</span>
                   </DropdownMenuItem>
                 </>
               )}
