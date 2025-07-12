@@ -42,13 +42,13 @@ export async function POST(req: Request) {
         const user = users.find((u: User) => u.email.toLowerCase() === email.toLowerCase());
         
         if (!user) {
-            return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
+            return NextResponse.json({ message: 'User not found.' }, { status: 401 });
         }
         
         const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
         if (!isPasswordValid) {
-            return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
+            return NextResponse.json({ message: 'Invalid password.' }, { status: 401 });
         }
 
         // Do not send the password hash to the client

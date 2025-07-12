@@ -5,7 +5,7 @@ import data from './data.json';
 // In a real app, you'd fetch this data from a database.
 // The initial state is loaded from this file, and then updated
 // in memory and via the API for persistence during local development.
-export let users: User[] = data.users;
+export let users: User[] = data.users as User[];
 export let profiles: Profile[] = data.profiles;
 
 
