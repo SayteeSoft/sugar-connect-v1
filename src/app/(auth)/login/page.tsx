@@ -47,7 +47,7 @@ export default function LoginPage() {
           Sign in to access your exclusive community.
         </p>
       </div>
-        <Card className="w-full max-w-2xl mx-auto shadow-lg">
+        <Card className="w-full max-w-md mx-auto shadow-lg">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>Enter your email below to login to your account.</CardDescription>
