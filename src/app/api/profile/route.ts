@@ -122,9 +122,9 @@ export async function POST(req: Request) {
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
-    const roleValue = formData.get('role') as User['role'];
-    if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
-      userToUpdate.role = roleValue;
+    const roleValue = formData.get('role');
+    if (roleValue && typeof roleValue === 'string' && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
+        userToUpdate.role = roleValue;
     }
     
     profileToUpdate.about = (formData.get('about') as string) || profileToUpdate.about;
