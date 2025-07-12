@@ -2,7 +2,8 @@ import type { User, Profile, Testimonial } from '@/types';
 import data from './data.json';
 
 // In a real app, you'd fetch this data from a database.
-// For our local dev environment, we'll read from a JSON file.
+// The initial state is loaded from the JSON file, and then updated
+// in memory and via the API for persistence during local development.
 export let users: User[] = data.users;
 export let profiles: Profile[] = data.profiles;
 
