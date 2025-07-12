@@ -41,6 +41,7 @@ export function Header() {
   const { user, logout, loading } = useAuth();
   const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -78,22 +79,43 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card">
-      <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
             <Logo />
           </Link>
         </div>
         
-        <nav className="flex-1 justify-center hidden md:flex">
+        <nav className="hidden flex-1 items-center justify-center md:flex">
              {isClient && !loading && user && <NavLinks />}
         </nav>
 
-        <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
+        <div className="flex items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : (
             <>
                 {user && getCreditsButton()}
-
+                
+                {user && (
+                    <div className="md:hidden">
+                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <Menu className="h-6 w-6" />
+                                <span className="sr-only">Open menu</span>
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="right">
+                            <SheetHeader>
+                                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                            </SheetHeader>
+                            <div className="flex flex-col gap-4 py-6" onClick={() => setIsSheetOpen(false)}>
+                                <NavLinks inSheet />
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                    </div>
+                )}
+                
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="rounded-full">
@@ -153,27 +175,6 @@ export function Header() {
                     )}
                     </DropdownMenuContent>
                 </DropdownMenu>
-
-                {user && (
-                    <div className="md:hidden">
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <Menu className="h-6 w-6" />
-                                <span className="sr-only">Open menu</span>
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="right">
-                            <SheetHeader>
-                                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                            </SheetHeader>
-                            <div className="flex flex-col gap-4 py-6">
-                                <NavLinks inSheet />
-                            </div>
-                        </SheetContent>
-                    </Sheet>
-                    </div>
-                )}
             </>
           )}
         </div>

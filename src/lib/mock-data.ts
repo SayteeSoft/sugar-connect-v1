@@ -12,7 +12,7 @@ export let users: User[] = [
       "location": "London, UK",
       "role": "Admin",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/public/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
     },
     {
