@@ -1,11 +1,227 @@
 import type { User, Profile, Testimonial } from '@/types';
-import data from './data.json';
 
 // In a real app, you'd fetch this data from a database.
-// The initial state is loaded from the JSON file, and then updated
+// The initial state is loaded from this file, and then updated
 // in memory and via the API for persistence during local development.
-export let users: User[] = data.users;
-export let profiles: Profile[] = data.profiles;
+export let users: User[] = [
+    {
+      "id": "1",
+      "name": "Admin",
+      "email": "saytee.software@gmail.com",
+      "age": 49,
+      "location": "London, UK",
+      "role": "Admin",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p1"
+    },
+    {
+      "id": "2",
+      "name": "James",
+      "email": "james.tech@example.com",
+      "age": 38,
+      "location": "Manchester, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p2"
+    },
+    {
+      "id": "3",
+      "name": "Mark",
+      "email": "mark.investor@example.com",
+      "age": 45,
+      "location": "Edinburgh, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p3"
+    },
+    {
+      "id": "4",
+      "name": "Darianna",
+      "email": "darianna.art@example.com",
+      "age": 22,
+      "location": "London, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p4"
+    },
+    {
+      "id": "5",
+      "name": "Kateryna",
+      "email": "kate.marketing@example.com",
+      "age": 24,
+      "location": "Birmingham, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p5"
+    },
+    {
+      "id": "6",
+      "name": "Sofia",
+      "email": "sofia.design@example.com",
+      "age": 26,
+      "location": "London, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p6"
+    }
+  ];
+export let profiles: Profile[] = [
+    {
+      "id": "p1",
+      "userId": "1",
+      "about": "Site administrator.",
+      "wants": [],
+      "interests": [],
+      "gallery": [],
+      "attributes": {
+        "ethnicity": "Black/African Decent",
+        "height": "6'0\"",
+        "bodyType": "Athletic",
+        "hairColor": "Black",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p2",
+      "userId": "2",
+      "about": "Tech CEO who works hard and plays harder.",
+      "wants": [
+        "Mentorship",
+        "Travel"
+      ],
+      "interests": [
+        "Fine dining",
+        "Technology",
+        "Yachting"
+      ],
+      "gallery": [],
+      "attributes": {
+        "height": "6'1\"",
+        "bodyType": "Athletic",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p3",
+      "userId": "3",
+      "about": "Investor and lover of the great outdoors.",
+      "wants": [
+        "Adventure",
+        "Companionship"
+      ],
+      "interests": [
+        "Hiking",
+        "Investing",
+        "Wine tasting"
+      ],
+      "gallery": [],
+      "attributes": {
+        "height": "5'11\"",
+        "bodyType": "Average",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p4",
+      "userId": "4",
+      "about": "Art student with a love for adventure and exploring new cultures.",
+      "wants": [
+        "Financial Support",
+        "Travel"
+      ],
+      "interests": [
+        "Painting",
+        "Museums",
+        "Photography"
+      ],
+      "gallery": [],
+      "attributes": {
+        "height": "5'5\"",
+        "bodyType": "Slim",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p5",
+      "userId": "5",
+      "about": "Recent graduate starting my career in marketing.",
+      "wants": [
+        "Mentorship",
+        "Networking"
+      ],
+      "interests": [
+        "Social media",
+        "Fashion",
+        "Concerts"
+      ],
+      "gallery": [],
+      "attributes": {
+        "height": "5'7\"",
+        "bodyType": "Average",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p6",
+      "userId": "6",
+      "about": "Fashion designer with an eye for beauty and a heart for adventure.",
+      "wants": [
+        "Luxury lifestyle",
+        "Spoiling"
+      ],
+      "interests": [
+        "Haute couture",
+        "Skiing",
+        "Art galleries"
+      ],
+      "gallery": [],
+      "attributes": {
+        "height": "5'6\"",
+        "bodyType": "Slim",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    }
+  ];
 
 
 export const testimonials: Testimonial[] = [

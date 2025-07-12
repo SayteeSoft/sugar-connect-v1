@@ -76,7 +76,15 @@
       "interests": [],
       "gallery": [],
       "attributes": {
-        "ethnicity": "Black/African Decent"
+        "ethnicity": "Black/African Decent",
+        "height": "6'0\"",
+        "bodyType": "Athletic",
+        "hairColor": "Black",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
       }
     },
     {
