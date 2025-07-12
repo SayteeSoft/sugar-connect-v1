@@ -107,8 +107,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     formData.append('userId', userId); // Add userId to the form data
     Object.entries(data).forEach(([key, value]) => {
       if (key === 'wants' || key === 'interests') {
-        // These are arrays of objects, so stringify them
-        formData.append(key, JSON.stringify(value.map((item: any) => item.value)));
+        // Correctly serialize the array of objects into a JSON string of strings
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value.map((item: any) => item.value)));
+        }
       } else if (key !== 'avatar' && key !== 'gallery' && value !== undefined && value !== null) {
         formData.append(key, String(value));
       }
