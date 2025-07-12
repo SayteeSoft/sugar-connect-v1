@@ -3,21 +3,40 @@ import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import type { User, Profile } from '@/types';
+import { getStore } from '@netlify/blobs';
 
 const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const uploadDir = path.join(process.cwd(), 'public/uploads');
+const DB_KEY = 'db.json';
 
 const readData = async () => {
+    // If in production on Netlify, use Blob store
+    if (process.env.NETLIFY) {
+        const store = getStore('data');
+        const data = await store.get(DB_KEY, { type: 'json' });
+        // If no data, return default structure
+        return data || { users: [], profiles: [] };
+    }
+
+    // Otherwise, use local file system for development
     try {
         const fileContent = await fs.readFile(dataPath, 'utf-8');
         return JSON.parse(fileContent);
     } catch (error) {
-        // If the file doesn't exist, return a default structure
+        // If the file doesn't exist locally, return default structure
         return { users: [], profiles: [] };
     }
 };
 
 const writeData = async (data: any) => {
+    // If in production on Netlify, use Blob store
+    if (process.env.NETLIFY) {
+        const store = getStore('data');
+        await store.setJSON(DB_KEY, data);
+        return;
+    }
+    
+    // Otherwise, use local file system for development
     await fs.writeFile(dataPath, JSON.stringify(data, null, 2), 'utf-8');
 };
 
