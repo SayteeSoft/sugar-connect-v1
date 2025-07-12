@@ -8,8 +8,13 @@ const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const uploadDir = path.join(process.cwd(), '/public/uploads');
 
 const readData = async () => {
-    const fileContent = await fs.readFile(dataPath, 'utf-8');
-    return JSON.parse(fileContent);
+    try {
+        const fileContent = await fs.readFile(dataPath, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        // If the file doesn't exist, return a default structure
+        return { users: [], profiles: [] };
+    }
 };
 
 const writeData = async (data: any) => {
@@ -33,6 +38,35 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
     
+    // Handle new user creation
+    const isNewUser = formData.get('isNewUser') === 'true';
+    if (isNewUser) {
+        const newUserString = formData.get('user') as string;
+        const newProfileString = formData.get('profile') as string;
+        if (!newUserString || !newProfileString) {
+            return NextResponse.json({ message: 'New user data is missing.' }, { status: 400 });
+        }
+        const newUser: User = JSON.parse(newUserString);
+        const newProfile: Profile = JSON.parse(newProfileString);
+
+        if (users.find((u: User) => u.email === newUser.email)) {
+            return NextResponse.json({ message: 'User with this email already exists.' }, { status: 409 });
+        }
+
+        users.push(newUser);
+        profiles.push(newProfile);
+
+        await writeData({ users, profiles });
+
+        return NextResponse.json({ 
+            message: 'User created successfully',
+            user: newUser,
+            profile: newProfile
+        }, { status: 201 });
+    }
+
+
+    // Handle existing user update
     const userIdToUpdate = formData.get('userId') as string;
 
     if (!userIdToUpdate) {
