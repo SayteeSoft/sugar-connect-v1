@@ -11,8 +11,8 @@ const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
 
 // A robust function to seed initial admin data in the respective data store.
 export const seedInitialData = async () => {
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash('password123', salt);
+    // Await the hash generation properly
+    const passwordHash = await bcrypt.hash('password123', 10);
     
     const initialData = {
         users: [
@@ -67,14 +67,22 @@ export const readData = async (): Promise<{ users: User[], profiles: Profile[] }
     // In production, always use Netlify Blobs.
     if (process.env.NETLIFY_CONTEXT === 'production') {
         const store = getStore('data');
-        const data = await store.get(DB_KEY, { type: 'json' });
-        if (data && data.users && data.users.length > 0) return data;
-        return seedInitialData(); // Seed if no data exists in production.
+        try {
+            const data = await store.get(DB_KEY, { type: 'json' });
+            if (data && data.users && data.users.length > 0) return data;
+            return seedInitialData(); // Seed if no data exists in production.
+        } catch(e) {
+             return seedInitialData();
+        }
     }
 
     // In local development, use the local data.json file.
     try {
         const fileContent = await fs.readFile(localDbPath, 'utf-8');
+        // Handle empty file case
+        if (!fileContent) {
+            return seedInitialData();
+        }
         const data = JSON.parse(fileContent);
         // Basic validation to see if the file is empty or corrupted
         if (!data || !data.users || data.users.length === 0) {
