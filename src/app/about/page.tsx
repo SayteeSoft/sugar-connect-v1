@@ -7,12 +7,12 @@ export default function AboutPage() {
   return (
     <div className="bg-muted/30">
         <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+            <div className="text-center mb-6">
+                <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Welcome to Sugar Connect</h1>
+                <p className="text-muted-foreground text-lg mt-2">Where Ambitious Hearts and Discerning Tastes Meet</p>
+            </div>
             <Card className="max-w-4xl mx-auto shadow-lg">
-                <CardHeader className="text-center pb-8">
-                    <CardTitle className="text-3xl md:text-4xl font-headline text-primary">Welcome to Sugar Connect</CardTitle>
-                    <p className="text-muted-foreground text-lg">Where Ambitious Hearts and Discerning Tastes Meet</p>
-                </CardHeader>
-                <CardContent className="space-y-8 text-muted-foreground text-center md:text-left">
+                <CardContent className="space-y-8 text-muted-foreground text-center md:text-left p-6 md:p-8">
                     <p>
                         At Sugar Connect, we believe that relationships should be empowering, transparent, and tailored to the modern world. We have created an exclusive platform where successful, established individuals and ambitious, attractive people can connect on their own terms. Our community is built on a foundation of respect, honesty, and the shared desire for a relationship that enhances, rather than complicates, life.
                     </p>
