@@ -2,16 +2,8 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import formidable from 'formidable';
 import { users, profiles } from '@/lib/mock-data'; // Using mock data as a "database"
 import type { User, Profile } from '@/types';
-
-// This disables the default body parser to allow formidable to handle the request stream.
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 const uploadDir = path.join(process.cwd(), '/public/uploads');
 
@@ -27,22 +19,10 @@ const ensureUploadDirExists = async () => {
 export async function POST(req: Request) {
   await ensureUploadDirExists();
   
-  const form = formidable({
-      uploadDir,
-      keepExtensions: true,
-      maxFiles: 10,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
-      filename: (name, ext, part) => {
-        // The part argument contains original filename, etc.
-        // This is the correct signature.
-        return `${Date.now()}_${part.originalFilename}`;
-      },
-  });
-
   try {
-    const [fields, files] = await form.parse(req);
+    const formData = await req.formData();
     
-    const userIdToUpdate = fields.userId?.[0];
+    const userIdToUpdate = formData.get('userId') as string;
 
     if (!userIdToUpdate) {
         return NextResponse.json({ message: 'User ID is missing.' }, { status: 400 });
@@ -64,35 +44,37 @@ export async function POST(req: Request) {
     }
 
     // Update text fields
-    userToUpdate.name = fields.name?.[0] || userToUpdate.name;
-    userToUpdate.location = fields.location?.[0] || userToUpdate.location;
-    userToUpdate.age = Number(fields.age?.[0]) || userToUpdate.age;
+    userToUpdate.name = (formData.get('name') as string) || userToUpdate.name;
+    userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
+    userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
-    const roleValue = fields.role?.[0];
+    const roleValue = formData.get('role') as User['role'];
     if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
       userToUpdate.role = roleValue;
     }
     
-    profileToUpdate.about = fields.about?.[0] || profileToUpdate.about;
+    profileToUpdate.about = (formData.get('about') as string) || profileToUpdate.about;
 
-    if (fields.wants?.[0]) {
+    const wantsString = formData.get('wants') as string;
+    if (wantsString) {
       try {
-        profileToUpdate.wants = JSON.parse(fields.wants[0]);
+        profileToUpdate.wants = JSON.parse(wantsString);
       } catch {
         // Ignore if parsing fails
       }
     }
-    if (fields.interests?.[0]) {
+
+    const interestsString = formData.get('interests') as string;
+    if (interestsString) {
       try {
-        profileToUpdate.interests = JSON.parse(fields.interests[0]);
+        profileToUpdate.interests = JSON.parse(interestsString);
       } catch {
         // Ignore if parsing fails
       }
     }
     
-    // Helper to safely convert form field to number or undefined
-    const toNumberOrUndefined = (field?: string): number | undefined => {
-        if (field === undefined || field === null || field.trim() === '') {
+    const toNumberOrUndefined = (field?: FormDataEntryValue | null): number | undefined => {
+        if (field === undefined || field === null || typeof field !== 'string' || field.trim() === '') {
             return undefined;
         }
         const num = Number(field);
@@ -100,18 +82,17 @@ export async function POST(req: Request) {
     };
 
     const newAttributes: Partial<Profile['attributes']> = {
-        height: toNumberOrUndefined(fields.height?.[0]),
-        bodyType: fields.bodyType?.[0] as Profile['attributes']['bodyType'] || undefined,
-        ethnicity: fields.ethnicity?.[0] as Profile['attributes']['ethnicity'] || undefined,
-        hairColor: fields.hairColor?.[0] as Profile['attributes']['hairColor'] || undefined,
-        eyeColor: fields.eyeColor?.[0] as Profile['attributes']['eyeColor'] || undefined,
-        smoker: fields.smoker?.[0] as Profile['attributes']['smoker'] || undefined,
-        drinker: fields.drinker?.[0] as Profile['attributes']['drinker'] || undefined,
-        piercings: fields.piercings?.[0] as Profile['attributes']['piercings'] || undefined,
-        tattoos: fields.tattoos?.[0] as Profile['attributes']['tattoos'] || undefined,
+        height: toNumberOrUndefined(formData.get('height')),
+        bodyType: formData.get('bodyType') as Profile['attributes']['bodyType'] || undefined,
+        ethnicity: formData.get('ethnicity') as Profile['attributes']['ethnicity'] || undefined,
+        hairColor: formData.get('hairColor') as Profile['attributes']['hairColor'] || undefined,
+        eyeColor: formData.get('eyeColor') as Profile['attributes']['eyeColor'] || undefined,
+        smoker: formData.get('smoker') as Profile['attributes']['smoker'] || undefined,
+        drinker: formData.get('drinker') as Profile['attributes']['drinker'] || undefined,
+        piercings: formData.get('piercings') as Profile['attributes']['piercings'] || undefined,
+        tattoos: formData.get('tattoos') as Profile['attributes']['tattoos'] || undefined,
     };
     
-    // Filter out undefined/null values to avoid overwriting existing data with nothing
     Object.keys(newAttributes).forEach(key => {
         const typedKey = key as keyof typeof newAttributes;
         const value = newAttributes[typedKey];
@@ -120,22 +101,29 @@ export async function POST(req: Request) {
         }
     });
 
+    const writeFile = async (file: File) => {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const filename = `${Date.now()}_${file.name}`;
+        await fs.writeFile(path.join(uploadDir, filename), buffer);
+        return `/uploads/${filename}`;
+    };
 
     // Update avatar if a new one was uploaded
-    const avatarFile = files.avatar?.[0];
-    if (avatarFile?.filepath) {
-        userToUpdate.avatarUrl = `/uploads/${path.basename(avatarFile.filepath)}`;
+    const avatarFile = formData.get('avatar') as File | null;
+    if (avatarFile && avatarFile.size > 0) {
+        userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
 
     // Update gallery if new images were uploaded
-    const galleryFiles = files.gallery;
+    const galleryFiles = formData.getAll('gallery') as File[];
     if (galleryFiles && galleryFiles.length > 0) {
-        const newImagePaths = galleryFiles.map(file => {
-             if (file?.filepath) {
-                return `/uploads/${path.basename(file.filepath)}`;
+        const newImagePaths: string[] = [];
+        for (const file of galleryFiles) {
+            if (file && file.size > 0) {
+                const path = await writeFile(file);
+                newImagePaths.push(path);
             }
-            return null;
-        }).filter((path): path is string => path !== null);
+        }
 
         if (newImagePaths.length > 0) {
              profileToUpdate.gallery = [...(profileToUpdate.gallery || []), ...newImagePaths];
