@@ -1,9 +1,11 @@
+
 {
   "users": [
     {
       "id": "1",
       "name": "Admin",
       "email": "saytee.software@gmail.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 49,
       "location": "London, UK",
       "role": "Admin",
@@ -15,6 +17,7 @@
       "id": "2",
       "name": "James",
       "email": "james.tech@example.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 38,
       "location": "Manchester, UK",
       "role": "Sugar Daddy",
@@ -26,6 +29,7 @@
       "id": "3",
       "name": "Mark",
       "email": "mark.investor@example.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 45,
       "location": "Edinburgh, UK",
       "role": "Sugar Daddy",
@@ -37,6 +41,7 @@
       "id": "4",
       "name": "Darianna",
       "email": "darianna.art@example.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 22,
       "location": "London, UK",
       "role": "Sugar Baby",
@@ -48,6 +53,7 @@
       "id": "5",
       "name": "Kateryna",
       "email": "kate.marketing@example.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 24,
       "location": "Birmingham, UK",
       "role": "Sugar Baby",
@@ -59,6 +65,7 @@
       "id": "6",
       "name": "Sofia",
       "email": "sofia.design@example.com",
+      "passwordHash": "$2b$10$t3gT0v/hU9.C9L/Y9QzUbeuFaYf5tX.hV/4/W3F5G3f5J6K8M9a1b",
       "age": 26,
       "location": "London, UK",
       "role": "Sugar Baby",

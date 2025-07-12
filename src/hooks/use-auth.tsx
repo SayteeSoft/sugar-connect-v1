@@ -4,13 +4,16 @@
 import { createContext, useContext } from 'react';
 import type { User, Role, ProfileFormValues } from '@/types';
 
+// The user object available in the context should not have the password hash.
+export type SafeUser = Omit<User, 'passwordHash'>;
+
 export interface AuthContextType {
-  user: User | null;
-  login: (email: string, pass: string) => Promise<User | null>;
+  user: SafeUser | null;
+  login: (email: string, pass: string) => Promise<SafeUser | null>;
   logout: () => void;
-  signup: (email: string, pass: string, role: Role) => Promise<User | null>;
+  signup: (email: string, pass: string, role: Role) => Promise<SafeUser | null>;
   loading: boolean;
-  updateUser: (userId: string, data: ProfileFormValues) => Promise<User>;
+  updateUser: (userId: string, data: ProfileFormValues) => Promise<SafeUser>;
   deleteUser: (userId: string) => Promise<void>;
 }
 

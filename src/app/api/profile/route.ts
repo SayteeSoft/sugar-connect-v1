@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import type { User, Profile } from '@/types';
 import { getStore } from '@netlify/blobs';
+import bcrypt from 'bcrypt';
 
 const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const uploadDir = path.join(process.cwd(), 'public/uploads');
@@ -62,24 +63,34 @@ export async function POST(req: Request) {
     if (isNewUser) {
         const newUserString = formData.get('user') as string;
         const newProfileString = formData.get('profile') as string;
-        if (!newUserString || !newProfileString) {
+        const password = formData.get('password') as string;
+
+        if (!newUserString || !newProfileString || !password) {
             return NextResponse.json({ message: 'New user data is missing.' }, { status: 400 });
         }
-        const newUser: User = JSON.parse(newUserString);
+        const newUser: Omit<User, 'passwordHash'> = JSON.parse(newUserString);
         const newProfile: Profile = JSON.parse(newProfileString);
 
         if (users.find((u: User) => u.email === newUser.email)) {
             return NextResponse.json({ message: 'User with this email already exists.' }, { status: 409 });
         }
+        
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
 
-        users.push(newUser);
+        const userWithHash: User = { ...newUser, passwordHash };
+
+        users.push(userWithHash);
         profiles.push(newProfile);
 
         await writeData({ users, profiles });
 
+        // Don't send the hash back to the client
+        const { passwordHash: _, ...userToReturn } = userWithHash;
+
         return NextResponse.json({ 
             message: 'User created successfully',
-            user: newUser,
+            user: userToReturn,
             profile: newProfile
         }, { status: 201 });
     }
@@ -178,10 +189,12 @@ export async function POST(req: Request) {
     profiles[profileIndex] = profileToUpdate;
 
     await writeData({ users, profiles });
+    
+    const { passwordHash: _, ...userToReturn } = userToUpdate;
 
     return NextResponse.json({ 
         message: 'Profile updated successfully',
-        user: userToUpdate,
+        user: userToReturn,
         profile: profileToUpdate
     }, { status: 200 });
 

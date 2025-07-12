@@ -3,65 +3,49 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { AuthContext, AuthContextType } from '@/hooks/use-auth';
-import type { User, Profile, Role, ProfileFormValues } from '@/types';
+import type { User, Role, Profile, ProfileFormValues } from '@/types';
+
+// We explicitly type the user object stored in state and localStorage to not include the hash.
+type SafeUser = Omit<User, 'passwordHash'>;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SafeUser | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // In-memory cache of users to avoid re-fetching constantly.
-  // This will be populated on initial load.
-  const [users, setUsers] = useState<User[]>([]);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
 
   useEffect(() => {
     const initializeAuth = async () => {
-      // Simulate fetching all users and profiles on initial load
-      // In a real app, this might be an API call that gets all data
-      // or it could be done page-by-page. For this app, we'll preload.
-      try {
-        // This is a bit of a hack for the mock data setup.
-        // We'll just read the local `data.json` via a fetch call to an API
-        // that we will need to create. For now, let's assume we can get it.
-        // Let's defer this and just use the local storage user for now.
-      } catch (e) {
-        console.error("Could not load initial user data", e);
-      }
-      
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
       setLoading(false);
     };
-
     initializeAuth();
   }, []);
 
-  const login = useCallback(async (email: string, pass: string): Promise<User | null> => {
+  const login = useCallback(async (email: string, pass: string): Promise<SafeUser | null> => {
     setLoading(true);
-    // In a real app, you'd fetch `/api/login` or similar.
-    // For this mock app, we'll have to "find" the user by fetching all data.
-    // This is inefficient but required by the mock data structure.
-    
-    // Let's simplify and just use a local find for now, as the API doesn't support it.
-    // This part is still mock-logic.
-    const { users: allUsers } = await import('@/lib/mock-data');
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: pass }),
+        });
 
+        if (!response.ok) {
+            return null;
+        }
 
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const foundUser = allUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-            if (foundUser) {
-                setUser(foundUser);
-                localStorage.setItem('user', JSON.stringify(foundUser));
-                resolve(foundUser);
-            } else {
-                resolve(null);
-            }
-            setLoading(false);
-        }, 1000);
-    })
+        const { user: loggedInUser } = await response.json();
+        setUser(loggedInUser);
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        return loggedInUser;
+    } catch (error) {
+        console.error("Login failed", error);
+        return null;
+    } finally {
+        setLoading(false);
+    }
   }, []);
 
   const logout = useCallback(() => {
@@ -69,13 +53,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user');
   }, []);
 
-  const signup = useCallback(async (email: string, pass: string, role: Role): Promise<User | null> => {
+  const signup = useCallback(async (email: string, pass: string, role: Role): Promise<SafeUser | null> => {
     setLoading(true);
     
     const newId = String(Date.now());
     const newProfileId = `p${newId}`;
 
-    const newUser: User = {
+    const newUser: Omit<User, 'passwordHash'> = {
         id: newId,
         email,
         name: 'New User',
@@ -101,6 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     formData.append('isNewUser', 'true');
     formData.append('user', JSON.stringify(newUser));
     formData.append('profile', JSON.stringify(newProfile));
+    formData.append('password', pass);
     
     try {
         const response = await fetch('/api/profile', {
@@ -128,7 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<User> => {
+  const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<SafeUser> => {
     const formData = new FormData();
     formData.append('userId', userId);
 
