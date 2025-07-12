@@ -17,17 +17,17 @@ import { Textarea } from "@/components/ui/textarea";
 export default function ContactPage() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
-      <Card className="max-w-3xl mx-auto shadow-lg">
-        <CardHeader className="text-center pb-8">
-          <CardTitle className="text-3xl md:text-4xl font-headline text-primary">
-            Contact Us
-          </CardTitle>
-          <CardDescription className="text-lg">
-            Have a question or feedback? Fill out the form below to get in
-            touch.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">
+          Contact Us
+        </h1>
+        <p className="text-muted-foreground text-lg mt-2">
+          Have a question or feedback? Fill out the form below to get in
+          touch.
+        </p>
+      </div>
+      <Card className="max-w-4xl mx-auto shadow-lg">
+        <CardContent className="p-6">
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
