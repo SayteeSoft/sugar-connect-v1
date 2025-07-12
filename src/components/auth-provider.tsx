@@ -120,7 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     
     if (data.gallery && data.gallery.length > 0) {
-        data.gallery.forEach((file, index) => {
+        data.gallery.forEach((file) => {
             if (file instanceof File) {
                 formData.append(`gallery`, file);
             }
@@ -156,6 +156,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   }, [user]);
 
+  const deleteUser = useCallback(async (userId: string): Promise<void> => {
+    // In a real app, this would be an API call.
+    // For our mock data, we filter the arrays.
+    
+    const userToDelete = users.find(u => u.id === userId);
+    if (!userToDelete) {
+        throw new Error("User not found");
+    }
+    // Prevent admin from being deleted
+    if (userToDelete.role === 'Admin') {
+        throw new Error("Admin accounts cannot be deleted.");
+    }
+
+    users = users.filter(u => u.id !== userId);
+    profiles = profiles.filter(p => p.userId !== userId);
+    
+    // If the deleted user is the currently logged-in user, log them out.
+    if (user?.id === userId) {
+        logout();
+    }
+  }, [user, logout]);
+
+
   const authContextValue = useMemo<AuthContextType>(() => ({
     user,
     login,
@@ -163,7 +186,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     loading,
     updateUser,
-  }), [user, login, logout, signup, loading, updateUser]);
+    deleteUser,
+  }), [user, login, logout, signup, loading, updateUser, deleteUser]);
 
   return (
     <AuthContext.Provider value={authContextValue}>

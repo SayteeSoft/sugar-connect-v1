@@ -11,6 +11,7 @@ export interface AuthContextType {
   signup: (email: string, pass: string, role: Role) => Promise<User | null>;
   loading: boolean;
   updateUser: (userId: string, data: ProfileFormValues) => Promise<User>;
+  deleteUser: (userId: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
