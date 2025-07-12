@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
@@ -75,8 +75,8 @@ export default function ProfilePage() {
         role: user.role,
         location: user.location,
         about: userProfile.about,
-        wants: userProfile.wants,
-        interests: userProfile.interests,
+        wants: userProfile.wants.map(v => ({value: v, label: v})),
+        interests: userProfile.interests.map(v => ({value: v, label: v})),
         age: user.age,
         height: userProfile.attributes.height,
         bodyType: userProfile.attributes.bodyType,
@@ -158,8 +158,8 @@ export default function ProfilePage() {
             role: user.role,
             location: user.location,
             about: userProfile.about,
-            wants: userProfile.wants,
-            interests: userProfile.interests,
+            wants: userProfile.wants.map(v => ({value: v, label: v})),
+            interests: userProfile.interests.map(v => ({value: v, label: v})),
             age: user.age,
             height: userProfile.attributes.height,
             bodyType: userProfile.attributes.bodyType,
@@ -258,7 +258,7 @@ export default function ProfilePage() {
                     </Badge>
                   )}
                 </div>
-                {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message}</p>}
+                {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message as string}</p>}
                 {isEditing ? (
                     <div className="space-y-4 text-center">
                         <div>
@@ -371,7 +371,7 @@ export default function ProfilePage() {
                   ) : (
                      <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
                         {formValues.wants && formValues.wants.length > 0 ? formValues.wants.map((want, index) => (
-                            <Badge key={index} variant="secondary">{want}</Badge>
+                            <Badge key={index} variant="secondary">{want.label}</Badge>
                         )) : <p className="text-sm text-muted-foreground">No wants specified.</p>}
                     </div>
                   )}
@@ -394,7 +394,7 @@ export default function ProfilePage() {
                   ) : (
                      <div className="flex flex-wrap gap-2 items-center p-2 min-h-10">
                         {formValues.interests && formValues.interests.length > 0 ? formValues.interests.map((interest, index) => (
-                            <Badge key={index} variant="secondary">{interest}</Badge>
+                            <Badge key={index} variant="secondary">{interest.label}</Badge>
                         )) : <p className="text-sm text-muted-foreground">No interests specified.</p>}
                     </div>
                   )}
@@ -435,7 +435,7 @@ export default function ProfilePage() {
                         </>
                     )}
                 </div>
-                {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message}</p>}
+                {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message as string}</p>}
                 {!isEditing && galleryPreviews.length === 0 && (
                     <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
                 )}
@@ -637,3 +637,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+
