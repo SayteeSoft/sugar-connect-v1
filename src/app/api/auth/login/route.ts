@@ -10,11 +10,11 @@ const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const DB_KEY = 'db.json';
 
 const readData = async () => {
-    // If in production on Netlify, use Blob store
+    // Check if running on Netlify by looking for the NETLIFY environment variable
     if (process.env.NETLIFY) {
         const store = getStore('data');
         const data = await store.get(DB_KEY, { type: 'json' });
-        // If no data, return default structure
+        // If no data in blob store, return a default structure
         return data || { users: [], profiles: [] };
     }
 
@@ -24,6 +24,7 @@ const readData = async () => {
         return JSON.parse(fileContent);
     } catch (error) {
         // If the file doesn't exist locally, return default structure
+        console.error("Could not read local data.json:", error);
         return { users: [], profiles: [] };
     }
 };
@@ -41,14 +42,14 @@ export async function POST(req: Request) {
 
         const user = users.find((u: User) => u.email.toLowerCase() === email.toLowerCase());
         
-        if (!user) {
-            return NextResponse.json({ message: 'User not found.' }, { status: 401 });
+        if (!user || !user.passwordHash) {
+            return NextResponse.json({ message: 'Invalid credentials.' }, { status: 401 });
         }
         
         const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
         if (!isPasswordValid) {
-            return NextResponse.json({ message: 'Invalid password.' }, { status: 401 });
+            return NextResponse.json({ message: 'Invalid credentials.' }, { status: 401 });
         }
 
         // Do not send the password hash to the client
