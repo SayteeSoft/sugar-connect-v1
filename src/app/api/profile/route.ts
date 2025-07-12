@@ -63,8 +63,12 @@ export async function POST(req: Request) {
     userToUpdate.role = fields.role?.[0] as User['role'] || userToUpdate.role;
     
     profileToUpdate.about = fields.about?.[0] || profileToUpdate.about;
-    profileToUpdate.wants = fields.wants?.[0] ? JSON.parse(fields.wants[0]) : profileToUpdate.wants;
-    profileToUpdate.interests = fields.interests?.[0] ? JSON.parse(fields.interests[0]) : profileToUpdate.interests;
+    if (fields.wants?.[0]) {
+      profileToUpdate.wants = JSON.parse(fields.wants[0]);
+    }
+    if (fields.interests?.[0]) {
+      profileToUpdate.interests = JSON.parse(fields.interests[0]);
+    }
     
     profileToUpdate.attributes = {
         height: Number(fields.height?.[0]) || profileToUpdate.attributes.height,
