@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { generateSugarBabyMessage } from '@/ai/flows/generate-sugar-baby-message';
-import { users as allUsers } from '@/lib/mock-data';
+import { mockUsers as allUsers } from '@/lib/mock-data';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
