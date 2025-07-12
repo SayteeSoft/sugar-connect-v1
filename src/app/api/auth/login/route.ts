@@ -10,8 +10,9 @@ const dataPath = path.join(process.cwd(), 'src/lib/data.json');
 const DB_KEY = 'db.json';
 
 const readData = async () => {
-    // Check if running on Netlify by looking for the NETLIFY environment variable
-    if (process.env.NETLIFY) {
+    // Check if running in a production Netlify environment.
+    // NETLIFY_CONTEXT is a build-time variable set by Netlify.
+    if (process.env.NETLIFY_CONTEXT === 'production') {
         const store = getStore('data');
         const data = await store.get(DB_KEY, { type: 'json' });
         // If no data in blob store, return a default structure
