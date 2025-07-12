@@ -102,25 +102,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<User> => {
     const formData = new FormData();
+    formData.append('userId', userId);
 
-    // Append all non-file fields to formData
-    formData.append('userId', userId); // Add userId to the form data
-    Object.entries(data).forEach(([key, value]) => {
-      if (key === 'wants' || key === 'interests') {
-        // Correctly serialize the array of objects into a JSON string of strings
-        if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value.map((item: any) => item.value)));
+    // Iterate over all keys in the form data
+    for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+            const value = data[key as keyof ProfileFormValues];
+
+            // Skip file inputs, they will be handled separately
+            if (key === 'avatar' || key === 'gallery') {
+                continue;
+            }
+
+            if (key === 'wants' || key === 'interests') {
+                // Handle array of objects for multi-select
+                if (Array.isArray(value)) {
+                    const stringValues = value.map((item: any) => item.value);
+                    formData.append(key, JSON.stringify(stringValues));
+                }
+            } else if (value !== undefined && value !== null) {
+                // Append other fields
+                formData.append(key, String(value));
+            }
         }
-      } else if (key !== 'avatar' && key !== 'gallery' && value !== undefined && value !== null) {
-        formData.append(key, String(value));
-      }
-    });
+    }
 
-    // Append files
+    // Append file if it exists
     if (data.avatar instanceof File) {
       formData.append('avatar', data.avatar);
     }
     
+    // Append gallery files if they exist
     if (data.gallery && data.gallery.length > 0) {
         data.gallery.forEach((file) => {
             if (file instanceof File) {
