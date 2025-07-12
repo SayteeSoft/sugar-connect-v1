@@ -4,13 +4,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { mockUsers } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageSquare, Trash2, Users, Eye } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import type { User } from "@/types";
 import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { mockUsers } from "@/lib/mock-data";
 
 const UserRow = ({ user }: { user: User }) => (
     <div className="flex items-center justify-between p-4 border-b last:border-b-0">
@@ -42,6 +42,8 @@ const UserRow = ({ user }: { user: User }) => (
 export default function MatchesPage() {
     const { user, loading } = useAuth();
 
+    // NOTE: This page currently uses mock data. In a real application,
+    // this data would be fetched from the API based on the logged-in user's matches.
     const filteredUsers = useMemo(() => {
         if (!user) return [];
         if (user.role === 'Sugar Daddy') {

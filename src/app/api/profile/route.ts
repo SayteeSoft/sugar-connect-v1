@@ -3,38 +3,10 @@ import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import type { User, Profile, Role } from '@/types';
-import { getStore } from '@netlify/blobs';
 import bcrypt from 'bcrypt';
+import { readData, writeData } from '../auth/login/route';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
-const DB_KEY = 'users-db';
-const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
-
-// A robust function to read data from the correct source
-const readData = async (): Promise<{ users: User[], profiles: Profile[] }> => {
-    if (process.env.NETLIFY_CONTEXT === 'production') {
-        const store = getStore('data');
-        const data = await store.get(DB_KEY, { type: 'json' });
-        return data || { users: [], profiles: [] };
-    }
-    try {
-        const fileContent = await fs.readFile(localDbPath, 'utf-8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        return { users: [], profiles: [] };
-    }
-};
-
-// A robust function to write data to the correct source
-const writeData = async (data: { users: User[], profiles: Profile[] }) => {
-    if (process.env.NETLIFY_CONTEXT === 'production') {
-        const store = getStore('data');
-        await store.setJSON(DB_KEY, data);
-    } else {
-        await fs.writeFile(localDbPath, JSON.stringify(data, null, 4));
-    }
-};
-
 
 const ensureUploadDirExists = async () => {  
   try {
