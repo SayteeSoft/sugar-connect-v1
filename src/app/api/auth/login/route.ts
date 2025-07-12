@@ -11,7 +11,7 @@ const DB_KEY = 'db.json';
 
 const readData = async () => {
     // Check if running on Netlify by looking for the NETLIFY environment variable
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY === 'true') {
         const store = getStore('data');
         const data = await store.get(DB_KEY, { type: 'json' });
         // If no data in blob store, return a default structure
@@ -60,7 +60,8 @@ export async function POST(req: Request) {
             user: userToReturn,
         }, { status: 200 });
 
-    } catch (error) {
+    } catch (error)
+        {
         console.error('Login error:', error);
         return NextResponse.json({ message: 'An internal server error occurred.' }, { status: 500 });
     }
