@@ -11,6 +11,42 @@
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
+    },
+    {
+      "id": "4",
+      "name": "Darianna",
+      "email": "darianna.art@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 22,
+      "location": "London, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p4"
+    },
+    {
+      "id": "5",
+      "name": "Kateryna",
+      "email": "kate.marketing@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 24,
+      "location": "Birmingham, UK",
+      "role": "Sugar Baby",
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p5"
+    },
+    {
+      "id": "3",
+      "name": "Mark",
+      "email": "mark.investor@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 45,
+      "location": "Edinburgh, UK",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p3"
     }
   ],
   "profiles": [
@@ -29,6 +65,63 @@
         "eyeColor": "Brown",
         "smoker": "No",
         "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p4",
+      "userId": "4",
+      "about": "Art student with a love for adventure and exploring new cultures.",
+      "wants": ["Travel", "Mentorship", "Fine Dining"],
+      "interests": ["Art", "Photography", "Museums"],
+      "gallery": [],
+      "attributes": {
+        "height": "5'5\"",
+        "bodyType": "Slim",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Blonde",
+        "eyeColor": "Blue",
+        "smoker": "No",
+        "drinker": "Socially",
+        "piercings": "Yes",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p5",
+      "userId": "5",
+      "about": "Recent graduate starting my career in marketing. I enjoy reading, fitness, and exploring new restaurants.",
+      "wants": ["Networking", "Financial Support", "Companionship"],
+      "interests": ["Reading", "Fitness", "Cooking", "Fashion"],
+      "gallery": [],
+      "attributes": {
+        "height": "5'7\"",
+        "bodyType": "Athletic",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Green",
+        "smoker": "No",
+        "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    },
+    {
+      "id": "p3",
+      "userId": "3",
+      "about": "Investor and lover of the great outdoors. Looking for a partner to join me on adventures.",
+      "wants": ["Travel", "Adventure", "Companionship"],
+      "interests": ["Travel", "Investing", "Skiing", "Yachting"],
+      "gallery": [],
+      "attributes": {
+        "height": "6'1\"",
+        "bodyType": "Average",
+        "ethnicity": "White/Caucasian",
+        "hairColor": "Brown",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "Socially",
         "piercings": "No",
         "tattoos": "No"
       }
