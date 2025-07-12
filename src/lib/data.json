@@ -252,8 +252,15 @@
       "id": "p6",
       "userId": "6",
       "about": "A vibrant soul who loves salsa dancing and sunny days.",
-      "wants": ["Companionship", "Fine Dining"],
-      "interests": ["Dancing", "Beach", "Cooking"],
+      "wants": [
+        "Companionship",
+        "Fine Dining"
+      ],
+      "interests": [
+        "Dancing",
+        "Beach",
+        "Cooking"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -261,8 +268,15 @@
       "id": "p7",
       "userId": "7",
       "about": "Entrepreneur with a passion for technology and travel.",
-      "wants": ["Adventure", "Companionship"],
-      "interests": ["Tech", "Travel", "Hiking"],
+      "wants": [
+        "Adventure",
+        "Companionship"
+      ],
+      "interests": [
+        "Tech",
+        "Travel",
+        "Hiking"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -270,8 +284,15 @@
       "id": "p8",
       "userId": "8",
       "about": "Student of languages, exploring the world one city at a time.",
-      "wants": ["Travel", "Mentorship"],
-      "interests": ["Languages", "Art", "History"],
+      "wants": [
+        "Travel",
+        "Mentorship"
+      ],
+      "interests": [
+        "Languages",
+        "Art",
+        "History"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -279,8 +300,16 @@
       "id": "p9",
       "userId": "9",
       "about": "A gentleman who appreciates the finer things in life.",
-      "wants": ["Fine Dining", "Theatre", "Companionship"],
-      "interests": ["Wine", "Theatre", "Cars"],
+      "wants": [
+        "Fine Dining",
+        "Theatre",
+        "Companionship"
+      ],
+      "interests": [
+        "Wine",
+        "Theatre",
+        "Cars"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -288,8 +317,15 @@
       "id": "p10",
       "userId": "10",
       "about": "Lover of nature, animals, and quiet evenings.",
-      "wants": ["Emotional Connection", "Companionship"],
-      "interests": ["Animals", "Hiking", "Reading"],
+      "wants": [
+        "Emotional Connection",
+        "Companionship"
+      ],
+      "interests": [
+        "Animals",
+        "Hiking",
+        "Reading"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -297,8 +333,15 @@
       "id": "p11",
       "userId": "11",
       "about": "Building my business and looking for someone to share the journey with.",
-      "wants": ["Companionship", "Travel"],
-      "interests": ["Business", "Golf", "Travel"],
+      "wants": [
+        "Companionship",
+        "Travel"
+      ],
+      "interests": [
+        "Business",
+        "Golf",
+        "Travel"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -306,8 +349,15 @@
       "id": "p12",
       "userId": "12",
       "about": "Life is a party, and I'm looking for a dance partner.",
-      "wants": ["Adventure", "Luxury Lifestyle"],
-      "interests": ["Dancing", "Music", "Fashion"],
+      "wants": [
+        "Adventure",
+        "Luxury Lifestyle"
+      ],
+      "interests": [
+        "Dancing",
+        "Music",
+        "Fashion"
+      ],
       "gallery": [],
       "attributes": {}
     },
@@ -315,8 +365,15 @@
       "id": "p13",
       "userId": "13",
       "about": "Experienced man looking for a genuine connection.",
-      "wants": ["Companionship", "Emotional Connection"],
-      "interests": ["Reading", "History", "Gardening"],
+      "wants": [
+        "Companionship",
+        "Emotional Connection"
+      ],
+      "interests": [
+        "Reading",
+        "History",
+        "Gardening"
+      ],
       "gallery": [],
       "attributes": {}
     }

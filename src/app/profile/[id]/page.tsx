@@ -127,9 +127,9 @@ export default function OtherUserProfilePage() {
                       Verified
                   </Badge>
                 </div>
-                <div className="text-center space-y-4">
+                <div className="space-y-4">
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
+                        <h1 className="text-2xl font-bold flex items-center gap-2">
                             {user.name}
                             {user.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                         </h1>
