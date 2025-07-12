@@ -23,16 +23,16 @@ import { useTheme } from 'next-themes';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
-    <Button variant="ghost" className="text-base text-muted-foreground hover:text-primary" asChild>
+    <Button variant="ghost" className="text-base text-muted-foreground hover:bg-transparent hover:text-primary" asChild>
       <Link href="/profile">Profile</Link>
     </Button>
-    <Button variant="ghost" className="text-base text-muted-foreground hover:text-primary" asChild>
+    <Button variant="ghost" className="text-base text-muted-foreground hover:bg-transparent hover:text-primary" asChild>
       <Link href="/messages">Messages</Link>
     </Button>
-    <Button variant="ghost" className="text-base text-muted-foreground hover:text-primary" asChild>
+    <Button variant="ghost" className="text-base text-muted-foreground hover:bg-transparent hover:text-primary" asChild>
       <Link href="/matches">Matches</Link>
     </Button>
-    <Button variant="ghost" className="text-base text-muted-foreground hover:text-primary" asChild>
+    <Button variant="ghost" className="text-base text-muted-foreground hover:bg-transparent hover:text-primary" asChild>
       <Link href="/search">Search</Link>
     </Button>
   </div>
