@@ -12,6 +12,7 @@ import { mockUsers, mockProfiles } from "@/lib/mock-data";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
+import { useEffect } from "react";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -32,6 +33,14 @@ export default function OtherUserProfilePage() {
   // For now, we use the mock data for display purposes.
   const user: User | undefined = mockUsers.find(u => u.id === id) as User | undefined;
   const userProfile: Profile | undefined = mockProfiles.find(p => p.userId === id);
+  
+  // If the current user is viewing their own profile, redirect to the editable /profile page
+  useEffect(() => {
+    if (!loading && currentUser && currentUser.id === id) {
+      router.push('/profile');
+    }
+  }, [currentUser, id, loading, router]);
+
 
   if (loading) {
     return (
@@ -59,10 +68,9 @@ export default function OtherUserProfilePage() {
     );
   }
 
-  // If the current user is viewing their own profile, redirect to the editable /profile page
+  // Render nothing if we are about to redirect, to prevent a flash of content.
   if (currentUser && currentUser.id === id) {
-    router.push('/profile');
-    return null; // Render nothing while redirecting
+    return null; 
   }
 
   if (!user || !userProfile) {
