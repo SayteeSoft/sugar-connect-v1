@@ -1,81 +1,8 @@
 
-import type { User, Profile, Testimonial } from '@/types';
-// This file now provides static data for UI elements but is NOT the source of truth for users/profiles.
-// The source of truth is the Netlify Blob store, managed via API routes.
+import type { Testimonial, Role, TestimonialRole, User, Profile } from '@/types';
 
-// Mock data for display purposes only. This will become outdated as the blob store is updated.
-// We keep it here to prevent breaking UI components that might still reference it directly.
-export let users: User[] = [
-    {
-      "id": "1",
-      "name": "Admin",
-      "email": "saytee.software@gmail.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 49,
-      "location": "London, UK",
-      "role": "Admin",
-      "credits": "unlimited",
-      "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
-      "profileId": "p1"
-    },
-    {
-      "id": "4",
-      "name": "Darianna",
-      "email": "darianna.art@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 22,
-      "location": "London, UK",
-      "role": "Sugar Baby",
-      "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p4"
-    },
-    {
-      "id": "5",
-      "name": "Kateryna",
-      "email": "kate.marketing@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 24,
-      "location": "Birmingham, UK",
-      "role": "Sugar Baby",
-      "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p5"
-    },
-     {
-      "id": "3",
-      "name": "Mark",
-      "email": "mark.investor@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 45,
-      "location": "Edinburgh, UK",
-      "role": "Sugar Daddy",
-      "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p3"
-    }
-];
-export let profiles: Profile[] = [
-     {
-      "id": "p1",
-      "userId": "1",
-      "about": "Site administrator.",
-      "wants": [],
-      "interests": [],
-      "gallery": [],
-      "attributes": {
-        "height": "6'0\"",
-        "bodyType": "Athletic",
-        "ethnicity": "Black/African Decent",
-        "hairColor": "Black",
-        "eyeColor": "Brown",
-        "smoker": "No",
-        "drinker": "No",
-        "piercings": "No",
-        "tattoos": "No"
-      }
-    }
-];
+// This file provides static data for UI elements and should not be used as a database.
+// Dynamic user data should be fetched from the API.
 
 export const testimonials: Testimonial[] = [
     { name: 'Darianna', role: 'Sugar Baby', quote: "Art student with a love for adventure and exploring new cultures.", avatarUrl: 'https://placehold.co/40x40.png' },
@@ -84,8 +11,6 @@ export const testimonials: Testimonial[] = [
     { name: 'Sofia', role: 'Sugar Baby', quote: "Fashion designer with an eye for beauty and a heart for adventure.", avatarUrl: 'https://placehold.co/40x40.png' },
     { name: 'James', role: 'Sugar Daddy', quote: "Tech CEO who works hard and plays harder.", avatarUrl: 'https://placehold.co/40x40.png' },
 ];
-
-export const featuredProfiles = users.filter(u => u.role !== 'Admin').slice(0, 4);
 
 export const wantOptions = [
     { value: "Mentorship", label: "Mentorship" },
@@ -123,3 +48,81 @@ export const interestOptions = [
     { value: "Concerts", label: "Concerts" },
     { value: "Skiing", label: "Skiing" },
 ];
+
+// Mock user and profile data for UI component development where API data isn't needed.
+// This is NOT the source of truth for the application.
+export const mockUsers = [
+    {
+      "id": "1",
+      "name": "Admin",
+      "email": "saytee.software@gmail.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 49,
+      "location": "London, UK",
+      "role": "Admin" as Role,
+      "credits": "unlimited",
+      "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+      "profileId": "p1"
+    },
+    {
+      "id": "4",
+      "name": "Darianna",
+      "email": "darianna.art@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 22,
+      "location": "London, UK",
+      "role": "Sugar Baby" as Role,
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p4"
+    },
+    {
+      "id": "5",
+      "name": "Kateryna",
+      "email": "kate.marketing@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 24,
+      "location": "Birmingham, UK",
+      "role": "Sugar Baby" as Role,
+      "credits": "unlimited",
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p5"
+    },
+     {
+      "id": "3",
+      "name": "Mark",
+      "email": "mark.investor@example.com",
+      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "age": 45,
+      "location": "Edinburgh, UK",
+      "role": "Sugar Daddy" as Role,
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p3"
+    }
+] as User[];
+
+export const mockProfiles = [
+     {
+      "id": "p1",
+      "userId": "1",
+      "about": "Site administrator.",
+      "wants": [],
+      "interests": [],
+      "gallery": [],
+      "attributes": {
+        "height": "6'0\"",
+        "bodyType": "Athletic",
+        "ethnicity": "Black/African Decent",
+        "hairColor": "Black",
+        "eyeColor": "Brown",
+        "smoker": "No",
+        "drinker": "No",
+        "piercings": "No",
+        "tattoos": "No"
+      }
+    }
+] as Profile[];
+
+
+export const featuredProfiles = mockUsers.filter(u => u.role !== 'Admin').slice(0, 4);

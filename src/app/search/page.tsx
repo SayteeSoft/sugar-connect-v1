@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/use-auth';
-import { users } from '@/lib/mock-data';
+import { mockUsers } from '@/lib/mock-data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -58,7 +58,7 @@ function FiltersPanel() {
 export default function SearchPage() {
   const { user } = useAuth();
   
-  const searchResults = users.filter((u: User) => {
+  const searchResults = mockUsers.filter((u) => {
     if (u.role === 'Admin') return false; // Exclude admins from search results always
     if (!user) return true; // If no user is logged in, show everyone (except Admins)
     if (user.role === 'Admin') return u.role !== 'Admin'; // Admin sees everyone (except other Admins)

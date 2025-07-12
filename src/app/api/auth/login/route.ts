@@ -3,15 +3,13 @@ import { NextResponse } from 'next/server';
 import type { User } from '@/types';
 import { getStore } from '@netlify/blobs';
 import bcrypt from 'bcrypt';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 const DB_KEY = 'users-db';
 
-const readData = async () => {
-    const store = getStore('data');
-    const data = await store.get(DB_KEY, { type: 'json' });
-    if (data) return data;
-
-    // If no data, seed with the initial admin user
+// A robust function to seed initial admin data in the respective data store.
+const seedInitialData = async () => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash('password123', salt);
     
@@ -52,8 +50,42 @@ const readData = async () => {
             }
         ]
     };
-    await store.setJSON(DB_KEY, initialData);
+
+    if (process.env.NETLIFY_CONTEXT === 'production') {
+        const store = getStore('data');
+        await store.setJSON(DB_KEY, initialData);
+    } else {
+        const filePath = path.join(process.cwd(), 'src', 'lib', 'data.json');
+        await fs.writeFile(filePath, JSON.stringify(initialData, null, 4));
+    }
     return initialData;
+};
+
+
+// A robust function to read data from the correct source based on environment.
+const readData = async () => {
+    // In production, always use Netlify Blobs.
+    if (process.env.NETLIFY_CONTEXT === 'production') {
+        const store = getStore('data');
+        const data = await store.get(DB_KEY, { type: 'json' });
+        if (data) return data;
+        return seedInitialData(); // Seed if no data exists in production.
+    }
+
+    // In local development, use the local data.json file.
+    try {
+        const filePath = path.join(process.cwd(), 'src', 'lib', 'data.json');
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const data = JSON.parse(fileContent);
+        // Basic validation to see if the file is empty or corrupted
+        if (!data || !data.users || data.users.length === 0) {
+            return seedInitialData();
+        }
+        return data;
+    } catch (error) {
+        // If the file doesn't exist or is invalid, create it with seed data.
+        return seedInitialData();
+    }
 };
 
 

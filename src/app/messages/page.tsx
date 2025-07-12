@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { users } from "@/lib/mock-data";
+import { mockUsers } from "@/lib/mock-data";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MoreVertical, Phone, Search, Send, Smile, Paperclip, Video } from "lucide-react";
@@ -18,13 +18,13 @@ export default function MessagesPage() {
     const conversations = useMemo(() => {
         if (!currentUser) return [];
         if (currentUser.role === 'Sugar Daddy') {
-            return users.filter(u => u.role === 'Sugar Baby');
+            return mockUsers.filter(u => u.role === 'Sugar Baby');
         }
         if (currentUser.role === 'Sugar Baby') {
-            return users.filter(u => u.role === 'Sugar Daddy');
+            return mockUsers.filter(u => u.role === 'Sugar Daddy');
         }
         if (currentUser.role === 'Admin') {
-            return users.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
+            return mockUsers.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
         }
         return [];
     }, [currentUser]);
@@ -33,7 +33,7 @@ export default function MessagesPage() {
 
     useEffect(() => {
         if (conversations.length > 0 && !activeConversation) {
-            setActiveConversation(conversations[0]);
+            setActiveConversation(conversations[0] as User);
         }
     }, [conversations, activeConversation]);
     
@@ -73,7 +73,7 @@ export default function MessagesPage() {
                                     "p-4 flex items-center gap-4 hover:bg-accent cursor-pointer border-b",
                                     activeConversation?.id === convo.id && "bg-accent"
                                 )}
-                                onClick={() => handleConversationClick(convo)}
+                                onClick={() => handleConversationClick(convo as User)}
                             >
                                 <Avatar className="h-12 w-12">
                                     <AvatarImage src={convo.avatarUrl} />

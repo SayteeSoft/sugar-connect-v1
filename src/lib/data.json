@@ -1,5 +1,38 @@
 
 {
-  "users": [],
-  "profiles": []
+    "users": [
+        {
+            "id": "1",
+            "name": "Admin",
+            "email": "saytee.software@gmail.com",
+            "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+            "age": 49,
+            "location": "London, UK",
+            "role": "Admin",
+            "credits": "unlimited",
+            "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+            "profileId": "p1"
+        }
+    ],
+    "profiles": [
+        {
+            "id": "p1",
+            "userId": "1",
+            "about": "Site administrator.",
+            "wants": [],
+            "interests": [],
+            "gallery": [],
+            "attributes": {
+                "height": "6'0\"",
+                "bodyType": "Athletic",
+                "ethnicity": "Black/African Decent",
+                "hairColor": "Black",
+                "eyeColor": "Brown",
+                "smoker": "No",
+                "drinker": "No",
+                "piercings": "No",
+                "tattoos": "No"
+            }
+        }
+    ]
 }

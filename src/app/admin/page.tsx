@@ -30,7 +30,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { users as initialUsers } from "@/lib/mock-data";
+import { mockUsers } from "@/lib/mock-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -60,7 +60,7 @@ export default function AdminPage() {
             } catch (error) {
                 console.error("Failed to fetch users from blob store:", error);
                 // Fallback to mock data if blob store fails
-                setUsers(initialUsers);
+                setUsers(mockUsers as User[]);
             }
         };
 

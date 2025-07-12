@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star } from "lucide-react";
 import Image from "next/image";
-import { users, profiles } from "@/lib/mock-data";
+import { mockUsers, mockProfiles } from "@/lib/mock-data";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
@@ -28,8 +28,10 @@ export default function OtherUserProfilePage() {
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
 
-  const user: User | undefined = users.find(u => u.id === id);
-  const userProfile: Profile | undefined = profiles.find(p => p.userId === id);
+  // In a real app, you would fetch this data from an API.
+  // For now, we use the mock data for display purposes.
+  const user: User | undefined = mockUsers.find(u => u.id === id) as User | undefined;
+  const userProfile: Profile | undefined = mockProfiles.find(p => p.userId === id);
 
   if (loading) {
     return (

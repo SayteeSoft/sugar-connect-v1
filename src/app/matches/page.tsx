@@ -4,7 +4,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { users } from "@/lib/mock-data";
+import { mockUsers } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageSquare, Trash2, Users, Eye } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -45,14 +45,14 @@ export default function MatchesPage() {
     const filteredUsers = useMemo(() => {
         if (!user) return [];
         if (user.role === 'Sugar Daddy') {
-            return users.filter(u => u.role === 'Sugar Baby');
+            return mockUsers.filter(u => u.role === 'Sugar Baby');
         }
         if (user.role === 'Sugar Baby') {
-            return users.filter(u => u.role === 'Sugar Daddy');
+            return mockUsers.filter(u => u.role === 'Sugar Daddy');
         }
         // Admins see everyone except other admins.
         if (user.role === 'Admin') {
-            return users.filter(u => u.role !== 'Admin');
+            return mockUsers.filter(u => u.role !== 'Admin');
         }
         return [];
     }, [user]);
@@ -108,13 +108,13 @@ export default function MatchesPage() {
                         </TabsList>
                         <div className="mt-6">
                             <TabsContent value="favorites">
-                                {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
+                                {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
                             </TabsContent>
                             <TabsContent value="visitors">
-                                {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
+                                {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
                             </TabsContent>
                             <TabsContent value="viewed">
-                                {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
+                                {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
                             </TabsContent>
                         </div>
                     </Tabs>

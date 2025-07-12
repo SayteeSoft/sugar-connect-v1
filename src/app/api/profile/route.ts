@@ -8,17 +8,31 @@ import bcrypt from 'bcrypt';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 const DB_KEY = 'users-db';
+const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
 
-const readData = async () => {
-    const store = getStore('data');
-    const data = await store.get(DB_KEY, { type: 'json' });
-    // If no data, return default structure. The login route will handle seeding.
-    return data || { users: [], profiles: [] };
+// A robust function to read data from the correct source
+const readData = async (): Promise<{ users: User[], profiles: Profile[] }> => {
+    if (process.env.NETLIFY_CONTEXT === 'production') {
+        const store = getStore('data');
+        const data = await store.get(DB_KEY, { type: 'json' });
+        return data || { users: [], profiles: [] };
+    }
+    try {
+        const fileContent = await fs.readFile(localDbPath, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        return { users: [], profiles: [] };
+    }
 };
 
-const writeData = async (data: any) => {
-    const store = getStore('data');
-    await store.setJSON(DB_KEY, data);
+// A robust function to write data to the correct source
+const writeData = async (data: { users: User[], profiles: Profile[] }) => {
+    if (process.env.NETLIFY_CONTEXT === 'production') {
+        const store = getStore('data');
+        await store.setJSON(DB_KEY, data);
+    } else {
+        await fs.writeFile(localDbPath, JSON.stringify(data, null, 4));
+    }
 };
 
 

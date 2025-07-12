@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail } from "lucide-react";
 import Image from "next/image";
-import { profiles, wantOptions, interestOptions } from "@/lib/mock-data";
+import { mockProfiles, wantOptions, interestOptions } from "@/lib/mock-data";
 import { notFound } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, useRef } from "react";
@@ -46,7 +46,7 @@ export default function ProfilePage() {
 
 
   // Find the profile that matches the logged-in user's ID
-  const userProfile = user ? profiles.find(p => p.userId === user.id) : undefined;
+  const userProfile = user ? mockProfiles.find(p => p.userId === user.id) : undefined;
 
   const { control, handleSubmit, reset, getValues, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
