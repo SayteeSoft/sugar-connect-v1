@@ -2,6 +2,7 @@
 import { z } from "zod";
 
 export type Role = 'Sugar Daddy' | 'Sugar Baby' | 'Admin';
+export type TestimonialRole = 'Sugar Daddy' | 'Sugar Baby';
 
 export interface User {
   id: string;
@@ -38,7 +39,7 @@ export interface Profile {
 
 export interface Testimonial {
   name: string;
-  role: Role;
+  role: TestimonialRole;
   quote: string;
   avatarUrl: string;
 }
