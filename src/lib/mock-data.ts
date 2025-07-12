@@ -51,6 +51,8 @@ export const interestOptions = [
 
 // Mock user and profile data for UI component development where API data isn't needed.
 // This is NOT the source of truth for the application.
+// NOTE: This data is now fetched from the API on relevant pages.
+// Leaving a slimmed down version for any remaining components that might reference it.
 export const mockUsers = [
     {
       "id": "1",
@@ -63,66 +65,10 @@ export const mockUsers = [
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
-    },
-    {
-      "id": "4",
-      "name": "Darianna",
-      "email": "darianna.art@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 22,
-      "location": "London, UK",
-      "role": "Sugar Baby" as Role,
-      "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p4"
-    },
-    {
-      "id": "5",
-      "name": "Kateryna",
-      "email": "kate.marketing@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 24,
-      "location": "Birmingham, UK",
-      "role": "Sugar Baby" as Role,
-      "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p5"
-    },
-     {
-      "id": "3",
-      "name": "Mark",
-      "email": "mark.investor@example.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
-      "age": 45,
-      "location": "Edinburgh, UK",
-      "role": "Sugar Daddy" as Role,
-      "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
-      "profileId": "p3"
     }
 ] as User[];
 
-export const mockProfiles = [
-     {
-      "id": "p1",
-      "userId": "1",
-      "about": "Site administrator.",
-      "wants": [],
-      "interests": [],
-      "gallery": [],
-      "attributes": {
-        "height": "6'0\"",
-        "bodyType": "Athletic",
-        "ethnicity": "Black/African Decent",
-        "hairColor": "Black",
-        "eyeColor": "Brown",
-        "smoker": "No",
-        "drinker": "No",
-        "piercings": "No",
-        "tattoos": "No"
-      }
-    }
-] as Profile[];
+export const mockProfiles: Profile[] = [];
 
 
 export const featuredProfiles = mockUsers.filter(u => u.role !== 'Admin').slice(0, 4);

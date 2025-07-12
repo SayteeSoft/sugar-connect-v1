@@ -8,11 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star } from "lucide-react";
 import Image from "next/image";
-import { mockUsers, mockProfiles } from "@/lib/mock-data";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -29,10 +28,39 @@ export default function OtherUserProfilePage() {
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
 
-  // In a real app, you would fetch this data from an API.
-  // For now, we use the mock data for display purposes.
-  const user: User | undefined = mockUsers.find(u => u.id === id) as User | undefined;
-  const userProfile: Profile | undefined = mockProfiles.find(p => p.userId === id);
+  const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setProfile] = useState<Profile | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!id) return;
+      setDataLoading(true);
+      try {
+        const response = await fetch('/api/users');
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        const foundUser = data.users.find((u: User) => u.id === id);
+        const foundProfile = data.profiles.find((p: Profile) => p.userId === id);
+
+        if (foundUser && foundProfile) {
+            setUser(foundUser);
+            setProfile(foundProfile);
+        } else {
+            setUser(null);
+            setProfile(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [id]);
   
   // If the current user is viewing their own profile, redirect to the editable /profile page
   useEffect(() => {
@@ -42,7 +70,7 @@ export default function OtherUserProfilePage() {
   }, [currentUser, id, loading, router]);
 
 
-  if (loading) {
+  if (loading || dataLoading) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
