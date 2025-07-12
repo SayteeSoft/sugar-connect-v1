@@ -59,6 +59,7 @@ export default function ProfilePage() {
       interests: [],
       age: 18,
       gallery: [],
+      height: "",
     }
   });
   
@@ -260,7 +261,7 @@ export default function ProfilePage() {
                 </div>
                 {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message as string}</p>}
                 {isEditing ? (
-                    <div className="space-y-4 text-center">
+                    <div className="space-y-4">
                         <div>
                             <Label htmlFor="name">Name</Label>
                             <Controller
@@ -288,20 +289,20 @@ export default function ProfilePage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="text-center space-y-4">
+                    <div className="space-y-4">
                         <div className="space-y-1">
-                            <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
+                            <h1 className="text-2xl font-bold flex items-center gap-2">
                                 {formValues.name}
                                 {formValues.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                             </h1>
                             <Badge variant="outline" className="border-primary text-primary">{formValues.role}</Badge>
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1">
-                            <div className="flex items-center justify-center gap-2">
+                            <div className="flex items-center gap-2">
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
                             </div>
-                            <div className="flex items-center justify-center gap-2">
+                            <div className="flex items-center gap-2">
                                <Mail className="h-4 w-4" />
                                <span>{user.email}</span>
                             </div>
@@ -465,6 +466,7 @@ export default function ProfilePage() {
                                 control={control}
                                 render={({ field }) => <Input id="height" type="text" {...field} value={field.value ?? ''} />}
                             />
+                             {errors.height && <p className="text-destructive text-sm mt-1">{errors.height.message}</p>}
                       </div>
                        <div>
                           <Label htmlFor="body-type">Body Type</Label>
@@ -637,4 +639,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
 
