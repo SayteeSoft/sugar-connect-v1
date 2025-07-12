@@ -23,6 +23,14 @@ const nextConfig: NextConfig = {
         'https://*.cluster-3gc7bglotjgwuxlqpiut7yyqt4.cloudworkstations.dev',
     ],
   },
+  watchOptions: {
+    ignored: [
+      '**/.git/**',
+      '**/.next/**',
+      '**/node_modules/**',
+      'src/ai/**', // Ignore Genkit files
+    ],
+  },
 };
 
 export default nextConfig;
