@@ -56,6 +56,11 @@ export async function POST(req: Request) {
     const userToUpdate: User = { ...users[userIndex] };
     const profileToUpdate: Profile = { ...profiles[profileIndex] };
 
+    // Ensure attributes object exists
+    if (!profileToUpdate.attributes) {
+        profileToUpdate.attributes = {};
+    }
+
     // Update text fields
     userToUpdate.name = fields.name?.[0] || userToUpdate.name;
     userToUpdate.location = fields.location?.[0] || userToUpdate.location;
@@ -70,24 +75,24 @@ export async function POST(req: Request) {
       profileToUpdate.interests = JSON.parse(fields.interests[0]);
     }
     
-    // Safely update attributes only if they exist in the form data
-    const newAttributes = {
-        height: Number(fields.height?.[0]) || profileToUpdate.attributes.height,
-        bodyType: fields.bodyType?.[0] as Profile['attributes']['bodyType'] || profileToUpdate.attributes.bodyType,
-        ethnicity: fields.ethnicity?.[0] as Profile['attributes']['ethnicity'] || profileToUpdate.attributes.ethnicity,
-        hairColor: fields.hairColor?.[0] as Profile['attributes']['hairColor'] || profileToUpdate.attributes.hairColor,
-        eyeColor: fields.eyeColor?.[0] as Profile['attributes']['eyeColor'] || profileToUpdate.attributes.eyeColor,
-        smoker: fields.smoker?.[0] as Profile['attributes']['smoker'] || profileToUpdate.attributes.smoker,
-        drinker: fields.drinker?.[0] as Profile['attributes']['drinker'] || profileToUpdate.attributes.drinker,
-        piercings: fields.piercings?.[0] as Profile['attributes']['piercings'] || profileToUpdate.attributes.piercings,
-        tattoos: fields.tattoos?.[0] as Profile['attributes']['tattoos'] || profileToUpdate.attributes.tattoos,
+    const newAttributes: Partial<Profile['attributes']> = {
+        height: fields.height?.[0] ? Number(fields.height[0]) : undefined,
+        bodyType: fields.bodyType?.[0] as Profile['attributes']['bodyType'] || undefined,
+        ethnicity: fields.ethnicity?.[0] as Profile['attributes']['ethnicity'] || undefined,
+        hairColor: fields.hairColor?.[0] as Profile['attributes']['hairColor'] || undefined,
+        eyeColor: fields.eyeColor?.[0] as Profile['attributes']['eyeColor'] || undefined,
+        smoker: fields.smoker?.[0] as Profile['attributes']['smoker'] || undefined,
+        drinker: fields.drinker?.[0] as Profile['attributes']['drinker'] || undefined,
+        piercings: fields.piercings?.[0] as Profile['attributes']['piercings'] || undefined,
+        tattoos: fields.tattoos?.[0] as Profile['attributes']['tattoos'] || undefined,
     };
     
     // Filter out undefined/null values to avoid overwriting existing data with nothing
     Object.keys(newAttributes).forEach(key => {
         const typedKey = key as keyof typeof newAttributes;
-        if (newAttributes[typedKey] !== undefined && newAttributes[typedKey] !== null && !Number.isNaN(newAttributes[typedKey])) {
-            (profileToUpdate.attributes as any)[typedKey] = newAttributes[typedKey];
+        const value = newAttributes[typedKey];
+        if (value !== undefined && value !== null && (typeof value !== 'number' || !Number.isNaN(value))) {
+            (profileToUpdate.attributes as any)[typedKey] = value;
         }
     });
 
