@@ -272,6 +272,26 @@ export default function ProfilePage() {
                             {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
                         </div>
                         <div>
+                            <Label htmlFor="role">Role</Label>
+                            <Controller
+                                name="role"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
+                                            <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
+                                            {user.role === 'Admin' && (
+                                                <SelectItem value="Admin">Admin</SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            {errors.role && <p className="text-destructive text-sm mt-1">{errors.role.message}</p>}
+                        </div>
+                        <div>
                             <Label htmlFor="location">Location</Label>
                             <Controller
                                 name="location"
@@ -289,7 +309,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-4 text-left">
                         <div className="space-y-1">
                             <h1 className="text-2xl font-bold flex items-center gap-2">
                                 {formValues.name}
@@ -639,5 +659,6 @@ export default function ProfilePage() {
     </div>
   );
 }
+
 
 
