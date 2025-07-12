@@ -14,12 +14,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail } from "lucide-react";
 import Image from "next/image";
-import { mockProfiles, wantOptions, interestOptions } from "@/lib/mock-data";
+import { wantOptions, interestOptions } from "@/lib/mock-data";
 import { notFound } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProfileFormValues as ProfileFormSchema, profileFormSchema } from "@/types";
+import { ProfileFormValues as ProfileFormSchema, profileFormSchema, Profile } from "@/types";
 import { MultiSelect } from "@/components/ui/multi-select";
 
 
@@ -43,10 +43,35 @@ export default function ProfilePage() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [userProfile, setUserProfile] = useState<Profile | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchProfileData = async () => {
+        if (!user) return;
+        setDataLoading(true);
+        try {
+            const response = await fetch('/api/users');
+            if (!response.ok) {
+                throw new Error("Failed to fetch profiles");
+            }
+            const data = await response.json();
+            const foundProfile = data.profiles.find((p: Profile) => p.userId === user.id);
+            if (foundProfile) {
+                setUserProfile(foundProfile);
+            }
+        } catch (error) {
+            console.error("Failed to fetch profile data:", error);
+            toast({ title: "Error", description: "Could not load your profile data.", variant: "destructive"});
+        } finally {
+            setDataLoading(false);
+        }
+    };
+    if (user) {
+        fetchProfileData();
+    }
+  }, [user, toast]);
 
-  // Find the profile that matches the logged-in user's ID
-  const userProfile = user ? mockProfiles.find(p => p.userId === user.id) : undefined;
 
   const { control, handleSubmit, reset, getValues, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -182,7 +207,7 @@ export default function ProfilePage() {
   }
   
 
-  if (loading) {
+  if (loading || dataLoading) {
     return (
         <div className="container mx-auto px-4 md:px-6 py-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

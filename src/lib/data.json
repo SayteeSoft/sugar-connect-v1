@@ -21,7 +21,7 @@
       "location": "London, UK",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/public/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
+      "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
       "profileId": "p4"
     },
     {
@@ -33,7 +33,7 @@
       "location": "Birmingham, UK",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p5"
     },
     {
@@ -45,7 +45,7 @@
       "location": "Edinburgh, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p3"
     },
     {
@@ -57,7 +57,7 @@
       "location": "Cartagena, CO",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p6"
     },
     {
@@ -69,7 +69,7 @@
       "location": "Medellín, CO",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p7"
     },
     {
@@ -81,7 +81,7 @@
       "location": "Frankfurt, DE",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p8"
     },
     {
@@ -93,7 +93,7 @@
       "location": "London, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p9"
     },
     {
@@ -105,7 +105,7 @@
       "location": "Medellín, CO",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p10"
     },
     {
@@ -117,7 +117,7 @@
       "location": "Cardiff, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p11"
     },
     {
@@ -129,7 +129,7 @@
       "location": "Rio, Brazil",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p12"
     },
     {
@@ -141,7 +141,7 @@
       "location": "London, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "https://placehold.co/400x400.png",
+      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p13"
     }
   ],
