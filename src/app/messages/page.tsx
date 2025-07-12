@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { users } from "@/lib/mock-data";
 import { Input } from "@/components/ui/input";
@@ -53,8 +53,12 @@ export default function MessagesPage() {
     }
 
   return (
-    <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 md:px-6 py-8">
-        <Card className="h-[70vh] w-full max-w-4xl flex shadow-lg">
+    <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
+        <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold font-headline text-primary">Messages</h1>
+            <p className="text-muted-foreground mt-2">Your private conversations with potential matches.</p>
+        </div>
+        <Card className="h-[70vh] w-full flex shadow-lg">
             {/* Left Panel: Conversations List */}
             <div className="w-1/3 border-r flex flex-col">
                 <div className="p-4 border-b">
