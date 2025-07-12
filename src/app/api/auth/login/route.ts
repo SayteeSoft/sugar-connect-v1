@@ -11,7 +11,7 @@ const DB_KEY = 'db.json';
 
 const readData = async () => {
     // Check if running on Netlify by looking for the NETLIFY environment variable
-    if (process.env.NETLIFY === 'true') {
+    if (process.env.NETLIFY) {
         const store = getStore('data');
         const data = await store.get(DB_KEY, { type: 'json' });
         // If no data in blob store, return a default structure

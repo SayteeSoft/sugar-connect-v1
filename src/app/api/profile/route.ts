@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { User, Profile } from '@/types';
+import type { User, Profile, Role } from '@/types';
 import { getStore } from '@netlify/blobs';
 import bcrypt from 'bcrypt';
 
@@ -122,8 +122,8 @@ export async function POST(req: Request) {
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
-    const roleValue = formData.get('role');
-    if (roleValue && typeof roleValue === 'string' && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
+    const roleValue = formData.get('role') as Role;
+    if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
         userToUpdate.role = roleValue;
     }
     
