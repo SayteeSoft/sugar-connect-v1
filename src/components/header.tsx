@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/icons";
 import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu, Sun, Moon } from "lucide-react";
-import { ThemeSwitcher } from "./theme-switcher";
+import { useTheme } from 'next-themes';
 import { Skeleton } from './ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
-import { useTheme } from 'next-themes';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
@@ -80,15 +79,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card">
       <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
-        <div className="flex flex-1 items-center gap-4">
+        <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
             <Logo />
           </Link>
-          <nav className="hidden items-center justify-center gap-2 md:flex flex-1">
-            {isClient && !loading && user && <NavLinks />}
-          </nav>
         </div>
         
+        <nav className="hidden items-center justify-center gap-2 md:flex flex-1">
+          {isClient && !loading && user && <NavLinks />}
+        </nav>
 
         <div className="flex items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : (
