@@ -12,7 +12,7 @@ const DB_KEY = 'db.json';
 
 const readData = async () => {
     // If in production on Netlify, use Blob store
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY_CONTEXT === 'production') {
         const store = getStore('data');
         const data = await store.get(DB_KEY, { type: 'json' });
         // If no data, return default structure
@@ -31,7 +31,7 @@ const readData = async () => {
 
 const writeData = async (data: any) => {
     // If in production on Netlify, use Blob store
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY_CONTEXT === 'production') {
         const store = getStore('data');
         await store.setJSON(DB_KEY, data);
         return;
