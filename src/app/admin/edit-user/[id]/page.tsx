@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { users as allUsers, profiles as allProfiles } from "@/lib/mock-data";
 import { notFound, useParams, useRouter } from "next/navigation";
-import type { ProfileFormValues } from "@/types";
+import type { ProfileFormValues, Role } from "@/types";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -35,6 +35,7 @@ export default function EditUserPage() {
   const params = useParams();
   const id = params.id as string;
 
+  // In a real app, this data would be fetched from an API.
   const userToEdit = allUsers.find(u => u.id === id);
   const userProfileToEdit = allProfiles.find(p => p.userId === id);
 
@@ -62,16 +63,22 @@ export default function EditUserPage() {
   }, [userToEdit, userProfileToEdit, reset]);
 
   const onSubmit = async (data: EditUserFormValues) => {
-    // This is a simplified submission. 
-    // The `updateUser` function in `useAuth` would need to be expanded
-    // to handle updates by an admin for another user.
-    // For this example, we'll just show a success toast.
-    console.log("Admin updating user:", id, data);
-    toast({
-      title: "User Profile Saved!",
-      description: `${data.name}'s profile has been successfully updated.`,
-    });
-    router.push("/admin");
+    // This is a simplified submission. In a real app, the `updateUser`
+    // function would likely have permission checks.
+    if (!updateUser) {
+        toast({ title: "Error", description: "Update function not available.", variant: "destructive" });
+        return;
+    }
+    try {
+        await updateUser(id, data as ProfileFormValues); // We cast here, it's not ideal but works for mock
+        toast({
+            title: "User Profile Saved!",
+            description: `${data.name}'s profile has been successfully updated.`,
+        });
+        router.push("/admin");
+    } catch (error) {
+        toast({ title: "Error", description: "Failed to update user.", variant: "destructive" });
+    }
   };
 
   if (loading || !userToEdit) {
@@ -94,6 +101,7 @@ export default function EditUserPage() {
     );
   }
 
+  // Ensure only admins can access this page
   if (currentUser?.role !== 'Admin') {
     notFound();
     return null;
@@ -140,7 +148,7 @@ export default function EditUserPage() {
                     name="role"
                     control={control}
                     render={({ field }) => (
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={userToEdit.role === 'Admin'}>
                             <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>

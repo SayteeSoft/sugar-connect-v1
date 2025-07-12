@@ -52,8 +52,10 @@ export default function AdminPage() {
     }
 
     const handleDelete = (userId: string) => {
-        setUsers(users.filter(u => u.id !== userId));
         // In a real app, you would also call an API to delete the user from the database.
+        // For this mock data setup, we just filter the state.
+        // This logic will need to be made more robust if using a real DB.
+        setUsers(currentUsers => currentUsers.filter(u => u.id !== userId));
     };
 
   return (
