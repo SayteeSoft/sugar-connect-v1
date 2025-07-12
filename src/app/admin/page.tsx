@@ -59,16 +59,13 @@ export default function AdminPage() {
     };
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8">
-      <h1 className="text-3xl font-bold font-headline mb-6">Admin Panel</h1>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle>User Management</CardTitle>
-          <CardDescription>
-            A list of all users in the system.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+      <div className="text-center mb-6">
+          <h1 className="text-4xl font-bold font-headline text-primary">User Management</h1>
+          <p className="text-muted-foreground mt-2">A list of all users in the system.</p>
+      </div>
+      <Card className="max-w-4xl mx-auto">
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
