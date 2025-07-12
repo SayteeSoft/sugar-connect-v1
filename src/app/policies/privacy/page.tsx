@@ -1,71 +1,20 @@
-"use client";
 
-import './globals.css';
-import { AuthProvider } from '@/components/auth-provider';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
-import { Toaster } from '@/components/ui/toaster';
-import { MessageToast } from '@/components/message-toast';
-import { ThemeProvider } from '@/components/theme-provider';
-import { CookieBanner } from '@/components/cookie-banner';
-import { LayoutProvider, useLayout } from '@/hooks/use-layout';
-import { CookiePolicy } from '@/components/cookie-policy';
-import { PrivacyPolicy } from '@/components/privacy-policy';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
-function AppContent({ children }: { children: React.ReactNode }) {
-  const { layoutState, setLayoutState } = useLayout();
-
+export default function PrivacyPolicyPage() {
   return (
-    <>
-      <div className="relative flex min-h-screen w-full flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer setLayoutState={setLayoutState} />
-      </div>
-      <Toaster />
-      <MessageToast />
-      <CookieBanner />
-      <CookiePolicy 
-        open={layoutState.showCookiePolicy} 
-        onOpenChange={(open) => setLayoutState(prevState => ({ ...prevState, showCookiePolicy: open }))}
-      />
-      <PrivacyPolicy
-        open={layoutState.showPrivacyPolicy}
-        onOpenChange={(open) => setLayoutState(prevState => ({ ...prevState, showPrivacyPolicy: open }))}
-      />
-    </>
-  );
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@400;700&display=swap" rel="stylesheet" />
-        <title>Sugar Connect</title>
-        <meta name="description" content="An exclusive platform for ambitious and attractive individuals" />
-      </head>
-      <body className="font-body antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LayoutProvider>
-            <AuthProvider>
-              <AppContent>{children}</AppContent>
-            </AuthProvider>
-          </LayoutProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+      <Card className="max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle>Privacy Policy</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            This page is for navigational purposes. Our full Privacy Policy is
+            available via the link in the footer of every page.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
