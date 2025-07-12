@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
       '**/.next/**',
       '**/node_modules/**',
       'src/ai/**', // Ignore Genkit files
+      '**/data.json', // Ignore the local database file
     ],
   },
 };
