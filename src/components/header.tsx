@@ -158,7 +158,7 @@ export function Header() {
                    <DropdownMenuSeparator />
                    <DropdownMenuItem onClick={toggleTheme}>
                     {theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
-                    <span>Toggle Theme</span>
+                    <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
                   </DropdownMenuItem>
                 </>
               )}
