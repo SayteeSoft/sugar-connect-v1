@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +15,17 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
   const { user } = useAuth();
+
+  const displayedProfiles = useMemo(() => {
+    if (user?.role === 'Sugar Daddy') {
+      return featuredProfiles.filter(p => p.role === 'Sugar Baby');
+    }
+    if (user?.role === 'Sugar Baby') {
+      return featuredProfiles.filter(p => p.role === 'Sugar Daddy');
+    }
+    // For guests or admins, show the default list
+    return featuredProfiles;
+  }, [user]);
   
   return (
     <div className="flex flex-col">
@@ -54,7 +66,7 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline text-primary">Featured Profiles</h2>
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {featuredProfiles.map((profile) => (
+            {displayedProfiles.map((profile) => (
               <Card key={profile.id} className="overflow-hidden group">
                 <Link href={`/profile/${profile.id}`}>
                   <div className="relative">
