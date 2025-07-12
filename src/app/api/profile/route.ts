@@ -70,7 +70,8 @@ export async function POST(req: Request) {
       profileToUpdate.interests = JSON.parse(fields.interests[0]);
     }
     
-    profileToUpdate.attributes = {
+    // Safely update attributes only if they exist in the form data
+    const newAttributes = {
         height: Number(fields.height?.[0]) || profileToUpdate.attributes.height,
         bodyType: fields.bodyType?.[0] as Profile['attributes']['bodyType'] || profileToUpdate.attributes.bodyType,
         ethnicity: fields.ethnicity?.[0] as Profile['attributes']['ethnicity'] || profileToUpdate.attributes.ethnicity,
@@ -81,6 +82,15 @@ export async function POST(req: Request) {
         piercings: fields.piercings?.[0] as Profile['attributes']['piercings'] || profileToUpdate.attributes.piercings,
         tattoos: fields.tattoos?.[0] as Profile['attributes']['tattoos'] || profileToUpdate.attributes.tattoos,
     };
+    
+    // Filter out undefined/null values to avoid overwriting existing data with nothing
+    Object.keys(newAttributes).forEach(key => {
+        const typedKey = key as keyof typeof newAttributes;
+        if (newAttributes[typedKey] !== undefined && newAttributes[typedKey] !== null && !Number.isNaN(newAttributes[typedKey])) {
+            (profileToUpdate.attributes as any)[typedKey] = newAttributes[typedKey];
+        }
+    });
+
 
     // Update avatar if a new one was uploaded
     const avatarFile = files.avatar?.[0];
@@ -98,10 +108,8 @@ export async function POST(req: Request) {
             return null;
         }).filter((path): path is string => path !== null);
 
-        // In a real app, you'd merge this with existing gallery, handle removals, etc.
-        // For now, we'll just overwrite.
         if (newImagePaths.length > 0) {
-             profileToUpdate.gallery = newImagePaths;
+             profileToUpdate.gallery = [...(profileToUpdate.gallery || []), ...newImagePaths];
         }
     }
     
