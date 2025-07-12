@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="bg-muted/30">
+    <div className="">
         <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
             <div className="text-center mb-6">
                 <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Welcome to Sugar Connect</h1>
