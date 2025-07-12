@@ -44,8 +44,17 @@ export default function MatchesPage() {
 
     const filteredUsers = useMemo(() => {
         if (!user) return [];
-        // Always show sugar babies
-        return users.filter(u => u.role === 'Sugar Baby');
+        if (user.role === 'Sugar Daddy') {
+            return users.filter(u => u.role === 'Sugar Baby');
+        }
+        if (user.role === 'Sugar Baby') {
+            return users.filter(u => u.role === 'Sugar Daddy');
+        }
+        // Admins see everyone except other admins.
+        if (user.role === 'Admin') {
+            return users.filter(u => u.role !== 'Admin');
+        }
+        return [];
     }, [user]);
 
     const favorites = useMemo(() => filteredUsers.slice(0, 2), [filteredUsers]);
@@ -74,13 +83,13 @@ export default function MatchesPage() {
     }
 
     return (
-        <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
             <div className="text-center mb-6">
                 <h1 className="text-4xl font-bold font-headline text-primary">Matches</h1>
                 <p className="text-muted-foreground mt-2">Browse your favorites, see who visited your profile, and who you have viewed.</p>
             </div>
 
-            <Card>
+            <Card className="max-w-4xl mx-auto">
                 <CardContent className="p-6">
                     <Tabs defaultValue="favorites" className="w-full">
                         <TabsList className="grid w-full grid-cols-3">

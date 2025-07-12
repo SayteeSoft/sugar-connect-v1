@@ -17,17 +17,14 @@ export default function MessagesPage() {
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
-        
-        if (currentUser.role === 'Admin') {
-            return users.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
-        }
         if (currentUser.role === 'Sugar Daddy') {
-            // Sugar Daddies only see Sugar Babies
             return users.filter(u => u.role === 'Sugar Baby');
         }
         if (currentUser.role === 'Sugar Baby') {
-            // Sugar Babies only see Sugar Daddies
             return users.filter(u => u.role === 'Sugar Daddy');
+        }
+        if (currentUser.role === 'Admin') {
+            return users.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
         }
         return [];
     }, [currentUser]);
