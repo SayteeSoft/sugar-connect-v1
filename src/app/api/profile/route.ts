@@ -74,6 +74,7 @@ export async function POST(req: Request) {
       }
     }
     
+    // Helper to handle form fields that could be empty strings
     const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
         if (field === undefined || field === null || typeof field !== 'string' || field.trim() === '') {
             return undefined;
@@ -81,25 +82,17 @@ export async function POST(req: Request) {
         return field;
     };
 
-    const newAttributes: Partial<Profile['attributes']> = {
-        height: toStringOrUndefined(formData.get('height')),
-        bodyType: formData.get('bodyType') as Profile['attributes']['bodyType'] || undefined,
-        ethnicity: formData.get('ethnicity') as Profile['attributes']['ethnicity'] || undefined,
-        hairColor: formData.get('hairColor') as Profile['attributes']['hairColor'] || undefined,
-        eyeColor: formData.get('eyeColor') as Profile['attributes']['eyeColor'] || undefined,
-        smoker: formData.get('smoker') as Profile['attributes']['smoker'] || undefined,
-        drinker: formData.get('drinker') as Profile['attributes']['drinker'] || undefined,
-        piercings: formData.get('piercings') as Profile['attributes']['piercings'] || undefined,
-        tattoos: formData.get('tattoos') as Profile['attributes']['tattoos'] || undefined,
-    };
-    
-    Object.keys(newAttributes).forEach(key => {
-        const typedKey = key as keyof typeof newAttributes;
-        const value = newAttributes[typedKey];
-        if (value !== undefined) {
-            (profileToUpdate.attributes as any)[typedKey] = value;
-        }
-    });
+    // Update all attributes from the form
+    profileToUpdate.attributes.height = toStringOrUndefined(formData.get('height'));
+    profileToUpdate.attributes.bodyType = formData.get('bodyType') as Profile['attributes']['bodyType'] || undefined;
+    profileToUpdate.attributes.ethnicity = formData.get('ethnicity') as Profile['attributes']['ethnicity'] || undefined;
+    profileToUpdate.attributes.hairColor = formData.get('hairColor') as Profile['attributes']['hairColor'] || undefined;
+    profileToUpdate.attributes.eyeColor = formData.get('eyeColor') as Profile['attributes']['eyeColor'] || undefined;
+    profileToUpdate.attributes.smoker = formData.get('smoker') as Profile['attributes']['smoker'] || undefined;
+    profileToUpdate.attributes.drinker = formData.get('drinker') as Profile['attributes']['drinker'] || undefined;
+    profileToUpdate.attributes.piercings = formData.get('piercings') as Profile['attributes']['piercings'] || undefined;
+    profileToUpdate.attributes.tattoos = formData.get('tattoos') as Profile['attributes']['tattoos'] || undefined;
+
 
     const writeFile = async (file: File) => {
         const buffer = Buffer.from(await file.arrayBuffer());
