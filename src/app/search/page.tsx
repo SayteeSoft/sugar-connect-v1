@@ -69,8 +69,11 @@ export default function SearchPage() {
 
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-8">
-      <h1 className="text-3xl font-bold font-headline mb-6">Discover Your Match</h1>
+    <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+      <div className="text-center mb-6">
+          <h1 className="text-4xl font-bold font-headline text-primary">Discover Your Match</h1>
+          <p className="text-muted-foreground mt-2">Use the filters to find the perfect person who meets your criteria.</p>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <div className="md:col-span-1 lg:col-span-1">
           <div className="sticky top-20">
