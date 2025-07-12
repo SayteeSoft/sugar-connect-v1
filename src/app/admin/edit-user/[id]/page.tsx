@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { notFound, useParams, useRouter } from "next/navigation";
 import type { ProfileFormValues, Role, User, Profile } from "@/types";
-import { getStore } from "@netlify/blobs";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -36,7 +35,6 @@ export default function EditUserPage() {
   const id = params.id as string;
 
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
-  const [userProfileToEdit, setUserProfileToEdit] = useState<Profile | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<EditUserFormValues>({
@@ -55,14 +53,17 @@ export default function EditUserPage() {
         if (!id) return;
         setDataLoading(true);
         try {
-            const store = getStore('data');
-            const data = await store.get('users-db', { type: 'json' });
-            const foundUser = data?.users?.find((u: User) => u.id === id);
-            const foundProfile = data?.profiles?.find((p: Profile) => p.userId === id);
+            const response = await fetch('/api/users');
+            if (!response.ok) {
+                throw new Error("Failed to fetch users");
+            }
+            const data = await response.json();
+
+            const foundUser = data.users.find((u: User) => u.id === id);
+            const foundProfile = data.profiles.find((p: Profile) => p.userId === id);
             
             if (foundUser && foundProfile) {
                 setUserToEdit(foundUser);
-                setUserProfileToEdit(foundProfile);
                 reset({
                     name: foundUser.name,
                     role: foundUser.role,
@@ -73,12 +74,13 @@ export default function EditUserPage() {
             }
         } catch (error) {
             console.error("Failed to fetch user to edit:", error);
+            toast({ title: "Error", description: "Could not load user data.", variant: "destructive"});
         } finally {
             setDataLoading(false);
         }
     };
     fetchUser();
-  }, [id, reset]);
+  }, [id, reset, toast]);
   
   const onSubmit = async (data: EditUserFormValues) => {
     if (!updateUser) {

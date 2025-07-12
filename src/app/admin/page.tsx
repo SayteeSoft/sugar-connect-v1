@@ -30,14 +30,12 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { mockUsers } from "@/lib/mock-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { User } from "@/types";
 import { useToast } from "@/hooks/use-toast";
-import { getStore } from '@netlify/blobs';
 
 
 export default function AdminPage() {
@@ -48,26 +46,27 @@ export default function AdminPage() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            // In a real app, you might have an API route to get all users.
-            // For now, we'll read directly from the blob store on the client,
-            // which is not ideal for security but works for this architecture.
             try {
-                 const store = getStore('data');
-                 const data = await store.get('users-db', { type: 'json' });
-                 if (data?.users) {
-                     setUsers(data.users);
+                 const response = await fetch('/api/users');
+                 if (!response.ok) {
+                    throw new Error("Failed to fetch users");
                  }
+                 const data = await response.json();
+                 setUsers(data.users);
             } catch (error) {
-                console.error("Failed to fetch users from blob store:", error);
-                // Fallback to mock data if blob store fails
-                setUsers(mockUsers as User[]);
+                console.error("Failed to fetch users:", error);
+                toast({
+                    title: "Error",
+                    description: "Could not fetch the user list.",
+                    variant: "destructive"
+                });
             }
         };
 
         if (user?.role === 'Admin') {
             fetchUsers();
         }
-    }, [user]);
+    }, [user, toast]);
 
     if (loading) {
         return <div className="container mx-auto p-8">Loading...</div>;
