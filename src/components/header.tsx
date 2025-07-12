@@ -18,7 +18,7 @@ import { Logo } from "@/components/icons";
 import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
 import { Skeleton } from './ui/skeleton';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
@@ -159,6 +159,9 @@ export function Header() {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="right">
+                    <SheetHeader>
+                        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                    </SheetHeader>
                     <div className="flex flex-col gap-4 py-6">
                         <NavLinks inSheet />
                     </div>
