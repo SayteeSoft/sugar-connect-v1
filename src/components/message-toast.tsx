@@ -85,8 +85,7 @@ export function MessageToast() {
     return (
         <div className="fixed top-20 right-5 z-50 animate-in slide-in-from-top-5 fade-in-50">
             <Card className="w-96 shadow-2xl">
-                <CardHeader className="flex flex-row items-center justify-between p-4">
-                    <CardTitle className="text-base">New Message</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-end p-2">
                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleClose}>
                         <X className="h-4 w-4" />
                     </Button>
