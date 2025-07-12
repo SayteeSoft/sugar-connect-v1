@@ -21,7 +21,7 @@ import { Skeleton } from './ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
-  <div className={inSheet ? 'flex flex-col space-y-4' : 'flex items-center gap-2'}>
+  <div className={inSheet ? 'flex flex-col space-y-4' : 'hidden md:flex items-center gap-2'}>
     <Button variant="ghost" className="text-base text-muted-foreground hover:bg-transparent hover:text-primary" asChild>
       <Link href="/profile">Profile</Link>
     </Button>
@@ -85,18 +85,15 @@ export function Header() {
           </Link>
         </div>
         
-        <nav className="hidden items-center justify-center gap-2 md:flex flex-1">
-          {isClient && !loading && user && <NavLinks />}
+        <nav className="flex-1 justify-center hidden md:flex">
+             {isClient && !loading && user && <NavLinks />}
         </nav>
 
-        <div className="flex items-center justify-end gap-2 md:gap-4">
+        <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
           {(!isClient || loading) ? renderLoadingSkeletons() : (
             <>
-                {user && (
-                    <div className="hidden md:flex items-center gap-2">
-                        {getCreditsButton()}
-                    </div>
-                )}
+                {user && getCreditsButton()}
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="rounded-full">
@@ -148,7 +145,7 @@ export function Header() {
                             <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={toggleTheme}>
+                         <DropdownMenuItem onClick={toggleTheme}>
                             {theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
                             <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
                         </DropdownMenuItem>
@@ -171,9 +168,6 @@ export function Header() {
                                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                             </SheetHeader>
                             <div className="flex flex-col gap-4 py-6">
-                                <div className="px-4">
-                                    {getCreditsButton()}
-                                </div>
                                 <NavLinks inSheet />
                             </div>
                         </SheetContent>
