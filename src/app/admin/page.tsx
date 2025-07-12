@@ -62,7 +62,7 @@ export default function AdminPage() {
     <div className="container mx-auto px-4 md:px-6 py-8">
       <h1 className="text-3xl font-bold font-headline mb-6">Admin Panel</h1>
       <Card>
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle>User Management</CardTitle>
           <CardDescription>
             A list of all users in the system.
