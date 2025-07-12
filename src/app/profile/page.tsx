@@ -285,7 +285,7 @@ export default function ProfilePage() {
                                         <SelectContent>
                                             <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
                                             <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                            {user.role === 'Admin' && (
+                                            {user.email === 'saytee.software@gmail.com' && (
                                                 <SelectItem value="Admin">Admin</SelectItem>
                                             )}
                                         </SelectContent>
@@ -664,4 +664,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

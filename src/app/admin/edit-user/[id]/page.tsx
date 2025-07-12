@@ -148,12 +148,14 @@ export default function EditUserPage() {
                     name="role"
                     control={control}
                     render={({ field }) => (
-                        <Select onValueChange={field.onChange} value={field.value} disabled={userToEdit.role === 'Admin'}>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={userToEdit.email === 'saytee.software@gmail.com'}>
                             <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
                                 <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                <SelectItem value="Admin">Admin</SelectItem>
+                                {currentUser.email === 'saytee.software@gmail.com' && (
+                                  <SelectItem value="Admin">Admin</SelectItem>
+                                )}
                             </SelectContent>
                         </Select>
                     )}
