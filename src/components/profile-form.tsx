@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail } from "lucide-react";
+import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail, Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { wantOptions, interestOptions } from "@/lib/mock-data";
 import { useRouter } from "next/navigation";
@@ -365,9 +365,12 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
                             </div>
-                             {formValues.sex && <div className="flex items-center gap-2">
-                               <span>Sex: {formValues.sex}</span>
-                            </div>}
+                             {formValues.sex && (
+                               <div className="flex items-center gap-2">
+                                {formValues.sex === 'Male' ? <Mars className="h-4 w-4" /> : <Venus className="h-4 w-4" />}
+                                <span>{formValues.sex}</span>
+                               </div>
+                             )}
                             <div className="flex items-center gap-2">
                                <Mail className="h-4 w-4" />
                                <span>{formValues.email}</span>

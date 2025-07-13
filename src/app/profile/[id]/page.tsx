@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star } from "lucide-react";
+import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star, Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -146,11 +146,12 @@ export default function OtherUserProfilePage() {
                            <MapPin className="h-4 w-4" />
                            <span>{user.location}</span>
                         </div>
-                        {user.sex &&
+                        {user.sex && (
                           <div className="flex items-center gap-2">
-                            <span>Sex: {user.sex}</span>
+                            {user.sex === 'Male' ? <Mars className="h-4 w-4" /> : <Venus className="h-4 w-4" />}
+                            <span>{user.sex}</span>
                           </div>
-                        }
+                        )}
                         <div className="flex items-center gap-2">
                            <Mail className="h-4 w-4" />
                            <span>{user.email}</span>
