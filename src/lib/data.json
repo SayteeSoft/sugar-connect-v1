@@ -8,7 +8,7 @@
       "age": 49,
       "location": "London, UK",
       "sex": "Male",
-      "role": "Sugar Daddy",
+      "role": "Admin",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
@@ -17,7 +17,7 @@
       "id": "4",
       "name": "Darianna",
       "email": "darianna.art@gmail.com",
-      "passwordHash": "$2a$10$2B3e.5qZ/9u.E5y.3c.7c.m9eF7i9a.6h2J/8k.0g1f4i5g6h7j8",
+      "passwordHash": "$2b$10$dJ/zP.E6f2rL/2I1i8X.o.1eP8y.f3h4g5i6j7k8l9m0n1o2p3q4",
       "age": 22,
       "location": "London, UK",
       "sex": "Female",
@@ -438,3 +438,4 @@
     }
   ]
 }
+    
