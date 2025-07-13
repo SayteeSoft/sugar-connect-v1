@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { mockUsers } from "@/lib/mock-data";
@@ -13,9 +13,23 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 
+type Message = {
+    id: number;
+    text: string;
+    sender: 'me' | 'them';
+    avatarUrl?: string;
+};
+
+const getMockMessages = (user: User): Message[] => {
+    return [
+        { id: 1, text: `Hi! I saw you're a travel partner. What's the most amazing place you've visited?`, sender: 'them', avatarUrl: user.avatarUrl },
+    ];
+};
+
 export default function MessagesPage() {
     const { user: currentUser, deductCredit } = useAuth();
     const { toast } = useToast();
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
@@ -32,20 +46,31 @@ export default function MessagesPage() {
     }, [currentUser]);
 
     const [activeConversation, setActiveConversation] = useState<User | null>(null);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [messageInput, setMessageInput] = useState('');
 
     useEffect(() => {
         if (conversations.length > 0 && !activeConversation) {
-            setActiveConversation(conversations[0] as User);
+            const firstConvo = conversations[0] as User;
+            setActiveConversation(firstConvo);
+            setMessages(getMockMessages(firstConvo));
         }
     }, [conversations, activeConversation]);
+
+    useEffect(() => {
+        // Scroll to the bottom of the chat container when messages change
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [messages]);
     
     const handleConversationClick = (user: User) => {
         setActiveConversation(user);
+        setMessages(getMockMessages(user));
     };
 
     const handleSendMessage = () => {
-        if (!messageInput.trim()) return;
+        if (!messageInput.trim() || !currentUser) return;
 
         if (currentUser?.role === 'Sugar Daddy') {
             if (typeof currentUser.credits === 'number' && currentUser.credits > 0) {
@@ -54,7 +79,7 @@ export default function MessagesPage() {
                     title: 'Message Sent!',
                     description: `1 credit has been deducted. You have ${currentUser.credits - 1} credits remaining.`,
                 });
-            } else {
+            } else if (currentUser.credits !== 'unlimited') {
                 toast({
                     variant: 'destructive',
                     title: 'No Credits Left',
@@ -64,8 +89,14 @@ export default function MessagesPage() {
             }
         }
         
-        // In a real app, you would send the message to the backend here.
-        console.log('Sending message:', messageInput);
+        const newMessage: Message = {
+            id: Date.now(),
+            text: messageInput.trim(),
+            sender: 'me',
+            avatarUrl: currentUser.avatarUrl,
+        };
+
+        setMessages(prevMessages => [...prevMessages, newMessage]);
         setMessageInput('');
     };
 
@@ -136,16 +167,29 @@ export default function MessagesPage() {
                                 <Button variant="ghost" size="icon"><MoreVertical className="h-5 w-5"/></Button>
                             </div>
                         </div>
-                        <div className="flex-1 p-6 space-y-4 overflow-y-auto">
-                            <div className="flex items-end gap-2">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src={activeConversation.avatarUrl} />
-                                    <AvatarFallback>{activeConversation.name.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <div className="rounded-lg bg-background p-3 max-w-md shadow-sm">
-                                    <p>Hi! I saw you're a travel partner. What's the most amazing place you've visited?</p>
+                        <div ref={chatContainerRef} className="flex-1 p-6 space-y-4 overflow-y-auto">
+                            {messages.map((msg) => (
+                                <div key={msg.id} className={cn("flex items-end gap-2", { 'justify-end': msg.sender === 'me' })}>
+                                    {msg.sender === 'them' && (
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage src={msg.avatarUrl} />
+                                            <AvatarFallback>{activeConversation.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                    )}
+                                    <div className={cn(
+                                        "rounded-lg p-3 max-w-md shadow-sm",
+                                        msg.sender === 'me' ? 'bg-primary text-primary-foreground' : 'bg-background'
+                                    )}>
+                                        <p>{msg.text}</p>
+                                    </div>
+                                    {msg.sender === 'me' && (
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage src={msg.avatarUrl} />
+                                            <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                    )}
                                 </div>
-                            </div>
+                            ))}
                         </div>
                         <div className="p-4 border-t flex items-center gap-2 bg-background">
                             <Button variant="ghost" size="icon"><Paperclip className="h-5 w-5" /></Button>
