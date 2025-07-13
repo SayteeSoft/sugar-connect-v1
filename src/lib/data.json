@@ -1,3 +1,4 @@
+
 {
   "users": [
     {
@@ -7,6 +8,7 @@
       "passwordHash": "$2b$10$Oc6SohJ2savfazRA3J0d8.x8b3NZk9WrAkiwpy7oUXoQyLjPTUYNO",
       "age": 49,
       "location": "London, UK",
+      "sex": "Male",
       "role": "Admin",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
@@ -19,6 +21,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 22,
       "location": "London, UK",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
@@ -31,6 +34,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 24,
       "location": "Birmingham, UK",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
@@ -43,6 +47,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 45,
       "location": "Edinburgh, UK",
+      "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
@@ -55,6 +60,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 26,
       "location": "Cartagena, CO",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
@@ -67,6 +73,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 38,
       "location": "Medellín, CO",
+      "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
@@ -79,6 +86,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 21,
       "location": "Frankfurt, DE",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
@@ -91,6 +99,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 49,
       "location": "London, UK",
+      "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
@@ -103,6 +112,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 23,
       "location": "Medellín, CO",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
@@ -115,6 +125,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 45,
       "location": "Cardiff, UK",
+      "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
@@ -127,6 +138,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 25,
       "location": "Rio, Brazil",
+      "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
       "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
@@ -139,6 +151,7 @@
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 55,
       "location": "London, UK",
+      "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
@@ -211,7 +224,10 @@
         "Cooking",
         "Fashion"
       ],
-      "gallery": [],
+      "gallery": [
+        "/uploads/1752368089077_Kateryna_Gemini_Generated_Image (small)-002.jpg",
+        "/uploads/1752368089080_Kateryna_Gemini_Generated_Image (small)-003.jpg"
+      ],
       "attributes": {
         "height": "5'7\"",
         "bodyType": "Athletic",
@@ -265,7 +281,11 @@
         "Beach",
         "Cooking"
       ],
-      "gallery": [],
+      "gallery": [
+        "/uploads/1752368293737_Sofia_Gemini_Generated_Image (small)-002.jpg",
+        "/uploads/1752368293745_Sofia_Gemini_Generated_Image (small)-004.jpg",
+        "/uploads/1752368293753_Sofia_Gemini_Generated_Image (small)-003.jpg"
+      ],
       "attributes": {}
     },
     {

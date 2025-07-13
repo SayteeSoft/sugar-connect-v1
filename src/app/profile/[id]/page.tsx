@@ -126,6 +126,11 @@ export default function OtherUserProfilePage() {
                       <CheckCircle className="h-4 w-4 mr-1"/>
                       Verified
                   </Badge>
+                  {user.role !== 'Admin' && (
+                     <Badge variant={user.role === 'Sugar Daddy' ? 'default' : 'secondary'} className="absolute bottom-3 left-3">
+                        {user.role}
+                    </Badge>
+                  )}
                 </div>
                 <div className="space-y-4 text-left">
                     <div className="space-y-1">
@@ -133,7 +138,6 @@ export default function OtherUserProfilePage() {
                             {user.name}
                             {user.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                         </h1>
-                        <Badge variant="outline" className="border-primary text-primary">{user.role}</Badge>
                     </div>
 
                     <div className="text-sm text-muted-foreground space-y-1 text-left">
@@ -141,6 +145,11 @@ export default function OtherUserProfilePage() {
                            <MapPin className="h-4 w-4" />
                            <span>{user.location}</span>
                         </div>
+                        {user.sex &&
+                          <div className="flex items-center gap-2">
+                            <span>Sex: {user.sex}</span>
+                          </div>
+                        }
                         <div className="flex items-center gap-2">
                            <Mail className="h-4 w-4" />
                            <span>{user.email}</span>

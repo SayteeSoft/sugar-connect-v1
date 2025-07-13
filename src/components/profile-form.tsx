@@ -48,11 +48,12 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [galleryPreviews, setGalleryPreviews] = useState<(string | File)[]>([]);
   
-  const { control, handleSubmit, reset, getValues, setValue, formState: { errors } } = useForm<ProfileFormValues>({
+  const { control, handleSubmit, reset, getValues, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
       email: "",
+      sex: "Female",
       role: "Sugar Baby",
       location: "",
       about: "",
@@ -68,10 +69,14 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     control, name: "gallery"
   });
 
+  const watchSex = watch("sex");
+  const watchRole = watch("role");
+
   useEffect(() => {
     const initialValues = {
       name: user.name,
       email: user.email,
+      sex: user.sex,
       role: user.role,
       location: user.location,
       about: profile.about,
@@ -91,9 +96,21 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     };
     reset(initialValues);
     setAvatarPreview(user.avatarUrl);
-    setGalleryPreviews(profile.gallery); // Initialize previews with existing gallery
-    replaceGallery(profile.gallery.map(url => ({ file: url }))); // Initialize form array
+    if (profile.gallery) {
+      setGalleryPreviews(profile.gallery);
+      replaceGallery(profile.gallery.map(url => ({ file: url })));
+    }
   }, [user, profile, reset, replaceGallery]);
+  
+  useEffect(() => {
+    if (currentUser?.role !== 'Admin') {
+      if (watchSex === 'Male') {
+        setValue('role', 'Sugar Daddy');
+      } else if (watchSex === 'Female') {
+        setValue('role', 'Sugar Baby');
+      }
+    }
+  }, [watchSex, setValue, currentUser?.role]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -111,15 +128,21 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     const files = event.target.files;
     if (files && files.length > 0) {
         const newFiles = Array.from(files);
-
-        // Get the current list of files/URLs from the form state
         const currentFieldValues = getValues("gallery") || [];
         const newFieldValues = [...currentFieldValues, ...newFiles.map(file => ({ file }))];
         replaceGallery(newFieldValues);
 
-        // Update previews by creating blob URLs for new files
+        const currentPreviews = getValues("gallery").map(item => {
+            const file = (item as any).file;
+            return typeof file === 'string' ? file : URL.createObjectURL(file);
+        });
+        
         const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-        setGalleryPreviews(prev => [...prev, ...newPreviews]);
+        setGalleryPreviews(prev => [...prev.filter(p => typeof p === 'string'), ...newPreviews]);
+        
+        const updatedFiles = [...currentFieldValues.map(item => (item as any).file), ...newFiles];
+        const finalFieldValues = updatedFiles.map(file => ({file}));
+        replaceGallery(finalFieldValues);
     }
   };
 
@@ -144,7 +167,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     try {
         const updatedUser = await updateUser(user.id, {
             ...data,
-            gallery: galleryFields.map(field => (field as any).file) // Pass the file/url objects
+            gallery: galleryFields.map(field => (field as any).file)
         });
         
         toast({
@@ -152,7 +175,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
           description: `${data.name}'s profile has been successfully updated.`,
         });
 
-        // After successful upload, update the form state to reflect the new reality
         const updatedProfileResponse = await fetch('/api/users');
         const updatedData = await updatedProfileResponse.json();
         const freshProfile = updatedData.profiles.find((p: Profile) => p.userId === user.id);
@@ -182,6 +204,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       const initialValues = {
           name: user.name,
           email: user.email,
+          sex: user.sex,
           role: user.role,
           location: user.location,
           about: profile.about,
@@ -201,8 +224,10 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       };
       reset(initialValues);
       setAvatarPreview(user.avatarUrl);
-      setGalleryPreviews(profile.gallery);
-      replaceGallery(profile.gallery.map(url => ({ file: url })));
+      if (profile.gallery) {
+        setGalleryPreviews(profile.gallery);
+        replaceGallery(profile.gallery.map(url => ({ file: url })));
+      }
       if (isAdminEditing) {
         router.back();
       } else {
@@ -252,6 +277,11 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                         Verified
                     </Badge>
                   )}
+                  {watchRole !== 'Admin' && (
+                     <Badge variant={watchRole === 'Sugar Daddy' ? 'default' : 'secondary'} className="absolute bottom-3 left-3">
+                        {watchRole}
+                    </Badge>
+                  )}
                 </div>
                 {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message as string}</p>}
                 {isEditing ? (
@@ -266,25 +296,43 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                             {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor="role">Role</Label>
-                            <Controller
-                                name="role"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value} disabled={currentUser?.email !== 'saytee.software@gmail.com'}>
-                                        <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
-                                            <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                            {currentUser?.email === 'saytee.software@gmail.com' && (
-                                                <SelectItem value="Admin">Admin</SelectItem>
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.role && <p className="text-destructive text-sm mt-1">{errors.role.message}</p>}
+                          <Label htmlFor="sex">Sex</Label>
+                          <Controller
+                              name="sex"
+                              control={control}
+                              render={({ field }) => (
+                                  <Select onValueChange={field.onChange} value={field.value} disabled={!isEditing}>
+                                      <SelectTrigger id="sex"><SelectValue placeholder="Select sex..." /></SelectTrigger>
+                                      <SelectContent>
+                                          <SelectItem value="Male">Male</SelectItem>
+                                          <SelectItem value="Female">Female</SelectItem>
+                                      </SelectContent>
+                                  </Select>
+                              )}
+                          />
+                          {errors.sex && <p className="text-destructive text-sm mt-1">{errors.sex.message}</p>}
                         </div>
+
+                        {currentUser?.role === 'Admin' && (
+                          <div>
+                              <Label htmlFor="role">Role</Label>
+                              <Controller
+                                  name="role"
+                                  control={control}
+                                  render={({ field }) => (
+                                      <Select onValueChange={field.onChange} value={field.value} disabled={currentUser?.role !== 'Admin'}>
+                                          <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
+                                          <SelectContent>
+                                              <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
+                                              <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
+                                              <SelectItem value="Admin">Admin</SelectItem>
+                                          </SelectContent>
+                                      </Select>
+                                  )}
+                              />
+                              {errors.role && <p className="text-destructive text-sm mt-1">{errors.role.message}</p>}
+                          </div>
+                        )}
                         <div>
                             <Label htmlFor="location">Location</Label>
                             <Controller
@@ -311,12 +359,14 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                 {formValues.name}
                                 {formValues.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                             </h1>
-                            <Badge variant="outline" className="border-primary text-primary">{formValues.role}</Badge>
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1 text-left">
                             <div className="flex items-center gap-2">
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
+                            </div>
+                             <div className="flex items-center gap-2">
+                               <span>Sex: {formValues.sex}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                <Mail className="h-4 w-4" />

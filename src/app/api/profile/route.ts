@@ -85,6 +85,11 @@ export async function POST(req: Request) {
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
+    const sexValue = formData.get('sex') as User['sex'];
+    if (sexValue && (sexValue === 'Male' || sexValue === 'Female')) {
+        userToUpdate.sex = sexValue;
+    }
+
     const roleValue = formData.get('role') as Role;
     if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
         userToUpdate.role = roleValue;
