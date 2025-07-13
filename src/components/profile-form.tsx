@@ -277,11 +277,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                         Verified
                     </Badge>
                   )}
-                  {watchRole !== 'Admin' && (
-                     <Badge variant={watchRole === 'Sugar Daddy' ? 'default' : 'secondary'} className="absolute bottom-3 left-3">
-                        {watchRole}
-                    </Badge>
-                  )}
                 </div>
                 {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message as string}</p>}
                 {isEditing ? (
@@ -335,6 +330,15 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                           {errors.sex && <p className="text-destructive text-sm mt-1">{errors.sex.message}</p>}
                         </div>
 
+                         <div>
+                          <Label htmlFor="role">Role</Label>
+                           <Controller
+                            name="role"
+                            control={control}
+                            render={({ field }) => <Input id="role" {...field} readOnly />}
+                           />
+                        </div>
+
                         <div>
                             <Label htmlFor="location">Location</Label>
                             <Controller
@@ -361,6 +365,11 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                 {formValues.name}
                                 {formValues.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                             </h1>
+                             {watchRole !== 'Admin' && (
+                                <Badge variant={watchRole === 'Sugar Daddy' ? 'default' : 'secondary'}>
+                                    {watchRole}
+                                </Badge>
+                             )}
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1 text-left">
                             <div className="flex items-center gap-2">
