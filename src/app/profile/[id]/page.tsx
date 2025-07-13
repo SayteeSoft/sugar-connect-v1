@@ -420,7 +420,7 @@ export default function OtherUserProfilePage() {
                        </Badge>
                     </Button>
                 </div>
-                {userVote && <p className="text-xs text-muted-foreground text-center mt-4">Thank you. Your vote has been recorded.</p>}
+                {userVote && <p className="text-xs text-muted-foreground text-left mt-4">Thank you. Your vote has been recorded.</p>}
               </CardContent>
             </Card>
             )}
