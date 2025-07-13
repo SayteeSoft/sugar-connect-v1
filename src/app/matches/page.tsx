@@ -92,7 +92,7 @@ export default function MatchesPage() {
                 <p className="text-muted-foreground mt-2">Browse your favorites, see who visited your profile, and who you have viewed.</p>
             </div>
 
-            <div className="max-w-lg mx-auto">
+            <div className="max-w-4xl mx-auto">
                 <Tabs defaultValue="favorites" onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="favorites">
