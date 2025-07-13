@@ -63,19 +63,14 @@ export default function AdminPage() {
             }
         };
 
-        if (user?.role === 'Admin') {
-            fetchUsers();
+        if (!loading) {
+            if (user?.role === 'Admin') {
+                fetchUsers();
+            } else {
+                router.push('/');
+            }
         }
-    }, [user, toast]);
-
-    if (loading) {
-        return <div className="container mx-auto p-8">Loading...</div>;
-    }
-
-    if (user?.role !== 'Admin') {
-        router.push('/');
-        return null;
-    }
+    }, [user, loading, router, toast]);
 
     const handleDelete = async (userId: string) => {
         if (!deleteUser) return;
@@ -95,6 +90,10 @@ export default function AdminPage() {
             });
         }
     };
+
+    if (loading || user?.role !== 'Admin') {
+        return <div className="container mx-auto p-8">Loading...</div>;
+    }
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
