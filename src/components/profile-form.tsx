@@ -323,9 +323,9 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                       <Select onValueChange={field.onChange} value={field.value}>
                                           <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                                           <SelectContent>
+                                              <SelectItem value="Admin">Admin</SelectItem>
                                               <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
                                               <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                              <SelectItem value="Admin">Admin</SelectItem>
                                           </SelectContent>
                                       </Select>
                                   )}
