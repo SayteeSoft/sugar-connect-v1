@@ -189,10 +189,11 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
         }
     } catch(error) {
         console.error("Failed to save profile", error);
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred while saving.";
         toast({
             variant: "destructive",
-            title: "Error",
-            description: "An unexpected error occurred while saving.",
+            title: "Error Saving Profile",
+            description: errorMessage,
         });
     }
   };

@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { User, Profile, Role, ProfileFormValues } from '@/types';
+import type { User, Profile, ProfileFormValues } from '@/types';
 import bcrypt from 'bcrypt';
 import { readData, writeData } from '@/lib/data-access';
 import { getStore } from '@netlify/blobs';
