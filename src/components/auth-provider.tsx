@@ -84,10 +84,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const formData = new FormData();
-    formData.append('isNewUser', 'true');
-    formData.append('user', JSON.stringify(newUser));
-    formData.append('profile', JSON.stringify(newProfile));
-    formData.append('password', pass);
+    const jsonData = {
+        isNewUser: true,
+        user: newUser,
+        profile: newProfile,
+        password: pass
+    };
+
+    formData.append('jsonData', JSON.stringify(jsonData));
     
     try {
         const response = await fetch('/api/profile', {
@@ -117,51 +121,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = useCallback(async (userId: string, data: Partial<ProfileFormValues> & { credits?: number | 'unlimited' }): Promise<SafeUser> => {
     const formData = new FormData();
-    formData.append('userId', userId);
+    const { avatar, gallery, ...restOfData } = data;
 
-    // Append all non-file fields
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key as keyof typeof data];
+    // Separate existing gallery URLs from new file uploads
+    const existingGalleryUrls: string[] = [];
+    const newGalleryFiles: File[] = [];
 
-            // Skip file-related fields; they are handled separately
-            if (key === 'avatar' || key === 'gallery') continue;
-
-            if (key === 'wants' || key === 'interests') {
-                if (Array.isArray(value)) {
-                    // Convert array of objects to array of strings
-                    const stringValues = value.map((item: any) => item.value);
-                    formData.append(key, JSON.stringify(stringValues));
-                }
-            } else if (value !== undefined && value !== null) {
-                formData.append(key, String(value));
-            }
-        }
-    }
-    
-    // Handle avatar file
-    const avatarFile = (data as ProfileFormValues).avatar;
-    if (avatarFile instanceof File) {
-      formData.append('avatar', avatarFile);
-    }
-    
-    // Handle gallery files
-    const galleryItems = (data as ProfileFormValues).gallery;
-    if (galleryItems) {
-        const existingImageUrls: string[] = [];
-        galleryItems.forEach(item => {
+    if (gallery) {
+        gallery.forEach(item => {
             const fileOrUrl = (item as any).file ?? item;
-            if (fileOrUrl instanceof File) {
-                formData.append('gallery', fileOrUrl);
-            } else if (typeof fileOrUrl === 'string') {
-                existingImageUrls.push(fileOrUrl);
+            if (typeof fileOrUrl === 'string') {
+                existingGalleryUrls.push(fileOrUrl);
+            } else if (fileOrUrl instanceof File) {
+                newGalleryFiles.push(fileOrUrl);
             }
         });
-        // Send existing URLs as a JSON string
-        formData.append('existingGallery', JSON.stringify(existingImageUrls));
     }
 
+    // Prepare JSON data with all non-file fields
+    const jsonData = {
+        userId,
+        ...restOfData,
+        wants: Array.isArray(restOfData.wants) ? restOfData.wants.map(item => item.value) : [],
+        interests: Array.isArray(restOfData.interests) ? restOfData.interests.map(item => item.value) : [],
+        existingGallery: existingGalleryUrls,
+    };
 
+    formData.append('jsonData', JSON.stringify(jsonData));
+
+    // Append new avatar file if it exists
+    if (avatar instanceof File) {
+      formData.append('avatar', avatar);
+    }
+    
+    // Append new gallery files
+    newGalleryFiles.forEach(file => {
+        formData.append('gallery', file);
+    });
+    
     const response = await fetch('/api/profile', {
       method: 'POST',
       body: formData,
@@ -172,7 +169,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(errorData.message || "Failed to update profile.");
     }
     
-    const { user: updatedUser, profile: updatedProfile } = await response.json();
+    const { user: updatedUser } = await response.json();
 
     if (user?.id === userId) {
         setUser(updatedUser);
