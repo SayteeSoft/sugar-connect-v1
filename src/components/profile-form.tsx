@@ -291,6 +291,32 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                             {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
                         </div>
 
+                         <div>
+                            <Label htmlFor="role">Role</Label>
+                            {currentUser?.role === 'Admin' ? (
+                                <Controller
+                                    name="role"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Admin">Admin</SelectItem>
+                                                <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
+                                                <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            ) : (
+                                <Controller
+                                    name="role"
+                                    control={control}
+                                    render={({ field }) => <Input id="role" {...field} readOnly />}
+                                />
+                            )}
+                        </div>
+
                         <div>
                           <Label htmlFor="sex">Sex</Label>
                           <Controller
@@ -307,15 +333,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                               )}
                           />
                           {errors.sex && <p className="text-destructive text-sm mt-1">{errors.sex.message}</p>}
-                        </div>
-
-                         <div>
-                          <Label htmlFor="role">Role</Label>
-                           <Controller
-                            name="role"
-                            control={control}
-                            render={({ field }) => <Input id="role" {...field} readOnly />}
-                           />
                         </div>
 
                         <div>
@@ -344,11 +361,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                 {formValues.name}
                                 {formValues.role === 'Admin' && <Star className="h-5 w-5 text-yellow-400 fill-current" />}
                             </h1>
-                             {watchRole !== 'Admin' && (
-                                <Badge variant={watchRole === 'Sugar Daddy' ? 'default' : 'secondary'}>
-                                    {watchRole}
-                                </Badge>
-                             )}
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1 text-left">
                             <div className="flex items-center gap-2">
