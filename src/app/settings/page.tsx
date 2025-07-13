@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,6 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 
 export default function SettingsPage() {
     const { user, deleteUser } = useAuth();
@@ -48,85 +50,82 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="container mx-auto max-w-4xl px-4 md:px-6 py-12 md:py-20">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-4xl font-bold font-headline text-primary">Settings</CardTitle>
-                    <CardDescription className="text-muted-foreground mt-2">Manage your account settings, preferences, and more.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-10">
-                        <section>
-                            <h2 className="text-2xl font-bold font-headline text-primary mb-4">Account</h2>
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Change Password</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="current-password">Current Password</Label>
-                                        <Input id="current-password" type="password" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="new-password">New Password</Label>
-                                        <Input id="new-password" type="password" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="confirm-password">Confirm New Password</Label>
-                                        <Input id="confirm-password" type="password" />
-                                    </div>
-                                    <Button>Update Password</Button>
-                                </CardContent>
-                            </Card>
-                        </section>
+        <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+            <div className="text-center mb-6">
+                <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">
+                    Settings
+                </h1>
+                <p className="text-muted-foreground text-lg mt-2">
+                    Manage your account settings, preferences, and more.
+                </p>
+            </div>
+            <div className="max-w-4xl mx-auto space-y-8">
+                <Card className="shadow-lg">
+                    <CardHeader>
+                        <CardTitle>Change Password</CardTitle>
+                        <CardDescription>Update the password for your account.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="current-password">Current Password</Label>
+                            <Input id="current-password" type="password" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="new-password">New Password</Label>
+                            <Input id="new-password" type="password" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="confirm-password">Confirm New Password</Label>
+                            <Input id="confirm-password" type="password" />
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <Button>Update Password</Button>
+                    </CardFooter>
 
-                        <section>
-                            <h2 className="text-2xl font-bold font-headline text-primary mb-4">Preferences</h2>
-                             <Card>
-                                <CardHeader>
-                                    <CardTitle>Language Settings</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-muted-foreground">Language selection coming soon.</p>
-                                    <Button className="mt-4" disabled>Save Language</Button>
-                                </CardContent>
-                            </Card>
-                        </section>
+                    <Separator className="my-6" />
 
-                        <section>
-                            <h2 className="text-2xl font-bold font-headline text-destructive mb-4">Danger Zone</h2>
-                            <Card className="border-destructive">
-                                <CardHeader>
-                                    <CardTitle>Delete Account</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm mb-4 text-muted-foreground">
-                                        Permanently delete your account and all of your content. This action is not reversible.
-                                    </p>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">Delete My Account</Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. This will permanently delete your account
-                                                and remove all your data from our servers.
-                                            </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={handleDeleteAccount}>Continue</AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </CardContent>
-                            </Card>
-                        </section>
-                    </div>
-                </CardContent>
-            </Card>
+                    <CardHeader>
+                        <CardTitle>Language Settings</CardTitle>
+                         <CardDescription>Language selection coming soon.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">This feature is not yet available.</p>
+                    </CardContent>
+                    <CardFooter>
+                        <Button disabled>Save Language</Button>
+                    </CardFooter>
+
+                    <Separator className="my-6" />
+
+                    <CardHeader className="border-t-destructive pt-6">
+                        <CardTitle className="text-destructive">Danger Zone</CardTitle>
+                        <CardDescription>
+                            Permanently delete your account and all of your content. This action is not reversible.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive">Delete My Account</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your account
+                                    and remove all your data from our servers.
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDeleteAccount}>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }
