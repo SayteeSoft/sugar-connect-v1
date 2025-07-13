@@ -23,17 +23,21 @@ const paymentMethods = [
     { id: "debit-card", name: "Debit Card", icon: <CreditCard />  },
 ]
 
+type CreditPackage = typeof creditPackages[0];
+
 export default function PurchaseCreditsPage() {
-    const [selectedPackage, setSelectedPackage] = React.useState(creditPackages[0]);
-    const [selectedMethod, setSelectedMethod] = React.useState(paymentMethods[0].id);
+    const [selectedPackage, setSelectedPackage] = React.useState<CreditPackage | null>(null);
+    const [selectedMethod, setSelectedMethod] = React.useState<string | null>(null);
     const [step, setStep] = React.useState<'select' | 'pay'>('select');
     const [message, setMessage] = React.useState('');
 
     const handleContinue = () => {
-        setStep('pay');
+        if (selectedPackage && selectedMethod) {
+            setStep('pay');
+        }
     };
 
-    if (step === 'pay') {
+    if (step === 'pay' && selectedPackage) {
         return (
             <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
                  <div className="text-center mb-6">
@@ -87,7 +91,7 @@ export default function PurchaseCreditsPage() {
                     </CardHeader>
                     <CardContent>
                          <RadioGroup 
-                            value={selectedPackage.id}
+                            value={selectedPackage?.id}
                             onValueChange={(id) => {
                                 const pkg = creditPackages.find(p => p.id === id);
                                 if (pkg) setSelectedPackage(pkg);
@@ -95,16 +99,18 @@ export default function PurchaseCreditsPage() {
                          >
                             <div className="space-y-4">
                             {creditPackages.map((pkg) => (
-                                <React.Fragment key={pkg.id}>
-                                    <RadioGroupItem value={pkg.id} id={pkg.id} className="peer sr-only" />
-                                    <Label htmlFor={pkg.id} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                                <Label key={pkg.id} htmlFor={pkg.id} className={cn("flex items-center gap-4 rounded-md border-2 p-4 cursor-pointer transition-colors",
+                                    selectedPackage?.id === pkg.id ? "border-primary" : "border-muted hover:bg-accent"
+                                )}>
+                                    <RadioGroupItem value={pkg.id} id={pkg.id} />
+                                    <div className="flex-1 flex justify-between items-center">
                                         <div>
                                             <p className="font-bold">{pkg.credits} Credits</p>
                                             {pkg.bonus && <p className="text-sm text-primary">{pkg.bonus}</p>}
                                         </div>
                                         <p className="font-semibold">${pkg.price}</p>
-                                    </Label>
-                                </React.Fragment>
+                                    </div>
+                                </Label>
                             ))}
                             </div>
                          </RadioGroup>
@@ -117,24 +123,33 @@ export default function PurchaseCreditsPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                          <RadioGroup 
-                            defaultValue={paymentMethods[0].id}
+                            value={selectedMethod ?? undefined}
                             onValueChange={setSelectedMethod}
                          >
                             <div className="space-y-4">
                             {paymentMethods.map((method) => (
-                                <React.Fragment key={method.id}>
-                                    <RadioGroupItem value={method.id} id={method.id} className="peer sr-only" />
-                                    <Label htmlFor={method.id} className="flex justify-between items-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
+                                 <Label key={method.id} htmlFor={method.id} className={cn("flex items-center gap-4 rounded-md border-2 p-4 cursor-pointer transition-colors",
+                                    selectedMethod === method.id ? "border-primary" : "border-muted hover:bg-accent"
+                                )}>
+                                    <RadioGroupItem value={method.id} id={method.id} />
+                                    <div className="flex-1 flex justify-between items-center">
                                         <div className="flex items-center gap-3">
                                             {method.icon}
                                             <p className="font-semibold">{method.name}</p>
                                         </div>
-                                    </Label>
-                                </React.Fragment>
+                                    </div>
+                                </Label>
                             ))}
                             </div>
                          </RadioGroup>
-                         <Button onClick={handleContinue} className="w-full mt-6" size="lg">Continue</Button>
+                         <Button 
+                            onClick={handleContinue} 
+                            className="w-full mt-6" 
+                            size="lg"
+                            disabled={!selectedPackage || !selectedMethod}
+                        >
+                            Continue
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
