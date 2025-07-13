@@ -19,14 +19,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  watchOptions: {
-    ignored: [
-      '**/.git/**',
-      '**/.next/**',
-      '**/node_modules/**',
-      'src/ai/**', // Ignore Genkit files
-    ],
-  },
 };
 
 export default nextConfig;
