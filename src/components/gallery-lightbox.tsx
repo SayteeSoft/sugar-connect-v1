@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -67,6 +67,7 @@ export function GalleryLightbox({ images, renderThumbnails }: GalleryLightboxPro
                     className="bg-black/80 border-none p-0 w-screen h-screen max-w-none flex items-center justify-center"
                     onInteractOutside={closeLightbox}
                 >
+                    <DialogTitle className="sr-only">Image Gallery</DialogTitle>
                     <div className="relative w-full h-full flex items-center justify-center">
                         <Button
                             variant="ghost"
