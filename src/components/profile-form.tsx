@@ -103,15 +103,15 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   }, [user, profile, reset, replaceGallery]);
   
   useEffect(() => {
-    // Only auto-update role if an admin is not editing the profile
-    if (!isAdminEditing || currentUser?.role !== 'Admin') {
-      if (watchSex === 'Male') {
-        setValue('role', 'Sugar Daddy');
-      } else if (watchSex === 'Female') {
-        setValue('role', 'Sugar Baby');
-      }
+    // Automatically update role based on sex, unless an Admin is editing.
+    if (!isAdminEditing) {
+        if (watchSex === 'Male') {
+            setValue('role', 'Sugar Daddy');
+        } else if (watchSex === 'Female') {
+            setValue('role', 'Sugar Baby');
+        }
     }
-  }, [watchSex, setValue, isAdminEditing, currentUser?.role]);
+  }, [watchSex, setValue, isAdminEditing]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -295,27 +295,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                             />
                             {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
                         </div>
-
-                        {isAdminEditing && currentUser?.role === 'Admin' && (
-                            <div>
-                                <Label htmlFor="role">Role</Label>
-                                <Controller
-                                    name="role"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Admin">Admin</SelectItem>
-                                                <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
-                                                <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    )}
-                                />
-                                {errors.role && <p className="text-destructive text-sm mt-1">{errors.role.message}</p>}
-                            </div>
-                        )}
                         
                         <div>
                           <Label htmlFor="sex">Sex</Label>
