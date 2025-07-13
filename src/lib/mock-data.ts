@@ -66,7 +66,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
     {
       "id": "4",
       "name": "Darianna",
-      "email": "darianna.art@example.com",
+      "email": "darianna.art@gmail.com",
       "age": 22,
       "location": "London, UK",
       "role": "Sugar Baby",
@@ -77,7 +77,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
     {
       "id": "5",
       "name": "Kateryna",
-      "email": "kate.marketing@example.com",
+      "email": "kate.marketing@gmail.com",
       "age": 24,
       "location": "Birmingham, UK",
       "role": "Sugar Baby",
@@ -88,7 +88,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
     {
       "id": "3",
       "name": "Mark",
-      "email": "mark.investor@example.com",
+      "email": "mark.investor@gmail.com",
       "age": 45,
       "location": "Edinburgh, UK",
       "role": "Sugar Daddy",

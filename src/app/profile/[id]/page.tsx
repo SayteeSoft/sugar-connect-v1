@@ -127,7 +127,7 @@ export default function OtherUserProfilePage() {
                       Verified
                   </Badge>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-4 text-left">
                     <div className="space-y-1">
                         <h1 className="text-2xl font-bold flex items-center gap-2">
                             {user.name}
@@ -201,7 +201,24 @@ export default function OtherUserProfilePage() {
                   <CardTitle>Gallery</CardTitle>
               </CardHeader>
               <CardContent>
-                 <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
+                {userProfile.gallery && userProfile.gallery.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {userProfile.gallery.map((src, index) => (
+                      <div key={index} className="relative group">
+                        <Image 
+                          src={src} 
+                          alt={`Gallery image ${index + 1}`} 
+                          width={200} 
+                          height={200} 
+                          className="rounded-md w-full aspect-square object-cover"
+                          data-ai-hint="gallery photo"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
+                )}
               </CardContent>
             </Card>
 

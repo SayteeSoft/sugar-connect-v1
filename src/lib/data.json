@@ -15,7 +15,7 @@
     {
       "id": "4",
       "name": "Darianna",
-      "email": "darianna.art@example.com",
+      "email": "darianna.art@gmail.com",
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 22,
       "location": "London, UK",
@@ -27,7 +27,7 @@
     {
       "id": "5",
       "name": "Kateryna",
-      "email": "kate.marketing@example.com",
+      "email": "kate.marketing@gmail.com",
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 24,
       "location": "Birmingham, UK",
@@ -39,7 +39,7 @@
     {
       "id": "3",
       "name": "Mark",
-      "email": "mark.investor@example.com",
+      "email": "mark.investor@gmail.com",
       "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
       "age": 45,
       "location": "Edinburgh, UK",
@@ -179,7 +179,14 @@
         "Photography",
         "Museums"
       ],
-      "gallery": [],
+      "gallery": [
+        "/uploads/1752365523342_Darianna_Gemini_Generated_Image(small)-002.jpg",
+        "/uploads/1752365523352_Darianna_Gemini_Generated_Image(small)-003.jpg",
+        "/uploads/1752365523364_Darianna_Gemini_Generated_Image(small)-004.jpg",
+        "/uploads/1752365537842_Darianna_Gemini_Generated_Image(small)-002.jpg",
+        "/uploads/1752365537856_Darianna_Gemini_Generated_Image(small)-003.jpg",
+        "/uploads/1752365537865_Darianna_Gemini_Generated_Image(small)-004.jpg"
+      ],
       "attributes": {
         "height": "5'5\"",
         "bodyType": "Slim",
