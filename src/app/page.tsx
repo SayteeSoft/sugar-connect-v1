@@ -12,6 +12,7 @@ import { Heart, Lock, ShieldCheck, Headset, Users, CakeSlice, HeartHandshake, St
 import { featuredProfiles, testimonials } from "@/lib/mock-data";
 import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const { user } = useAuth();
@@ -68,9 +69,19 @@ export default function Home() {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {displayedProfiles.map((profile) => (
               <Card key={profile.id} className="overflow-hidden group">
-                <Link href={`/profile/${profile.id}`}>
+                <Link href={user ? `/profile/${profile.id}` : `/login`}>
                   <div className="relative">
-                    <Image src={profile.avatarUrl} alt={profile.name} width={250} height={250} className="object-cover w-full h-[250px]" data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}/>
+                    <Image 
+                        src={profile.avatarUrl} 
+                        alt={profile.name} 
+                        width={250} 
+                        height={250} 
+                        className={cn(
+                            "object-cover w-full h-[250px] transition-all",
+                            !user && "blur-md group-hover:blur-sm"
+                        )}
+                        data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <div className="absolute bottom-0 left-0 p-4 text-white">
                         <div className="flex items-center gap-2">
