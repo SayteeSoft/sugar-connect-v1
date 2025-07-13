@@ -98,7 +98,7 @@ export function MessageToast() {
                     </Button>
                 </CardHeader>
                 <CardContent className="px-4 pb-4">
-                     <p className="text-sm text-muted-foreground ml-[52px]">{message}</p>
+                     <p className="text-sm text-muted-foreground">{message}</p>
                 </CardContent>
                 <CardFooter className="flex justify-end gap-2 p-4 pt-0">
                     <Button variant="ghost" size="sm" onClick={handleClose}>
