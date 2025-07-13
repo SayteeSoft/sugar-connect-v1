@@ -25,7 +25,7 @@ export function PayPalButtonsComponent({ cart, onResult }: PayPalButtonsProps) {
   const { user, updateUser } = useAuth();
   const { toast } = useToast();
   
-  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'AfJ7bhG_VDx0Z2o_EtExWS_Ps2eUiZKS0lABsQCbQC02V-c_Z59cOw8xq3yNqO763BAKwSRAf8n7fob8';
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
   useEffect(() => {
     if (window.paypal) {
@@ -110,6 +110,10 @@ export function PayPalButtonsComponent({ cart, onResult }: PayPalButtonsProps) {
       },
     }).render("#paypal-button-container");
   };
+
+  if (!PAYPAL_CLIENT_ID) {
+    return <p className="text-center text-muted-foreground">PayPal is not configured.</p>;
+  }
 
   return (
     <>
