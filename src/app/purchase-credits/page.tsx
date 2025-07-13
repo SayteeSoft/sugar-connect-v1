@@ -35,8 +35,11 @@ export default function PurchaseCreditsPage() {
 
     if (step === 'pay') {
         return (
-            <div className="container mx-auto px-4 md:px-6 py-8">
-                 <h1 className="text-3xl font-bold font-headline mb-6 text-center">Complete Your Purchase</h1>
+            <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+                 <div className="text-center mb-6">
+                    <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Complete Your Purchase</h1>
+                    <p className="text-muted-foreground text-lg mt-2">Finalize your transaction below.</p>
+                </div>
                  <Card className="max-w-md mx-auto">
                     <CardHeader>
                         <CardTitle>Payment for {selectedPackage.credits} Credits</CardTitle>
@@ -72,8 +75,11 @@ export default function PurchaseCreditsPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 md:px-6 py-8">
-            <h1 className="text-3xl font-bold font-headline mb-6 text-center">Purchase Credits</h1>
+        <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+            <div className="text-center mb-6">
+                <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Purchase Credits</h1>
+                <p className="text-muted-foreground text-lg mt-2">Unlock conversations by choosing one of our credit packages.</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <Card>
                     <CardHeader>
