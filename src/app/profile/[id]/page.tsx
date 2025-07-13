@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Edit, MessageCircle, Heart, CheckCircle, Mail, MapPin, Star, Mars, Venus } from "lucide-react";
+import { Camera, Edit, MessageSquare, Heart, CheckCircle, Mail, MapPin, Star, Mars, Venus, Flag, Ban } from "lucide-react";
 import Image from "next/image";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
 import { useEffect, useState } from "react";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -162,7 +163,7 @@ export default function OtherUserProfilePage() {
             </Card>
              <div className="flex gap-2">
                 <Button className="w-full">
-                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <MessageSquare className="mr-2 h-4 w-4" />
                     Message
                 </Button>
                  <Button variant="outline" className="w-full">
@@ -175,8 +176,44 @@ export default function OtherUserProfilePage() {
           {/* Right Column */}
           <div className="md:col-span-2 space-y-8">
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>About {user.name}</CardTitle>
+                <TooltipProvider>
+                  <div className="flex items-center gap-1">
+                      <Tooltip>
+                          <TooltipTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
+                                  <Heart className="h-5 w-5"/>
+                              </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Add to Favorites</p></TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                          <TooltipTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
+                                  <MessageSquare className="h-5 w-5"/>
+                              </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Send Message</p></TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                          <TooltipTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
+                                  <Flag className="h-5 w-5"/>
+                              </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Report Profile</p></TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                          <TooltipTrigger asChild>
+                               <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-destructive">
+                                  <Ban className="h-5 w-5"/>
+                              </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Block User</p></TooltipContent>
+                      </Tooltip>
+                  </div>
+                </TooltipProvider>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">{userProfile.about || 'No information provided.'}</p>
