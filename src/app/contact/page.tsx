@@ -26,39 +26,61 @@ export default function ContactPage() {
           touch.
         </p>
       </div>
-      <Card className="max-w-4xl mx-auto shadow-lg">
-        <CardContent className="p-6">
-          <form className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="name">Your Name</Label>
-                <Input id="name" placeholder="John Doe" />
+      <div className="max-w-4xl mx-auto space-y-8">
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Your Name</Label>
+                  <Input id="name" placeholder="John Doe" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Your Email</Label>
+                  <Input id="email" type="email" placeholder="you@example.com" />
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Your Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" />
+                <Label htmlFor="subject">Subject</Label>
+                <Input id="subject" placeholder="Regarding my account" />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="subject">Subject</Label>
-              <Input id="subject" placeholder="Regarding my account" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea
-                id="message"
-                placeholder="Your message here..."
-                rows={5}
-              />
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" size="lg" className="w-full">
-            Send Message
-          </Button>
-        </CardFooter>
-      </Card>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea
+                  id="message"
+                  placeholder="Your message here..."
+                  rows={5}
+                />
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" size="lg" className="w-full">
+              Send Message
+            </Button>
+          </CardFooter>
+        </Card>
+        
+        <Card className="shadow-lg">
+            <CardHeader>
+                <CardTitle>Submit a Detailed Inquiry</CardTitle>
+                <CardDescription>
+                    For more specific requests, please use the form below.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+                 <iframe 
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdgo2RY0kzpfxs1R_X4wNWwZAO9YMJvvnmNcKlGDZGlfdwUnA/viewform?embedded=true" 
+                    width="100%" 
+                    height="780" 
+                    frameBorder="0" 
+                    marginHeight={0} 
+                    marginWidth={0}>
+                        Loading…
+                </iframe>
+            </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
