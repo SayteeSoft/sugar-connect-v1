@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, MessageSquare, Trash2, Users, Eye } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import type { User } from "@/types";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { mockUsers } from "@/lib/mock-data";
 
@@ -41,6 +41,7 @@ const UserRow = ({ user }: { user: User }) => (
 
 export default function MatchesPage() {
     const { user, loading } = useAuth();
+    const [activeTab, setActiveTab] = useState("favorites");
 
     // NOTE: This page currently uses mock data. In a real application,
     // this data would be fetched from the API based on the logged-in user's matches.
@@ -91,37 +92,43 @@ export default function MatchesPage() {
                 <p className="text-muted-foreground mt-2">Browse your favorites, see who visited your profile, and who you have viewed.</p>
             </div>
 
-            <Card className="max-w-4xl mx-auto">
-                <CardContent className="p-6">
-                    <Tabs defaultValue="favorites" className="w-full">
-                        <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="favorites">
-                                <Heart className="mr-2 h-4 w-4" />
-                                Favorites
-                            </TabsTrigger>
-                            <TabsTrigger value="visitors">
-                                <Users className="mr-2 h-4 w-4" />
-                                Visitors
-                            </TabsTrigger>
-                            <TabsTrigger value="viewed">
-                                <Eye className="mr-2 h-4 w-4" />
-                                Viewed
-                            </TabsTrigger>
-                        </TabsList>
-                        <div className="mt-6">
-                            <TabsContent value="favorites">
-                                {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
+            <div className="max-w-4xl mx-auto">
+                <Tabs defaultValue="favorites" orientation="vertical" className="grid grid-cols-4 gap-6 items-start" onValueChange={setActiveTab}>
+                     <TabsList className="col-span-1 flex flex-col h-auto w-full">
+                        <TabsTrigger value="favorites" className="w-full justify-start gap-2">
+                            <Heart className="h-4 w-4" />
+                            Favorites
+                        </TabsTrigger>
+                        <TabsTrigger value="visitors" className="w-full justify-start gap-2">
+                            <Users className="h-4 w-4" />
+                            Visitors
+                        </TabsTrigger>
+                        <TabsTrigger value="viewed" className="w-full justify-start gap-2">
+                            <Eye className="h-4 w-4" />
+                            Viewed
+                        </TabsTrigger>
+                    </TabsList>
+                    <div className="col-span-3">
+                        <Card>
+                            <TabsContent value="favorites" className="m-0">
+                                <CardContent className="p-0">
+                                    {favorites.length > 0 ? favorites.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No favorites yet.</p>}
+                                </CardContent>
                             </TabsContent>
-                            <TabsContent value="visitors">
-                                {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
+                            <TabsContent value="visitors" className="m-0">
+                                <CardContent className="p-0">
+                                    {visitors.length > 0 ? visitors.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">No visitors yet.</p>}
+                                </CardContent>
                             </TabsContent>
-                            <TabsContent value="viewed">
-                                {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
+                            <TabsContent value="viewed" className="m-0">
+                                <CardContent className="p-0">
+                                    {viewed.length > 0 ? viewed.map(u => <UserRow key={u.id} user={u as User} />) : <p className="p-4 text-center text-muted-foreground">You haven't viewed any profiles yet.</p>}
+                                </CardContent>
                             </TabsContent>
-                        </div>
-                    </Tabs>
-                </CardContent>
-            </Card>
+                        </Card>
+                    </div>
+                </Tabs>
+            </div>
         </div>
     );
 }
