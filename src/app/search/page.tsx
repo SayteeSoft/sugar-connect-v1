@@ -45,7 +45,7 @@ function FiltersPanel() {
             <Label htmlFor="location-filter">Location</Label>
             <Input id="location-filter" placeholder="e.g. London" />
           </div>
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col gap-2 pt-4">
             <Button className="w-full">Apply Filters</Button>
             <Button variant="outline" className="w-full">Clear Filters</Button>
           </div>
