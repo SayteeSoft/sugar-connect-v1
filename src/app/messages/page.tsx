@@ -128,10 +128,8 @@ export default function MessagesPage() {
                         {conversations.map(convo => (
                              <div 
                                 key={convo.id} 
-                                className={cn(
-                                    "p-4 flex items-center gap-4 hover:bg-accent cursor-pointer border-b",
-                                    activeConversation?.id === convo.id && "bg-accent"
-                                )}
+                                className="group p-4 flex items-center gap-4 hover:bg-accent cursor-pointer border-b"
+                                data-state={activeConversation?.id === convo.id ? 'active' : 'inactive'}
                                 onClick={() => handleConversationClick(convo as User)}
                             >
                                 <Avatar className="h-12 w-12">
@@ -140,7 +138,7 @@ export default function MessagesPage() {
                                 </Avatar>
                                 <div className="flex-1 overflow-hidden">
                                     <p className="font-semibold">{convo.name}</p>
-                                    <p className="text-sm text-muted-foreground truncate">
+                                    <p className="text-sm text-muted-foreground truncate group-hover:text-foreground group-data-[state=active]:text-foreground">
                                         {convo.id === '4' ? "Hi! I saw you're a travel partner." : convo.id === '5' ? "Hey there! Loved your profile!" : "Your profile mentioned you..."}
                                     </p>
                                 </div>
@@ -184,7 +182,7 @@ export default function MessagesPage() {
                                     </div>
                                     {msg.sender === 'me' && (
                                         <Avatar className="h-8 w-8">
-                                            <AvatarImage src={msg.avatarUrl} />
+                                            <AvatarImage src={currentUser.avatarUrl} />
                                             <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
                                         </Avatar>
                                     )}
