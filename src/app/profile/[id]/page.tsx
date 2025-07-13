@@ -14,6 +14,19 @@ import type { User, Profile } from "@/types";
 import { useEffect, useState } from "react";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -29,10 +42,12 @@ export default function OtherUserProfilePage() {
   const id = params.id as string;
   const { user: currentUser, loading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
 
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setProfile] = useState<Profile | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -71,6 +86,35 @@ export default function OtherUserProfilePage() {
     }
   }, [currentUser, id, loading, router]);
 
+  const handleFavorite = () => {
+      setIsFavorite(!isFavorite);
+      toast({
+          title: !isFavorite ? "Added to Favorites" : "Removed from Favorites",
+          description: `${user?.name} has been ${!isFavorite ? 'added to' : 'removed from'} your favorites.`,
+      });
+  };
+
+  const handleMessage = () => {
+      // In a real app, this might open a specific chat window.
+      // For now, we'll navigate to the main messages page.
+      router.push('/messages');
+  };
+
+  const handleReport = () => {
+      toast({
+          title: "Profile Reported",
+          description: `Thank you for reporting ${user?.name}. Our team will review this profile.`,
+      });
+  };
+
+  const handleBlock = () => {
+      toast({
+          title: "User Blocked",
+          description: `You have successfully blocked ${user?.name}. You will no longer see their profile.`,
+      });
+      // In a real app, you would also redirect the user away from this profile.
+      router.push('/search');
+  };
 
   if (loading || dataLoading) {
     return (
@@ -162,13 +206,13 @@ export default function OtherUserProfilePage() {
               </CardContent>
             </Card>
              <div className="flex gap-2">
-                <Button className="w-full">
+                <Button className="w-full" onClick={handleMessage}>
                     <MessageSquare className="mr-2 h-4 w-4" />
                     Message
                 </Button>
-                 <Button variant="outline" className="w-full">
-                    <Heart className="mr-2 h-4 w-4" />
-                    Favorite
+                 <Button variant="outline" className="w-full" onClick={handleFavorite}>
+                    <Heart className={cn("mr-2 h-4 w-4", isFavorite && "fill-destructive text-destructive")} />
+                    {isFavorite ? 'Favorited' : 'Favorite'}
                 </Button>
             </div>
           </div>
@@ -182,36 +226,68 @@ export default function OtherUserProfilePage() {
                   <div className="flex items-center gap-1">
                       <Tooltip>
                           <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
-                                  <Heart className="h-5 w-5"/>
+                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary" onClick={handleFavorite}>
+                                  <Heart className={cn("h-5 w-5", isFavorite && "fill-destructive text-destructive")} />
                               </Button>
                           </TooltipTrigger>
                           <TooltipContent><p>Add to Favorites</p></TooltipContent>
                       </Tooltip>
                       <Tooltip>
                           <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
+                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary" onClick={handleMessage}>
                                   <MessageSquare className="h-5 w-5"/>
                               </Button>
                           </TooltipTrigger>
                           <TooltipContent><p>Send Message</p></TooltipContent>
                       </Tooltip>
-                      <Tooltip>
-                          <TooltipTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
-                                  <Flag className="h-5 w-5"/>
-                              </Button>
-                          </TooltipTrigger>
-                          <TooltipContent><p>Report Profile</p></TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                          <TooltipTrigger asChild>
-                               <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-destructive">
-                                  <Ban className="h-5 w-5"/>
-                              </Button>
-                          </TooltipTrigger>
-                          <TooltipContent><p>Block User</p></TooltipContent>
-                      </Tooltip>
+                      <AlertDialog>
+                          <Tooltip>
+                              <TooltipTrigger asChild>
+                                <AlertDialogTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-primary">
+                                      <Flag className="h-5 w-5"/>
+                                  </Button>
+                                </AlertDialogTrigger>
+                              </TooltipTrigger>
+                              <TooltipContent><p>Report Profile</p></TooltipContent>
+                          </Tooltip>
+                          <AlertDialogContent>
+                              <AlertDialogHeader>
+                                  <AlertDialogTitle>Report {user.name}?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                      Reporting this user will submit their profile for review by our team. Are you sure you want to proceed?
+                                  </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={handleReport}>Report Profile</AlertDialogAction>
+                              </AlertDialogFooter>
+                          </AlertDialogContent>
+                      </AlertDialog>
+                      <AlertDialog>
+                          <Tooltip>
+                              <TooltipTrigger asChild>
+                                  <AlertDialogTrigger asChild>
+                                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:bg-accent hover:text-destructive">
+                                          <Ban className="h-5 w-5"/>
+                                      </Button>
+                                  </AlertDialogTrigger>
+                              </TooltipTrigger>
+                              <TooltipContent><p>Block User</p></TooltipContent>
+                          </Tooltip>
+                          <AlertDialogContent>
+                              <AlertDialogHeader>
+                                  <AlertDialogTitle>Block {user.name}?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                      This will prevent them from seeing your profile and messaging you. This action can be undone in your settings. Are you sure?
+                                  </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={handleBlock}>Block User</AlertDialogAction>
+                              </AlertDialogFooter>
+                          </AlertDialogContent>
+                      </AlertDialog>
                   </div>
                 </TooltipProvider>
               </CardHeader>
