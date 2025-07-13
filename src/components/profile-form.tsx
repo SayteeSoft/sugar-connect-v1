@@ -103,15 +103,12 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   }, [user, profile, reset, replaceGallery]);
   
   useEffect(() => {
-    // Admins can manage roles freely, so we don't auto-set for them.
-    if (currentUser?.role === 'Admin' && isAdminEditing) return;
-
     if (watchSex === 'Male') {
       setValue('role', 'Sugar Daddy');
     } else if (watchSex === 'Female') {
       setValue('role', 'Sugar Baby');
     }
-  }, [watchSex, setValue, currentUser?.role, isAdminEditing]);
+  }, [watchSex, setValue]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -313,26 +310,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                           {errors.sex && <p className="text-destructive text-sm mt-1">{errors.sex.message}</p>}
                         </div>
 
-                        {currentUser?.role === 'Admin' && isAdminEditing && (
-                          <div>
-                              <Label htmlFor="role">Role</Label>
-                              <Controller
-                                  name="role"
-                                  control={control}
-                                  render={({ field }) => (
-                                      <Select onValueChange={field.onChange} value={field.value}>
-                                          <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
-                                          <SelectContent>
-                                              <SelectItem value="Admin">Admin</SelectItem>
-                                              <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
-                                              <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                          </SelectContent>
-                                      </Select>
-                                  )}
-                              />
-                              {errors.role && <p className="text-destructive text-sm mt-1">{errors.role.message}</p>}
-                          </div>
-                        )}
                         <div>
                             <Label htmlFor="location">Location</Label>
                             <Controller
