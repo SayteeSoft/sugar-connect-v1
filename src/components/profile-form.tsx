@@ -110,20 +110,19 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   const handleGalleryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-        // Create a new list of files, replacing any previously staged new files
         const newFiles = Array.from(files);
-        const existingImageUrls = galleryFields
-            .map(field => (field as any).file)
-            .filter(file => typeof file === 'string');
-        
-        const newFieldValues = [...existingImageUrls.map(url => ({ file: url })), ...newFiles.map(file => ({ file }))];
+
+        // Get the current list of files/URLs from the form state
+        const currentFieldValues = getValues("gallery") || [];
+        const newFieldValues = [...currentFieldValues, ...newFiles.map(file => ({ file }))];
         replaceGallery(newFieldValues);
 
-        // Update previews
+        // Update previews by creating blob URLs for new files
         const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-        setGalleryPreviews([...existingImageUrls, ...newPreviews]);
+        setGalleryPreviews(prev => [...prev, ...newPreviews]);
     }
   };
+
 
   const removeGalleryImage = (index: number) => {
     removeGallery(index);
