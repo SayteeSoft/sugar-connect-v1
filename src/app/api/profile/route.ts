@@ -149,21 +149,19 @@ export async function POST(req: Request) {
     };
 
     const avatarFile = formData.get('avatar') as File | null;
-    if (avatarFile && avatarFile.size > 0) {
+    if (avatarFile instanceof File && avatarFile.size > 0) {
         userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
     
-    const galleryFiles = formData.getAll('gallery') as File[];
+    const galleryFiles = formData.getAll('gallery') as (File | string)[];
     
-    const hasNewGalleryFiles = galleryFiles.some(file => file instanceof File && file.size > 0);
+    const newGalleryFiles = galleryFiles.filter(file => file instanceof File && file.size > 0) as File[];
 
-    if (hasNewGalleryFiles) {
+    if (newGalleryFiles.length > 0) {
         const newImagePaths: string[] = [];
-        for (const file of galleryFiles) {
-            if (file instanceof File && file.size > 0) {
-                const path = await writeFile(file);
-                newImagePaths.push(path);
-            }
+        for (const file of newGalleryFiles) {
+            const path = await writeFile(file);
+            newImagePaths.push(path);
         }
         profileToUpdate.gallery = newImagePaths;
     } else {
