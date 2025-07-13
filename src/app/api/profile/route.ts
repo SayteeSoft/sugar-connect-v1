@@ -82,62 +82,57 @@ export async function POST(req: Request) {
         profileToUpdate.attributes = {};
     }
 
-    const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
-        if (field === undefined || field === null || typeof field !== 'string') {
-            return undefined;
-        }
-        return field.trim() === "" ? undefined : field;
+    // Helper to safely get string values from FormData
+    const getString = (key: string): string | undefined => {
+        const value = formData.get(key);
+        return typeof value === 'string' ? value : undefined;
     };
-    
-    const toStringOrExisting = (field: FormDataEntryValue | null, existingValue: string) => {
-        return typeof field === 'string' ? field : existingValue;
-    }
 
-    userToUpdate.name = toStringOrExisting(formData.get('name'), userToUpdate.name);
-    userToUpdate.email = toStringOrExisting(formData.get('email'), userToUpdate.email);
-    userToUpdate.location = toStringOrExisting(formData.get('location'), userToUpdate.location);
-    userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
+    userToUpdate.name = getString('name') ?? userToUpdate.name;
+    userToUpdate.email = getString('email') ?? userToUpdate.email;
+    userToUpdate.location = getString('location') ?? userToUpdate.location;
+    userToUpdate.age = Number(getString('age')) || userToUpdate.age;
     
-    const creditsValue = formData.get('credits');
+    const creditsValue = getString('credits');
     if (creditsValue) {
         userToUpdate.credits = creditsValue === 'unlimited' ? 'unlimited' : Number(creditsValue);
     }
     
-    const sexValue = formData.get('sex') as User['sex'];
-    if (sexValue && (sexValue === 'Male' || sexValue === 'Female')) {
-        userToUpdate.sex = sexValue;
-    }
+    const sexValue = getString('sex') as User['sex'];
+    if (sexValue) userToUpdate.sex = sexValue;
 
-    const roleValue = formData.get('role') as Role;
-    if (roleValue && (roleValue === 'Sugar Daddy' || roleValue === 'Sugar Baby' || roleValue === 'Admin')) {
-        userToUpdate.role = roleValue;
-    }
+    const roleValue = getString('role') as Role;
+    if (roleValue) userToUpdate.role = roleValue;
     
-    profileToUpdate.about = toStringOrExisting(formData.get('about'), profileToUpdate.about);
+    profileToUpdate.about = getString('about') ?? profileToUpdate.about;
 
-    const wantsString = formData.get('wants') as string;
+    const wantsString = getString('wants');
     if (wantsString) {
       try {
         profileToUpdate.wants = JSON.parse(wantsString);
-      } catch {}
+      } catch (e) {
+        console.error("Failed to parse wants:", e);
+      }
     }
 
-    const interestsString = formData.get('interests') as string;
+    const interestsString = getString('interests');
     if (interestsString) {
       try {
         profileToUpdate.interests = JSON.parse(interestsString);
-      } catch {}
+      } catch (e) {
+        console.error("Failed to parse interests:", e);
+      }
     }
 
-    profileToUpdate.attributes.height = toStringOrUndefined(formData.get('height'));
-    profileToUpdate.attributes.bodyType = (formData.get('bodyType') as Profile['attributes']['bodyType']) || undefined;
-    profileToUpdate.attributes.ethnicity = (formData.get('ethnicity') as Profile['attributes']['ethnicity']) || undefined;
-    profileToUpdate.attributes.hairColor = (formData.get('hairColor') as Profile['attributes']['hairColor']) || undefined;
-    profileToUpdate.attributes.eyeColor = (formData.get('eyeColor') as Profile['attributes']['eyeColor']) || undefined;
-    profileToUpdate.attributes.smoker = (formData.get('smoker') as Profile['attributes']['smoker']) || undefined;
-    profileToUpdate.attributes.drinker = (formData.get('drinker') as Profile['attributes']['drinker']) || undefined;
-    profileToUpdate.attributes.piercings = (formData.get('piercings') as Profile['attributes']['piercings']) || undefined;
-    profileToUpdate.attributes.tattoos = (formData.get('tattoos') as Profile['attributes']['tattoos']) || undefined;
+    profileToUpdate.attributes.height = getString('height') ?? profileToUpdate.attributes.height;
+    profileToUpdate.attributes.bodyType = (getString('bodyType') as Profile['attributes']['bodyType']) ?? profileToUpdate.attributes.bodyType;
+    profileToUpdate.attributes.ethnicity = (getString('ethnicity') as Profile['attributes']['ethnicity']) ?? profileToUpdate.attributes.ethnicity;
+    profileToUpdate.attributes.hairColor = (getString('hairColor') as Profile['attributes']['hairColor']) ?? profileToUpdate.attributes.hairColor;
+    profileToUpdate.attributes.eyeColor = (getString('eyeColor') as Profile['attributes']['eyeColor']) ?? profileToUpdate.attributes.eyeColor;
+    profileToUpdate.attributes.smoker = (getString('smoker') as Profile['attributes']['smoker']) ?? profileToUpdate.attributes.smoker;
+    profileToUpdate.attributes.drinker = (getString('drinker') as Profile['attributes']['drinker']) ?? profileToUpdate.attributes.drinker;
+    profileToUpdate.attributes.piercings = (getString('piercings') as Profile['attributes']['piercings']) ?? profileToUpdate.attributes.piercings;
+    profileToUpdate.attributes.tattoos = (getString('tattoos') as Profile['attributes']['tattoos']) ?? profileToUpdate.attributes.tattoos;
 
     const writeFile = async (file: File) => {
       const filename = `${Date.now()}_${file.name}`;
@@ -152,7 +147,7 @@ export async function POST(req: Request) {
       }
     };
 
-    const avatarFile = formData.get('avatar') as File | null;
+    const avatarFile = formData.get('avatar');
     if (avatarFile instanceof File && avatarFile.size > 0) {
         userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
@@ -171,8 +166,10 @@ export async function POST(req: Request) {
     }
 
     for (const file of newGalleryFiles) {
-        const path = await writeFile(file);
-        finalGallery.push(path);
+        if (file instanceof File && file.size > 0) {
+            const path = await writeFile(file);
+            finalGallery.push(path);
+        }
     }
     
     profileToUpdate.gallery = finalGallery;
