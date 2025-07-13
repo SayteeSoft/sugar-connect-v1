@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem('user');
+    window.location.href = '/';
   }, []);
 
   const signup = useCallback(async (email: string, pass: string, role: Role): Promise<SafeUser | null> => {
@@ -120,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
             const value = data[key as keyof typeof data];
-            if (key === 'avatar' || key === 'gallery') continue;
+            if (key === 'avatar' || key === 'gallery' || key === 'blank') continue;
             if (key === 'wants' || key === 'interests') {
                 if (Array.isArray(value)) {
                     const stringValues = value.map((item: any) => item.value);
