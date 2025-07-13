@@ -295,6 +295,27 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                             />
                             {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
                         </div>
+
+                        {isAdminEditing && currentUser?.role === 'Admin' && (
+                          <div>
+                            <Label htmlFor="blank">Blank</Label>
+                            <Controller
+                                name="blank"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={!isEditing}>
+                                        <SelectTrigger id="blank"><SelectValue placeholder="Select an option..." /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Option 1">Option 1</SelectItem>
+                                            <SelectItem value="Option 2">Option 2</SelectItem>
+                                            <SelectItem value="Option 3">Option 3</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                             {errors.blank && <p className="text-destructive text-sm mt-1">{errors.blank.message}</p>}
+                          </div>
+                        )}
                         
                         <div>
                           <Label htmlFor="sex">Sex</Label>
