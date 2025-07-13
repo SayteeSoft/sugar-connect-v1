@@ -60,26 +60,6 @@ export default function ContactPage() {
             </Button>
           </CardFooter>
         </Card>
-        
-        <Card className="shadow-lg">
-            <CardHeader>
-                <CardTitle>Submit a Detailed Inquiry</CardTitle>
-                <CardDescription>
-                    For more specific requests, please use the form below.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-                 <iframe 
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSdgo2RY0kzpfxs1R_X4wNWwZAO9YMJvvnmNcKlGDZGlfdwUnA/viewform?embedded=true" 
-                    width="100%" 
-                    height="780" 
-                    frameBorder="0" 
-                    marginHeight={0} 
-                    marginWidth={0}>
-                        Loading…
-                </iframe>
-            </CardContent>
-        </Card>
       </div>
     </div>
   );
