@@ -189,6 +189,7 @@ export default function OtherUserProfilePage() {
   }
   
   const isEmailVisible = userVote === 'met';
+  const isStarUser = metCount > 5 && metCount > notMetCount;
   
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
@@ -210,6 +211,11 @@ export default function OtherUserProfilePage() {
                       <CheckCircle className="h-4 w-4 mr-1"/>
                       Verified
                   </Badge>
+                  {isStarUser && (
+                    <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-lg">
+                      <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                    </div>
+                  )}
                   {user.role !== 'Admin' && (
                      <Badge variant={user.role === 'Sugar Daddy' ? 'default' : 'secondary'} className="absolute bottom-3 left-3">
                         {user.role}
