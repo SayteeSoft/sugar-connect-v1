@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Heart, Lock, ShieldCheck, Headset, Users, CakeSlice, HeartHandshake, Star } from "lucide-react";
-import { featuredProfiles, testimonials } from "@/lib/mock-data";
+import { mockUsers, testimonials } from "@/lib/mock-data";
 import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -19,13 +19,13 @@ export default function Home() {
 
   const displayedProfiles = useMemo(() => {
     if (user?.role === 'Sugar Daddy') {
-      return featuredProfiles.filter(p => p.role === 'Sugar Baby');
+      return mockUsers.filter(p => p.role === 'Sugar Baby').slice(0, 4);
     }
     if (user?.role === 'Sugar Baby') {
-      return featuredProfiles.filter(p => p.role === 'Sugar Daddy');
+      return mockUsers.filter(p => p.role === 'Sugar Daddy').slice(0, 4);
     }
-    // For guests or admins, show the default list
-    return featuredProfiles;
+    // For guests or admins, show a mix of the first 4 profiles.
+    return mockUsers.filter(p => p.role !== 'Admin').slice(0, 4);
   }, [user]);
   
   return (
