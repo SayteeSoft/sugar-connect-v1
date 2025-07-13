@@ -456,8 +456,75 @@
       "wants": [],
       "interests": [],
       "gallery": [],
-      "attributes": {}
+      "attributes": {
+        "height": "6'0\""
+      }
     }
   ],
-  "messages": []
+  "messages": [
+    {
+        "id": "msg1",
+        "conversationId": "3-4",
+        "senderId": "4",
+        "receiverId": "3",
+        "text": "Hi Mark, I saw your profile and I'm fascinated by your love for the outdoors!",
+        "timestamp": "2024-05-20T10:00:00Z"
+    },
+    {
+        "id": "msg2",
+        "conversationId": "3-4",
+        "senderId": "3",
+        "receiverId": "4",
+        "text": "Hi Darianna, thanks for reaching out. Your art is amazing. I'd love to hear more about it.",
+        "timestamp": "2024-05-20T10:05:00Z"
+    },
+    {
+        "id": "msg3",
+        "conversationId": "3-4",
+        "senderId": "4",
+        "receiverId": "3",
+        "text": "I'd love that! Maybe we could grab a coffee sometime this week?",
+        "timestamp": "2024-05-20T10:10:00Z"
+    },
+    {
+        "id": "msg4",
+        "conversationId": "3-5",
+        "senderId": "5",
+        "receiverId": "3",
+        "text": "Hey Mark, I noticed you're into investing. I'm just starting my career in marketing and would love to get your perspective on a few things.",
+        "timestamp": "2024-05-21T11:00:00Z"
+    },
+    {
+        "id": "msg5",
+        "conversationId": "3-5",
+        "senderId": "3",
+        "receiverId": "5",
+        "text": "Kateryna, I'd be happy to chat. I'm always open to mentoring ambitious people.",
+        "timestamp": "2024-05-21T11:05:00Z"
+    },
+    {
+        "id": "msg6",
+        "conversationId": "6-7",
+        "senderId": "6",
+        "receiverId": "7",
+        "text": "Your travel pictures look incredible! I've always wanted to visit Medellín.",
+        "timestamp": "2024-05-22T12:00:00Z"
+    },
+    {
+        "id": "msg7",
+        "conversationId": "6-7",
+        "senderId": "7",
+        "receiverId": "6",
+        "text": "You should! It's a beautiful city. Let me know if you ever decide to come, I can show you around.",
+        "timestamp": "2024-05-22T12:05:00Z"
+    },
+    {
+        "id": "msg8",
+        "conversationId": "7-8",
+        "senderId": "8",
+        "receiverId": "7",
+        "text": "I see you're into tech. I'm studying languages but I'm fascinated by the tech world.",
+        "timestamp": "2024-05-23T14:00:00Z"
+    }
+]
 }
