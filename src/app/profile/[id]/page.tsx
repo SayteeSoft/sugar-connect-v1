@@ -48,6 +48,12 @@ export default function OtherUserProfilePage() {
   const [userProfile, setProfile] = useState<Profile | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  
+  // Voting state
+  const [metCount, setMetCount] = useState(0);
+  const [notMetCount, setNotMetCount] = useState(0);
+  const [userVote, setUserVote] = useState<'met' | 'notMet' | null>(null);
+  const [canVote, setCanVote] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -65,6 +71,19 @@ export default function OtherUserProfilePage() {
         if (foundUser && foundProfile) {
             setUser(foundUser);
             setProfile(foundProfile);
+            setMetCount(foundProfile.metCount || 0);
+            setNotMetCount(foundProfile.notMetCount || 0);
+
+            if (currentUser) {
+              // Check if current user has already voted
+              const existingVote = foundProfile.votes?.[currentUser.id];
+              if (existingVote) {
+                  setUserVote(existingVote);
+              }
+              // User can vote if they are logged in and NOT viewing their own profile
+              setCanVote(currentUser.id !== foundUser.id);
+            }
+
         } else {
             setUser(null);
             setProfile(null);
@@ -77,7 +96,7 @@ export default function OtherUserProfilePage() {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [id, currentUser]);
   
   // If the current user is viewing their own profile, redirect to the editable /profile page
   useEffect(() => {
@@ -85,6 +104,23 @@ export default function OtherUserProfilePage() {
       router.push('/profile');
     }
   }, [currentUser, id, loading, router]);
+
+  const handleVote = (voteType: 'met' | 'notMet') => {
+    if (!canVote || userVote) return; // Can't vote if not allowed or already voted
+
+    if (voteType === 'met') {
+      setMetCount(prev => prev + 1);
+    } else {
+      setNotMetCount(prev => prev + 1);
+    }
+    setUserVote(voteType);
+    
+    // In a real app, you would send this vote to the backend API
+    toast({
+        title: "Vote Recorded",
+        description: "Thank you for your feedback!",
+    });
+  };
 
   const handleFavorite = () => {
       setIsFavorite(!isFavorite);
@@ -152,6 +188,8 @@ export default function OtherUserProfilePage() {
     return null;
   }
   
+  const isEmailVisible = userVote === 'met';
+  
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
@@ -199,7 +237,7 @@ export default function OtherUserProfilePage() {
                         )}
                         <div className="flex items-center gap-2">
                            <Mail className="h-4 w-4" />
-                           <span>{user.email}</span>
+                           <span className={cn(!isEmailVisible && "blur-sm")}>{user.email}</span>
                         </div>
                     </div>
                 </div>
@@ -350,6 +388,42 @@ export default function OtherUserProfilePage() {
                 )}
               </CardContent>
             </Card>
+
+            {canVote && (
+            <Card>
+              <CardHeader>
+                  <CardTitle>Interactions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground text-sm mb-4">Have you met {user.name} in person?</p>
+                <div className="grid grid-cols-2 gap-4">
+                    <Button 
+                      variant={userVote === 'met' ? 'default' : 'outline'}
+                      className="relative h-12 text-base"
+                      onClick={() => handleVote('met')}
+                      disabled={!!userVote}
+                    >
+                        We Met
+                        <Badge variant={userVote === 'met' ? 'secondary' : 'default'} className="absolute -top-2 -right-2 h-6 w-6 justify-center">
+                            {metCount}
+                        </Badge>
+                    </Button>
+                    <Button 
+                       variant={userVote === 'notMet' ? 'destructive' : 'outline'}
+                       className="relative h-12 text-base"
+                       onClick={() => handleVote('notMet')}
+                       disabled={!!userVote}
+                    >
+                       Didn't Meet
+                       <Badge variant={userVote === 'notMet' ? 'secondary' : 'default'} className="absolute -top-2 -right-2 h-6 w-6 justify-center">
+                           {notMetCount}
+                       </Badge>
+                    </Button>
+                </div>
+                {userVote && <p className="text-xs text-muted-foreground text-center mt-4">Thank you. Your vote has been recorded.</p>}
+              </CardContent>
+            </Card>
+            )}
 
             <Card>
               <CardHeader>

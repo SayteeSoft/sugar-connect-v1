@@ -25,6 +25,9 @@ export interface Profile {
   wants: string[];
   interests: string[];
   gallery: string[];
+  metCount?: number;
+  notMetCount?: number;
+  votes?: Record<string, 'met' | 'notMet'>;
   attributes: {
     bodyType?: 'Slim' | 'Athletic' | 'Average' | 'Curvy';
     hairColor?: 'Brown' | 'Black' | 'Blonde' | 'Chestnut' | 'Grey' | 'Auburn' | 'Red';

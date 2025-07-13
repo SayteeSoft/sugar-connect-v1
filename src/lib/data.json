@@ -166,6 +166,9 @@
       "wants": [],
       "interests": [],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {
         "height": "6'0\"",
         "bodyType": "Athletic",
@@ -197,6 +200,9 @@
         "/uploads/1752365523352_Darianna_Gemini_Generated_Image(small)-003.jpg",
         "/uploads/1752365523364_Darianna_Gemini_Generated_Image(small)-004.jpg"
       ],
+      "metCount": 5,
+      "notMetCount": 12,
+      "votes": {},
       "attributes": {
         "height": "5'5\"",
         "bodyType": "Slim",
@@ -228,6 +234,9 @@
         "/uploads/1752368089077_Kateryna_Gemini_Generated_Image (small)-002.jpg",
         "/uploads/1752368089080_Kateryna_Gemini_Generated_Image (small)-003.jpg"
       ],
+      "metCount": 2,
+      "notMetCount": 8,
+      "votes": {},
       "attributes": {
         "height": "5'7\"",
         "bodyType": "Athletic",
@@ -256,6 +265,9 @@
         "Yachting"
       ],
       "gallery": [],
+      "metCount": 1,
+      "notMetCount": 3,
+      "votes": {},
       "attributes": {
         "height": "6'1\"",
         "bodyType": "Average",
@@ -286,6 +298,9 @@
         "/uploads/1752368293745_Sofia_Gemini_Generated_Image (small)-004.jpg",
         "/uploads/1752368293753_Sofia_Gemini_Generated_Image (small)-003.jpg"
       ],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -302,6 +317,9 @@
         "Hiking"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -318,6 +336,9 @@
         "History"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -335,6 +356,9 @@
         "Cars"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -351,6 +375,9 @@
         "Reading"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -367,6 +394,9 @@
         "Travel"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -383,6 +413,9 @@
         "Fashion"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     },
     {
@@ -399,6 +432,9 @@
         "Gardening"
       ],
       "gallery": [],
+      "metCount": 0,
+      "notMetCount": 0,
+      "votes": {},
       "attributes": {}
     }
   ]
