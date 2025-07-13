@@ -128,7 +128,7 @@ export default function MessagesPage() {
                         {conversations.map(convo => (
                              <div 
                                 key={convo.id} 
-                                className="group p-4 flex items-center gap-4 hover:bg-accent cursor-pointer border-b"
+                                className="group p-4 flex items-center gap-4 hover:bg-accent cursor-pointer border-b data-[state=active]:bg-accent"
                                 data-state={activeConversation?.id === convo.id ? 'active' : 'inactive'}
                                 onClick={() => handleConversationClick(convo as User)}
                             >
