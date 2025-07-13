@@ -113,13 +113,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const updateUser = useCallback(async (userId: string, data: ProfileFormValues): Promise<SafeUser> => {
+  const updateUser = useCallback(async (userId: string, data: Partial<ProfileFormValues> & { credits?: number | 'unlimited' }): Promise<SafeUser> => {
     const formData = new FormData();
     formData.append('userId', userId);
 
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key as keyof ProfileFormValues];
+            const value = data[key as keyof typeof data];
             if (key === 'avatar' || key === 'gallery') continue;
             if (key === 'wants' || key === 'interests') {
                 if (Array.isArray(value)) {
@@ -131,15 +131,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
         }
     }
-
-    if (data.avatar instanceof File) {
-      formData.append('avatar', data.avatar);
+    
+    const avatarFile = (data as ProfileFormValues).avatar;
+    if (avatarFile instanceof File) {
+      formData.append('avatar', avatarFile);
     }
     
-    // Send only new files to the backend
+    const galleryFiles = (data as ProfileFormValues).gallery;
     let hasNewFiles = false;
-    if (data.gallery && data.gallery.length > 0) {
-        data.gallery.forEach((file) => {
+    if (galleryFiles && galleryFiles.length > 0) {
+        galleryFiles.forEach((item) => {
+            const file = (item as any).file ?? item;
             if (file instanceof File) {
                 formData.append(`gallery`, file);
                 hasNewFiles = true;
@@ -147,9 +149,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
     }
 
-    // If no new files are being uploaded, send the current state of the gallery (which may have deletions)
-    if (!hasNewFiles) {
-        const existingGallery = data.gallery?.map(item => (typeof item === 'string' ? item : ''))?.filter(Boolean) || [];
+    if (!hasNewFiles && galleryFiles) {
+        const existingGallery = galleryFiles.map(item => (typeof ((item as any).file ?? item) === 'string' ? ((item as any).file ?? item) : '')).filter(Boolean);
         formData.append('existingGallery', JSON.stringify(existingGallery));
     }
 
@@ -189,11 +190,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(errorData.message || "Failed to delete user.");
     }
 
-    // If the deleted user is the currently logged-in user, log them out.
     if (user?.id === userId) {
         logout();
     }
   }, [user, logout]);
+
+  const deductCredit = useCallback(async (): Promise<void> => {
+    if (user && user.role === 'Sugar Daddy' && typeof user.credits === 'number' && user.credits > 0) {
+        const newCredits = user.credits - 1;
+        try {
+            await updateUser(user.id, { credits: newCredits });
+        } catch (error) {
+            console.error("Failed to deduct credit:", error);
+            // Optionally revert UI change or notify user
+        }
+    }
+  }, [user, updateUser]);
 
 
   const authContextValue = useMemo<AuthContextType>(() => ({
@@ -204,7 +216,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     updateUser,
     deleteUser,
-  }), [user, login, logout, signup, loading, updateUser, deleteUser]);
+    deductCredit,
+  }), [user, login, logout, signup, loading, updateUser, deleteUser, deductCredit]);
 
   return (
     <AuthContext.Provider value={authContextValue}>

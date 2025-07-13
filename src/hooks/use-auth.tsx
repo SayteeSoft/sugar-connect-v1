@@ -13,8 +13,9 @@ export interface AuthContextType {
   logout: () => void;
   signup: (email: string, pass: string, role: Role) => Promise<SafeUser | null>;
   loading: boolean;
-  updateUser: (userId: string, data: ProfileFormValues) => Promise<SafeUser>;
+  updateUser: (userId: string, data: Partial<ProfileFormValues> & { credits?: number | 'unlimited' }) => Promise<SafeUser>;
   deleteUser: (userId: string) => Promise<void>;
+  deductCredit: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

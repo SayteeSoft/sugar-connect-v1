@@ -85,6 +85,11 @@ export async function POST(req: Request) {
     userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
+    const creditsValue = formData.get('credits');
+    if (creditsValue) {
+        userToUpdate.credits = creditsValue === 'unlimited' ? 'unlimited' : Number(creditsValue);
+    }
+    
     const sexValue = formData.get('sex') as User['sex'];
     if (sexValue && (sexValue === 'Male' || sexValue === 'Female')) {
         userToUpdate.sex = sexValue;

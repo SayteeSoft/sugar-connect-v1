@@ -19,6 +19,7 @@ import { LogIn, LogOut, Settings, UserPlus, User, Users, Menu, Sun, Moon } from 
 import { useTheme } from 'next-themes';
 import { Skeleton } from './ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { Badge } from './ui/badge';
 
 const NavLinks = ({ inSheet = false }: { inSheet?: boolean }) => (
   <div className={inSheet ? 'flex flex-col space-y-4' : 'hidden md:flex items-center gap-2'}>
@@ -58,7 +59,12 @@ export function Header() {
       case 'Sugar Daddy':
         return (
           <Button asChild>
-            <Link href="/purchase-credits">Buy Credits [{user.credits}]</Link>
+            <Link href="/purchase-credits" className="flex items-center gap-2">
+              Buy Credits
+              <Badge variant="secondary" className="rounded-full bg-white text-primary text-xs w-6 h-6 flex items-center justify-center p-0">
+                {user.credits}
+              </Badge>
+            </Link>
           </Button>
         );
       case 'Sugar Baby':

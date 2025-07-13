@@ -11,9 +11,11 @@ import { MoreVertical, Phone, Search, Send, Smile, Paperclip, Video } from "luci
 import type { User } from '@/types';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function MessagesPage() {
-    const { user: currentUser } = useAuth();
+    const { user: currentUser, deductCredit } = useAuth();
+    const { toast } = useToast();
     
     const conversations = useMemo(() => {
         if (!currentUser) return [];
@@ -30,6 +32,7 @@ export default function MessagesPage() {
     }, [currentUser]);
 
     const [activeConversation, setActiveConversation] = useState<User | null>(null);
+    const [messageInput, setMessageInput] = useState('');
 
     useEffect(() => {
         if (conversations.length > 0 && !activeConversation) {
@@ -39,6 +42,31 @@ export default function MessagesPage() {
     
     const handleConversationClick = (user: User) => {
         setActiveConversation(user);
+    };
+
+    const handleSendMessage = () => {
+        if (!messageInput.trim()) return;
+
+        if (currentUser?.role === 'Sugar Daddy') {
+            if (typeof currentUser.credits === 'number' && currentUser.credits > 0) {
+                deductCredit?.();
+                toast({
+                    title: 'Message Sent!',
+                    description: `1 credit has been deducted. You have ${currentUser.credits - 1} credits remaining.`,
+                });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'No Credits Left',
+                    description: 'Please purchase more credits to send messages.',
+                });
+                return;
+            }
+        }
+        
+        // In a real app, you would send the message to the backend here.
+        console.log('Sending message:', messageInput);
+        setMessageInput('');
     };
 
     if (!currentUser) {
@@ -122,8 +150,14 @@ export default function MessagesPage() {
                         <div className="p-4 border-t flex items-center gap-2 bg-background">
                             <Button variant="ghost" size="icon"><Paperclip className="h-5 w-5" /></Button>
                             <Button variant="ghost" size="icon"><Smile className="h-5 w-5" /></Button>
-                            <Input placeholder="Type your message..." className="flex-1 bg-muted/50 focus-visible:ring-1" />
-                            <Button>
+                            <Input 
+                                placeholder="Type your message..." 
+                                className="flex-1 bg-muted/50 focus-visible:ring-1"
+                                value={messageInput}
+                                onChange={(e) => setMessageInput(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                            />
+                            <Button onClick={handleSendMessage}>
                                 <Send className="h-5 w-5" />
                             </Button>
                         </div>
