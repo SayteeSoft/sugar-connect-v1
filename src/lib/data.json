@@ -155,6 +155,18 @@
       "credits": 10,
       "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
       "profileId": "p13"
+    },
+    {
+      "id": "1752417984405",
+      "email": "larry.saytee@email.com",
+      "name": "New User",
+      "age": 18,
+      "location": "Not specified",
+      "role": "Sugar Daddy",
+      "credits": 10,
+      "avatarUrl": "https://placehold.co/400x400.png",
+      "profileId": "p1752417984405",
+      "passwordHash": "$2b$10$tnz.ro/TaNXAMSPTBNlQ/.1gPeVhVp0.LzNIG5rLXukomb3l93b3a"
     }
   ],
   "profiles": [
@@ -435,7 +447,15 @@
       "notMetCount": 0,
       "votes": {},
       "attributes": {}
+    },
+    {
+      "id": "p1752417984405",
+      "userId": "1752417984405",
+      "about": "",
+      "wants": [],
+      "interests": [],
+      "gallery": [],
+      "attributes": {}
     }
   ]
 }
-    
