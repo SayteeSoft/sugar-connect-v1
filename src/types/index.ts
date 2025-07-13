@@ -47,14 +47,28 @@ export interface Testimonial {
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-const fileSchema = z
-  .instanceof(File)
-  .optional()
-  .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-  .refine(
-    (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
-    "Only .jpg, .jpeg, .png and .webp formats are supported."
-  );
+const fileSchema = z.union([
+    z.string(), // For existing image URLs
+    z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .refine(
+        (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
+]);
+
+const avatarFileSchema = z.union([
+    z.string(),
+    z
+    .instanceof(File)
+    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .refine(
+        (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
+]).optional();
+
 
 // We can infer the type from the zod schema used in the profile page
 export const profileFormSchema = z.object({
@@ -63,8 +77,8 @@ export const profileFormSchema = z.object({
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
   location: z.string().min(2, "Location is required."),
   about: z.string().optional(),
-  wants: z.array(z.object({ value: z.string() })).optional(),
-  interests: z.array(z.object({ value: z.string() })).optional(),
+  wants: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  interests: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
   age: z.coerce.number().min(18, "You must be at least 18."),
   height: z.string().optional(),
   bodyType: z.enum(["Slim", "Athletic", "Average", "Curvy"]).optional(),
@@ -75,8 +89,8 @@ export const profileFormSchema = z.object({
   drinker: z.enum(["Yes", "Socially", "Sometimes", "No"]).optional(),
   piercings: z.enum(["Yes", "No"]).optional(),
   tattoos: z.enum(["Yes", "No"]).optional(),
-  avatar: fileSchema,
-  gallery: z.array(fileSchema).optional(),
+  avatar: avatarFileSchema,
+  gallery: z.array(z.union([fileSchema, z.object({ file: fileSchema })])).optional().default([]),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

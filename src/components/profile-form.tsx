@@ -46,7 +46,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
-  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<(string | File)[]>([]);
   
   const { control, handleSubmit, reset, getValues, setValue, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -64,12 +64,12 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     }
   });
   
-  const { fields: galleryFields, append: appendGallery, remove: removeGallery } = useFieldArray({
+  const { fields: galleryFields, append: appendGallery, remove: removeGallery, replace: replaceGallery } = useFieldArray({
     control, name: "gallery"
   });
 
   useEffect(() => {
-    reset({
+    const initialValues = {
       name: user.name,
       email: user.email,
       role: user.role,
@@ -78,6 +78,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       wants: profile.wants.map(v => ({value: v, label: v})),
       interests: profile.interests.map(v => ({value: v, label: v})),
       age: user.age,
+      gallery: profile.gallery, // Keep existing gallery paths
       height: profile.attributes.height,
       bodyType: profile.attributes.bodyType,
       ethnicity: profile.attributes.ethnicity,
@@ -87,10 +88,12 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       drinker: profile.attributes.drinker,
       piercings: profile.attributes.piercings,
       tattoos: profile.attributes.tattoos,
-    });
+    };
+    reset(initialValues);
     setAvatarPreview(user.avatarUrl);
-    setGalleryPreviews(profile.gallery);
-  }, [user, profile, reset]);
+    setGalleryPreviews(profile.gallery); // Initialize previews with existing gallery
+    replaceGallery(profile.gallery.map(url => ({ file: url }))); // Initialize form array
+  }, [user, profile, reset, replaceGallery]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -106,19 +109,27 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   
   const handleGalleryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      const newPreviews: string[] = [];
-      Array.from(files).forEach(file => {
-          appendGallery(file as any);
-          newPreviews.push(URL.createObjectURL(file));
-      });
-      setGalleryPreviews(prev => [...prev, ...newPreviews]);
+    if (files && files.length > 0) {
+        // Create a new list of files, replacing any previously staged new files
+        const newFiles = Array.from(files);
+        const existingImageUrls = galleryFields
+            .map(field => (field as any).file)
+            .filter(file => typeof file === 'string');
+        
+        const newFieldValues = [...existingImageUrls.map(url => ({ file: url })), ...newFiles.map(file => ({ file }))];
+        replaceGallery(newFieldValues);
+
+        // Update previews
+        const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+        setGalleryPreviews([...existingImageUrls, ...newPreviews]);
     }
   };
 
   const removeGalleryImage = (index: number) => {
-    removeGallery(index);
-    setGalleryPreviews(previews => previews.filter((_, i) => i !== index));
+    remove(index);
+    const updatedPreviews = [...galleryPreviews];
+    updatedPreviews.splice(index, 1);
+    setGalleryPreviews(updatedPreviews);
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -132,11 +143,27 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     }
 
     try {
-        await updateUser(user.id, data);
+        const updatedUser = await updateUser(user.id, {
+            ...data,
+            gallery: galleryFields.map(field => (field as any).file) // Pass the file/url objects
+        });
+        
         toast({
           title: "Profile Saved!",
           description: `${data.name}'s profile has been successfully updated.`,
         });
+
+        // After successful upload, update the form state to reflect the new reality
+        const updatedProfileResponse = await fetch('/api/users');
+        const updatedData = await updatedProfileResponse.json();
+        const freshProfile = updatedData.profiles.find((p: Profile) => p.userId === user.id);
+
+        if (freshProfile) {
+            const newFieldValues = freshProfile.gallery.map((url: string) => ({ file: url }));
+            replaceGallery(newFieldValues);
+            setGalleryPreviews(freshProfile.gallery);
+        }
+
         if (isAdminEditing) {
           router.push("/admin");
         } else {
@@ -153,7 +180,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   };
 
   const handleCancel = () => {
-      reset({
+      const initialValues = {
           name: user.name,
           email: user.email,
           role: user.role,
@@ -162,6 +189,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
           wants: profile.wants.map(v => ({value: v, label: v})),
           interests: profile.interests.map(v => ({value: v, label: v})),
           age: user.age,
+          gallery: profile.gallery,
           height: profile.attributes.height,
           bodyType: profile.attributes.bodyType,
           ethnicity: profile.attributes.ethnicity,
@@ -171,9 +199,11 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
           drinker: profile.attributes.drinker,
           piercings: profile.attributes.piercings,
           tattoos: profile.attributes.tattoos,
-      });
+      };
+      reset(initialValues);
       setAvatarPreview(user.avatarUrl);
       setGalleryPreviews(profile.gallery);
+      replaceGallery(profile.gallery.map(url => ({ file: url })));
       if (isAdminEditing) {
         router.back();
       } else {
@@ -391,16 +421,20 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {galleryPreviews.map((src, index) => (
-                        <div key={index} className="relative group">
-                            <Image src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
-                            {isEditing && (
-                                <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeGalleryImage(index)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            )}
-                        </div>
-                    ))}
+                    {galleryFields.map((field, index) => {
+                        const currentFile = (field as any).file;
+                        const src = typeof currentFile === 'string' ? currentFile : URL.createObjectURL(currentFile);
+                        return (
+                            <div key={field.id} className="relative group">
+                                <Image src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
+                                {isEditing && (
+                                    <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeGalleryImage(index)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                )}
+                            </div>
+                        )
+                    })}
                     {isEditing && (
                         <>
                           <input
@@ -419,7 +453,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                     )}
                 </div>
                 {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message as string}</p>}
-                {!isEditing && galleryPreviews.length === 0 && (
+                {!isEditing && galleryFields.length === 0 && (
                     <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
                 )}
               </CardContent>

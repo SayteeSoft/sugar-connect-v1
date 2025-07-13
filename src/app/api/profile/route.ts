@@ -134,18 +134,28 @@ export async function POST(req: Request) {
     if (avatarFile && avatarFile.size > 0) {
         userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
-
+    
+    const existingGallery = profileToUpdate.gallery ? [...profileToUpdate.gallery] : [];
     const galleryFiles = formData.getAll('gallery') as File[];
     const newImagePaths: string[] = [];
-    for (const file of galleryFiles) {
-        if (file instanceof File && file.size > 0) {
-            const path = await writeFile(file);
-            newImagePaths.push(path);
-        }
-    }
 
-    if (newImagePaths.length > 0) {
-        profileToUpdate.gallery = [...(profileToUpdate.gallery || []), ...newImagePaths];
+    // Check if new gallery files were uploaded. If so, we replace the entire gallery.
+    const hasNewGalleryFiles = galleryFiles.some(file => file instanceof File && file.size > 0);
+
+    if (hasNewGalleryFiles) {
+        for (const file of galleryFiles) {
+            if (file instanceof File && file.size > 0) {
+                const path = await writeFile(file);
+                newImagePaths.push(path);
+            }
+        }
+        profileToUpdate.gallery = newImagePaths;
+    } else {
+        // If no new files, respect the existing gallery from form data (which might have deletions)
+        const galleryFromForm = formData.get('existingGallery') as string | null;
+        if (galleryFromForm) {
+            profileToUpdate.gallery = JSON.parse(galleryFromForm);
+        }
     }
     
     users[userIndex] = userToUpdate;

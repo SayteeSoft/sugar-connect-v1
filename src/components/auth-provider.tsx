@@ -136,13 +136,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       formData.append('avatar', data.avatar);
     }
     
+    // Send only new files to the backend
+    let hasNewFiles = false;
     if (data.gallery && data.gallery.length > 0) {
         data.gallery.forEach((file) => {
             if (file instanceof File) {
                 formData.append(`gallery`, file);
+                hasNewFiles = true;
             }
         });
     }
+
+    // If no new files are being uploaded, send the current state of the gallery (which may have deletions)
+    if (!hasNewFiles) {
+        const existingGallery = data.gallery?.map(item => (typeof item === 'string' ? item : ''))?.filter(Boolean) || [];
+        formData.append('existingGallery', JSON.stringify(existingGallery));
+    }
+
 
     const response = await fetch('/api/profile', {
       method: 'POST',
