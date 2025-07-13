@@ -66,7 +66,7 @@ export default function MatchesPage() {
     
     if (loading) {
         return (
-             <div className="container mx-auto px-4 md:px-6 py-8 max-w-lg">
+             <div className="container mx-auto px-4 md:px-6 py-8 max-w-4xl">
                 <div className="text-center mb-6">
                     <Skeleton className="h-9 w-1/3 mx-auto" />
                     <Skeleton className="h-4 w-2/3 mx-auto mt-4" />
@@ -94,20 +94,22 @@ export default function MatchesPage() {
 
             <div className="max-w-4xl mx-auto">
                 <Tabs defaultValue="favorites" onValueChange={setActiveTab}>
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="favorites">
-                            <Heart className="mr-2 h-4 w-4" />
-                            Favorites
-                        </TabsTrigger>
-                        <TabsTrigger value="visitors">
-                            <Users className="mr-2 h-4 w-4" />
-                            Visitors
-                        </TabsTrigger>
-                        <TabsTrigger value="viewed">
-                            <Eye className="mr-2 h-4 w-4" />
-                            Viewed
-                        </TabsTrigger>
-                    </TabsList>
+                    <div className="max-w-xl mx-auto">
+                        <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="favorites">
+                                <Heart className="mr-2 h-4 w-4" />
+                                Favorites
+                            </TabsTrigger>
+                            <TabsTrigger value="visitors">
+                                <Users className="mr-2 h-4 w-4" />
+                                Visitors
+                            </TabsTrigger>
+                            <TabsTrigger value="viewed">
+                                <Eye className="mr-2 h-4 w-4" />
+                                Viewed
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
                     <Card className="mt-4">
                         <TabsContent value="favorites">
                             <CardContent className="p-0">
