@@ -40,7 +40,8 @@ export default function MessagesPage() {
             return mockUsers.filter(u => u.role === 'Sugar Daddy');
         }
         if (currentUser.role === 'Admin') {
-            return mockUsers.filter(u => u.id !== currentUser.id && u.role !== 'Admin');
+            const specificUsers = ["Darianna", "Kateryna", "Sofia", "Vanessa"];
+            return mockUsers.filter(u => specificUsers.includes(u.name));
         }
         return [];
     }, [currentUser]);
