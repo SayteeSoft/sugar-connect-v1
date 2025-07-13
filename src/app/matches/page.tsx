@@ -66,7 +66,7 @@ export default function MatchesPage() {
     
     if (loading) {
         return (
-             <div className="container mx-auto px-4 md:px-6 py-8 max-w-4xl">
+             <div className="container mx-auto px-4 md:px-6 py-8 max-w-lg">
                 <div className="text-center mb-6">
                     <Skeleton className="h-9 w-1/3 mx-auto" />
                     <Skeleton className="h-4 w-2/3 mx-auto mt-4" />
@@ -92,7 +92,7 @@ export default function MatchesPage() {
                 <p className="text-muted-foreground mt-2">Browse your favorites, see who visited your profile, and who you have viewed.</p>
             </div>
 
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-lg mx-auto">
                 <Tabs defaultValue="favorites" onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="favorites">
