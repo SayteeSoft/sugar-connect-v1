@@ -109,7 +109,10 @@ export async function POST(req: Request) {
     const wantsString = getString('wants');
     if (wantsString) {
       try {
-        profileToUpdate.wants = JSON.parse(wantsString);
+        const wantsArray = JSON.parse(wantsString);
+        if (Array.isArray(wantsArray)) {
+          profileToUpdate.wants = wantsArray;
+        }
       } catch (e) {
         console.error("Failed to parse wants:", e);
       }
@@ -118,7 +121,10 @@ export async function POST(req: Request) {
     const interestsString = getString('interests');
     if (interestsString) {
       try {
-        profileToUpdate.interests = JSON.parse(interestsString);
+        const interestsArray = JSON.parse(interestsString);
+        if (Array.isArray(interestsArray)) {
+          profileToUpdate.interests = interestsArray;
+        }
       } catch (e) {
         console.error("Failed to parse interests:", e);
       }

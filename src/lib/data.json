@@ -161,7 +161,7 @@
       "email": "larry.saytee@email.com",
       "name": "Larry",
       "age": 18,
-      "location": "Not specified",
+      "location": "London, UK",
       "role": "Sugar Daddy",
       "credits": 8,
       "avatarUrl": "/uploads/1752432192682_Photo 09-02-2019, 19 01 19 (small).jpg",
@@ -452,7 +452,7 @@
     {
       "id": "p1752417984405",
       "userId": "1752417984405",
-      "about": "",
+      "about": "My profile :)",
       "wants": [],
       "interests": [],
       "gallery": [],
