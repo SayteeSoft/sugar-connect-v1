@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
@@ -79,5 +80,5 @@ export default function ProfilePage() {
     return <div className="container mx-auto p-8">Profile not found. Please contact support.</div>;
   }
 
-  return <ProfileForm user={user} profile={userProfile} />;
+  return <ProfileForm user={user} profile={userProfile} currentUser={user} />;
 }

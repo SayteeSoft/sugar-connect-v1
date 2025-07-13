@@ -38,10 +38,11 @@ interface ProfileFormProps {
   user: User;
   profile: Profile;
   isAdminEditing?: boolean;
+  currentUser?: User | null;
 }
 
-export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFormProps) {
-  const { user: currentUser, updateUser } = useAuth();
+export function ProfileForm({ user, profile, isAdminEditing = false, currentUser }: ProfileFormProps) {
+  const { updateUser } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(isAdminEditing);
@@ -293,28 +294,24 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
 
                          <div>
                             <Label htmlFor="role">Role</Label>
-                            {currentUser?.role === 'Admin' ? (
-                                <Controller
-                                    name="role"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Admin">Admin</SelectItem>
-                                                <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
-                                                <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    )}
-                                />
-                            ) : (
-                                <Controller
-                                    name="role"
-                                    control={control}
-                                    render={({ field }) => <Input id="role" {...field} readOnly />}
-                                />
-                            )}
+                             <Controller
+                                name="role"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select 
+                                        onValueChange={field.onChange} 
+                                        value={field.value}
+                                        disabled={currentUser?.role !== 'Admin'}
+                                    >
+                                        <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Admin">Admin</SelectItem>
+                                            <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
+                                            <SelectItem value="Sugar Baby">Sugar Baby</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
                         </div>
 
                         <div>

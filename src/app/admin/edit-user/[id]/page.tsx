@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -78,6 +79,7 @@ export default function EditUserPage() {
       user={userToEdit}
       profile={profileToEdit}
       isAdminEditing={true}
+      currentUser={currentUser}
     />
   );
 }
