@@ -85,22 +85,20 @@ export function MessageToast() {
     return (
         <div className="fixed top-20 right-5 z-50 animate-in slide-in-from-top-5 fade-in-50">
             <Card className="w-96 shadow-2xl">
-                <CardHeader className="flex flex-row items-center justify-end p-2">
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleClose}>
-                        <X className="h-4 w-4" />
-                    </Button>
-                </CardHeader>
-                <CardContent className="p-4 pt-0">
-                    <div className="flex items-start gap-3">
+                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
+                    <div className="flex items-center gap-3">
                         <Avatar>
                             <AvatarImage src={fromUser.avatarUrl} alt={fromUser.name} />
                             <AvatarFallback>{fromUser.name.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <div>
-                            <p className="font-semibold">{fromUser.name}</p>
-                            <p className="text-sm text-muted-foreground">{message}</p>
-                        </div>
+                        <p className="font-semibold">{fromUser.name}</p>
                     </div>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={handleClose}>
+                        <X className="h-4 w-4" />
+                    </Button>
+                </CardHeader>
+                <CardContent className="px-4 pb-4">
+                     <p className="text-sm text-muted-foreground ml-[52px]">{message}</p>
                 </CardContent>
                 <CardFooter className="flex justify-end gap-2 p-4 pt-0">
                     <Button variant="ghost" size="sm" onClick={handleClose}>
