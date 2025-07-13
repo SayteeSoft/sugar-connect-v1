@@ -18,7 +18,7 @@
       "id": "4",
       "name": "Darianna",
       "email": "darianna.art@gmail.com",
-      "passwordHash": "$2b$10$NotARealHashJustForShow.u6bA/3K/dIs43y/c6i26.46",
+      "passwordHash": "$2a$10$2B3e.5qZ/9u.E5y.3c.7c.m9eF7i9a.6h2J/8k.0g1f4i5g6h7j8",
       "age": 22,
       "location": "London, UK",
       "sex": "Female",
@@ -439,3 +439,5 @@
     }
   ]
 }
+
+    
