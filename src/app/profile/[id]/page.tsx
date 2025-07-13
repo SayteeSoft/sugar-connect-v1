@@ -12,6 +12,7 @@ import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
 import { useEffect, useState } from "react";
+import { GalleryLightbox } from "@/components/gallery-lightbox";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -211,20 +212,25 @@ export default function OtherUserProfilePage() {
               </CardHeader>
               <CardContent>
                 {userProfile.gallery && userProfile.gallery.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {userProfile.gallery.map((src, index) => (
-                      <div key={index} className="relative group">
-                        <Image 
-                          src={src} 
-                          alt={`Gallery image ${index + 1}`} 
-                          width={200} 
-                          height={200} 
-                          className="rounded-md w-full aspect-square object-cover"
-                          data-ai-hint="gallery photo"
-                        />
+                  <GalleryLightbox 
+                    images={userProfile.gallery}
+                    renderThumbnails={({ openLightbox }) => (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {userProfile.gallery.map((src, index) => (
+                          <div key={index} className="relative group cursor-pointer" onClick={() => openLightbox(index)}>
+                            <Image 
+                              src={src} 
+                              alt={`Gallery image ${index + 1}`} 
+                              width={200} 
+                              height={200} 
+                              className="rounded-md w-full aspect-square object-cover"
+                              data-ai-hint="gallery photo"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  />
                 ) : (
                   <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
                 )}

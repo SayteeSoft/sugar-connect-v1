@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useForm, Controller, useFieldArray } from "react-hook-form";
@@ -20,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, useRef } from "react";
 import { ProfileFormValues as ProfileFormSchema, profileFormSchema, Profile, User } from "@/types";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { GalleryLightbox } from "@/components/gallery-lightbox";
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
@@ -229,6 +231,11 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   }
   
   const formValues = getValues();
+  
+  const imageSources = galleryFields
+        .map(field => (field as any).file)
+        .map(file => (typeof file === 'string' ? file : URL.createObjectURL(file)));
+
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
@@ -458,47 +465,74 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                  <CardTitle>Gallery</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {galleryFields.map((field, index) => {
-                        const currentFile = (field as any).file;
-                        const src = typeof currentFile === 'string' ? currentFile : URL.createObjectURL(currentFile);
-                        return (
-                            <div key={field.id} className="relative group">
-                                <Image src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo"/>
-                                {isEditing && (
-                                    <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeGalleryImage(index)}>
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                )}
-                            </div>
-                        )
-                    })}
-                    {isEditing && (
-                        <>
-                          <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            ref={galleryInputRef}
-                            className="hidden"
-                            onChange={handleGalleryChange}
-                          />
-                          <button type="button" onClick={() => galleryInputRef.current?.click()} className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                              <PlusCircle className="h-8 w-8" />
-                              <span className="text-sm mt-1">Add Photo</span>
-                          </button>
-                        </>
+                <CardHeader>
+                    <CardTitle>Gallery</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {galleryFields.length > 0 ? (
+                        <GalleryLightbox
+                            images={imageSources}
+                            renderThumbnails={({ openLightbox }) => (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {galleryFields.map((field, index) => {
+                                        const src = imageSources[index];
+                                        return (
+                                            <div key={field.id} className="relative group cursor-pointer" onClick={() => openLightbox(index)}>
+                                                <Image src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo" />
+                                                {isEditing && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="icon"
+                                                        className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            removeGalleryImage(index);
+                                                        }}
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                    {isEditing && (
+                                        <>
+                                            <input type="file" multiple accept="image/*" ref={galleryInputRef} className="hidden" onChange={handleGalleryChange} />
+                                            <button type="button" onClick={() => galleryInputRef.current?.click()} className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                                                <PlusCircle className="h-8 w-8" />
+                                                <span className="text-sm mt-1">Add Photo</span>
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        />
+                    ) : (
+                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {isEditing && (
+                                <>
+                                  <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    ref={galleryInputRef}
+                                    className="hidden"
+                                    onChange={handleGalleryChange}
+                                  />
+                                  <button type="button" onClick={() => galleryInputRef.current?.click()} className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                                      <PlusCircle className="h-8 w-8" />
+                                      <span className="text-sm mt-1">Add Photo</span>
+                                  </button>
+                                </>
+                            )}
+                            {!isEditing && (
+                                <p className="text-sm text-muted-foreground col-span-full">This user hasn't added any photos to their gallery yet.</p>
+                            )}
+                         </div>
                     )}
-                </div>
-                {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message as string}</p>}
-                {!isEditing && galleryFields.length === 0 && (
-                    <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
-                )}
-              </CardContent>
+                    {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message as string}</p>}
+                </CardContent>
             </Card>
             <Card>
               <CardHeader>
