@@ -5,10 +5,12 @@ import path from 'path';
 import type { User, Profile, Role } from '@/types';
 import bcrypt from 'bcrypt';
 import { readData, writeData } from '@/lib/data-access';
+import { getStore } from '@netlify/blobs';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {  
+  if (process.env.NETLIFY_CONTEXT) return;
   try {
     await fs.access(uploadDir);
   } catch (error) {
@@ -134,10 +136,16 @@ export async function POST(req: Request) {
     profileToUpdate.attributes.tattoos = (formData.get('tattoos') as Profile['attributes']['tattoos']) || undefined;
 
     const writeFile = async (file: File) => {
+      const filename = `${Date.now()}_${file.name}`;
+      if (process.env.NETLIFY_CONTEXT) {
+        const store = getStore('uploads');
+        await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
+        return `/api/uploads/${filename}`;
+      } else {
         const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `${Date.now()}_${file.name}`;
         await fs.writeFile(path.join(uploadDir, filename), buffer);
         return `/uploads/${filename}`;
+      }
     };
 
     const avatarFile = formData.get('avatar') as File | null;

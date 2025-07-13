@@ -6,3 +6,8 @@
 [blobs]
   # Enable the blobs feature
   store = "data"
+
+[[redirects]]
+  from = "/api/uploads/*"
+  to = "/.netlify/functions/server/api/uploads/:splat"
+  status = 200
