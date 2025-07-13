@@ -2,18 +2,6 @@
 import { NextResponse } from 'next/server';
 import paypal from '@paypal/checkout-server-sdk';
 
-const {
-    PAYPAL_CLIENT_ID,
-    PAYPAL_CLIENT_SECRET,
-} = process.env;
-
-if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-    throw new Error("PayPal client ID or secret is not configured in environment variables.");
-}
-
-const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
-const client = new paypal.core.PayPalHttpClient(environment);
-
 const creditPackages: Record<string, {name: string, value: string}> = {
     credits_100: { name: "100 Credits Pack", value: "49.99" },
     credits_250: { name: "250 Credits Pack", value: "99.99" },
@@ -22,7 +10,23 @@ const creditPackages: Record<string, {name: string, value: string}> = {
 };
 
 export async function POST(req: Request) {
+    
+    function getPayPalClient() {
+        const {
+            PAYPAL_CLIENT_ID,
+            PAYPAL_CLIENT_SECRET,
+        } = process.env;
+
+        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            throw new Error("PayPal client ID or secret is not configured in environment variables.");
+        }
+
+        const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
+        return new paypal.core.PayPalHttpClient(environment);
+    }
+
     try {
+        const client = getPayPalClient();
         const { cart } = await req.json();
         const item = creditPackages[cart.id];
         if (!item) {
@@ -63,11 +67,13 @@ export async function POST(req: Request) {
 
         const order = await client.execute(request);
         
-        return NextResponse.json({ id: order.result.id }, { status: order.statusCode as number });
+        const status = order.statusCode ? order.statusCode : 500;
+        return NextResponse.json({ id: order.result.id }, { status });
 
     } catch (error: any) {
         console.error("Failed to create order:", error);
         const message = error.message || "Failed to create order.";
-        return NextResponse.json({ error: message }, { status: 500 });
+        const status = error.statusCode || 500;
+        return NextResponse.json({ error: message }, { status });
     }
 }
