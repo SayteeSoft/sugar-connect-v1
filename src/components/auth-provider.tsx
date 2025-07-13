@@ -67,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         age: 18,
         location: 'Not specified',
         role,
+        sex: role === 'Sugar Daddy' ? 'Male' : 'Female',
         credits: role === 'Sugar Daddy' ? 10 : 'unlimited',
         avatarUrl: 'https://placehold.co/400x400.png',
         profileId: newProfileId
