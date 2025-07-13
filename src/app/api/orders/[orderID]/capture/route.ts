@@ -27,7 +27,7 @@ export async function POST(req: Request, { params }: { params: { orderID: string
         
         const capture = await client.execute(request);
         
-        return NextResponse.json({ ...capture.result }, { status: capture.statusCode });
+        return NextResponse.json({ ...capture.result }, { status: capture.statusCode as number });
 
     } catch (error: any) {
         console.error("Failed to capture order:", error);

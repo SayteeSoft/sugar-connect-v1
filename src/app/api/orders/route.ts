@@ -63,7 +63,7 @@ export async function POST(req: Request) {
 
         const order = await client.execute(request);
         
-        return NextResponse.json({ id: order.result.id }, { status: order.statusCode });
+        return NextResponse.json({ id: order.result.id }, { status: order.statusCode as number });
 
     } catch (error: any) {
         console.error("Failed to create order:", error);
