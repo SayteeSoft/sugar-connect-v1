@@ -126,7 +126,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   };
 
   const removeGalleryImage = (index: number) => {
-    remove(index);
+    removeGallery(index);
     const updatedPreviews = [...galleryPreviews];
     updatedPreviews.splice(index, 1);
     setGalleryPreviews(updatedPreviews);
@@ -314,7 +314,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                             </h1>
                             <Badge variant="outline" className="border-primary text-primary">{formValues.role}</Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground space-y-1">
+                        <div className="text-sm text-muted-foreground space-y-1 text-left">
                             <div className="flex items-center gap-2">
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
