@@ -70,7 +70,14 @@ export function Header() {
       case 'Sugar Baby':
         return <Button variant="outline" disabled>Free</Button>;
       case 'Admin':
-        return <Button variant="outline" disabled>Unlimited Credits</Button>;
+        return (
+            <Button variant="outline" disabled>
+                Unlimited
+                <Badge variant="secondary" className="rounded-full bg-white text-primary text-xs w-6 h-6 flex items-center justify-center p-0">
+                    U
+                </Badge>
+            </Button>
+        );
       default:
         return null;
     }
