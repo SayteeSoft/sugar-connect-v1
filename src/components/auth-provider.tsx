@@ -119,41 +119,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const formData = new FormData();
     formData.append('userId', userId);
 
+    // Append all non-file fields
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
             const value = data[key as keyof typeof data];
-            if (key === 'avatar' || key === 'gallery' || key === 'blank') continue;
+
+            // Skip file-related fields; they are handled separately
+            if (key === 'avatar' || key === 'gallery') continue;
+
             if (key === 'wants' || key === 'interests') {
                 if (Array.isArray(value)) {
+                    // Convert array of objects to array of strings
                     const stringValues = value.map((item: any) => item.value);
                     formData.append(key, JSON.stringify(stringValues));
                 }
-            } else if (value !== undefined && value !== null && value !== '') {
+            } else if (value !== undefined && value !== null) {
                 formData.append(key, String(value));
             }
         }
     }
     
+    // Handle avatar file
     const avatarFile = (data as ProfileFormValues).avatar;
     if (avatarFile instanceof File) {
       formData.append('avatar', avatarFile);
     }
     
-    const galleryFiles = (data as ProfileFormValues).gallery;
-    let hasNewFiles = false;
-    if (galleryFiles && galleryFiles.length > 0) {
-        galleryFiles.forEach((item) => {
-            const file = (item as any).file ?? item;
-            if (file instanceof File) {
-                formData.append(`gallery`, file);
-                hasNewFiles = true;
+    // Handle gallery files
+    const galleryItems = (data as ProfileFormValues).gallery;
+    if (galleryItems) {
+        const existingImageUrls: string[] = [];
+        galleryItems.forEach(item => {
+            const fileOrUrl = (item as any).file ?? item;
+            if (fileOrUrl instanceof File) {
+                formData.append('gallery', fileOrUrl);
+            } else if (typeof fileOrUrl === 'string') {
+                existingImageUrls.push(fileOrUrl);
             }
         });
-    }
-
-    if (!hasNewFiles && galleryFiles) {
-        const existingGallery = galleryFiles.map(item => (typeof ((item as any).file ?? item) === 'string' ? ((item as any).file ?? item) : '')).filter(Boolean);
-        formData.append('existingGallery', JSON.stringify(existingGallery));
+        // Send existing URLs as a JSON string
+        formData.append('existingGallery', JSON.stringify(existingImageUrls));
     }
 
 
@@ -167,7 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(errorData.message || "Failed to update profile.");
     }
     
-    const { user: updatedUser } = await response.json();
+    const { user: updatedUser, profile: updatedProfile } = await response.json();
 
     if (user?.id === userId) {
         setUser(updatedUser);

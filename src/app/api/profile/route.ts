@@ -82,9 +82,20 @@ export async function POST(req: Request) {
         profileToUpdate.attributes = {};
     }
 
-    userToUpdate.name = (formData.get('name') as string) || userToUpdate.name;
-    userToUpdate.email = (formData.get('email') as string) || userToUpdate.email;
-    userToUpdate.location = (formData.get('location') as string) || userToUpdate.location;
+    const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
+        if (field === undefined || field === null || typeof field !== 'string') {
+            return undefined;
+        }
+        return field.trim() === "" ? undefined : field;
+    };
+    
+    const toStringOrExisting = (field: FormDataEntryValue | null, existingValue: string) => {
+        return typeof field === 'string' ? field : existingValue;
+    }
+
+    userToUpdate.name = toStringOrExisting(formData.get('name'), userToUpdate.name);
+    userToUpdate.email = toStringOrExisting(formData.get('email'), userToUpdate.email);
+    userToUpdate.location = toStringOrExisting(formData.get('location'), userToUpdate.location);
     userToUpdate.age = Number(formData.get('age')) || userToUpdate.age;
     
     const creditsValue = formData.get('credits');
@@ -102,7 +113,7 @@ export async function POST(req: Request) {
         userToUpdate.role = roleValue;
     }
     
-    profileToUpdate.about = (formData.get('about') as string) || profileToUpdate.about;
+    profileToUpdate.about = toStringOrExisting(formData.get('about'), profileToUpdate.about);
 
     const wantsString = formData.get('wants') as string;
     if (wantsString) {
@@ -117,13 +128,6 @@ export async function POST(req: Request) {
         profileToUpdate.interests = JSON.parse(interestsString);
       } catch {}
     }
-    
-    const toStringOrUndefined = (field?: FormDataEntryValue | null): string | undefined => {
-        if (field === undefined || field === null || typeof field !== 'string' || field.trim() === '') {
-            return undefined;
-        }
-        return field;
-    };
 
     profileToUpdate.attributes.height = toStringOrUndefined(formData.get('height'));
     profileToUpdate.attributes.bodyType = (formData.get('bodyType') as Profile['attributes']['bodyType']) || undefined;
@@ -153,23 +157,25 @@ export async function POST(req: Request) {
         userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
     
-    const galleryFiles = formData.getAll('gallery') as (File | string)[];
-    
-    const newGalleryFiles = galleryFiles.filter(file => file instanceof File && file.size > 0) as File[];
+    const existingGallery = formData.get('existingGallery');
+    const newGalleryFiles = formData.getAll('gallery').filter(f => f instanceof File) as File[];
 
-    if (newGalleryFiles.length > 0) {
-        const newImagePaths: string[] = [];
-        for (const file of newGalleryFiles) {
-            const path = await writeFile(file);
-            newImagePaths.push(path);
-        }
-        profileToUpdate.gallery = newImagePaths;
+    let finalGallery: string[] = [];
+
+    if (existingGallery && typeof existingGallery === 'string') {
+        try {
+            finalGallery = JSON.parse(existingGallery);
+        } catch {}
     } else {
-        const galleryFromForm = formData.get('existingGallery') as string | null;
-        if (galleryFromForm) {
-            profileToUpdate.gallery = JSON.parse(galleryFromForm);
-        }
+        finalGallery = profileToUpdate.gallery || [];
     }
+
+    for (const file of newGalleryFiles) {
+        const path = await writeFile(file);
+        finalGallery.push(path);
+    }
+    
+    profileToUpdate.gallery = finalGallery;
     
     users[userIndex] = userToUpdate;
     profiles[profileIndex] = profileToUpdate;
