@@ -77,7 +77,6 @@ const avatarFileSchema = z.union([
 // We can infer the type from the zod schema used in the profile page
 export const profileFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
-  blank: z.string().optional(),
   email: z.string().email("Please enter a valid email address."),
   sex: z.enum(["Male", "Female"]).optional(),
   role: z.enum(["Sugar Daddy", "Sugar Baby", "Admin"]),
