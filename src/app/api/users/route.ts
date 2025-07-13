@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { readData } from '../auth/login/route';
+import { readData } from '@/lib/data-access';
 import type { User } from '@/types';
 
 export async function GET() {

@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import type { User, Profile, Role } from '@/types';
 import bcrypt from 'bcrypt';
-import { readData, writeData } from '../auth/login/route';
+import { readData, writeData } from '@/lib/data-access';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         users.push(userWithHash);
         profiles.push(newProfile);
 
-        await writeData({ users, profiles });
+        await writeData({ ...db, users, profiles });
 
         const { passwordHash: _, ...userToReturn } = userWithHash;
 
@@ -171,7 +171,7 @@ export async function POST(req: Request) {
     users[userIndex] = userToUpdate;
     profiles[profileIndex] = profileToUpdate;
 
-    await writeData({ users, profiles });
+    await writeData({ ...db, users, profiles });
     
     const { passwordHash: _, ...userToReturn } = userToUpdate;
 
@@ -213,7 +213,7 @@ export async function DELETE(req: Request) {
         const updatedUsers = users.filter((u: User) => u.id !== userId);
         const updatedProfiles = profiles.filter((p: Profile) => p.userId !== userId);
 
-        await writeData({ users: updatedUsers, profiles: updatedProfiles });
+        await writeData({ ...db, users: updatedUsers, profiles: updatedProfiles });
 
         return NextResponse.json({ message: 'User deleted successfully.' }, { status: 200 });
 

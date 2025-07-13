@@ -41,6 +41,21 @@ export interface Profile {
   };
 }
 
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  timestamp: string;
+}
+
+export interface AppData {
+  users: User[];
+  profiles: Profile[];
+  messages: Message[];
+}
+
 export interface Testimonial {
   name: string;
   role: TestimonialRole;
