@@ -46,7 +46,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
-  const [galleryPreviews, setGalleryPreviews] = useState<(string | File)[]>([]);
   
   const { control, handleSubmit, reset, getValues, setValue, watch, formState: { errors } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -83,7 +82,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       wants: profile.wants.map(v => ({value: v, label: v})),
       interests: profile.interests.map(v => ({value: v, label: v})),
       age: user.age,
-      gallery: profile.gallery, // Keep existing gallery paths
+      gallery: profile.gallery || [],
       height: profile.attributes.height,
       bodyType: profile.attributes.bodyType,
       ethnicity: profile.attributes.ethnicity,
@@ -97,20 +96,20 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
     reset(initialValues);
     setAvatarPreview(user.avatarUrl);
     if (profile.gallery) {
-      setGalleryPreviews(profile.gallery);
       replaceGallery(profile.gallery.map(url => ({ file: url })));
     }
   }, [user, profile, reset, replaceGallery]);
   
   useEffect(() => {
-    if (currentUser?.role !== 'Admin') {
-      if (watchSex === 'Male') {
-        setValue('role', 'Sugar Daddy');
-      } else if (watchSex === 'Female') {
-        setValue('role', 'Sugar Baby');
-      }
+    // Admins can manage roles freely, so we don't auto-set for them.
+    if (currentUser?.role === 'Admin' && isAdminEditing) return;
+
+    if (watchSex === 'Male') {
+      setValue('role', 'Sugar Daddy');
+    } else if (watchSex === 'Female') {
+      setValue('role', 'Sugar Baby');
     }
-  }, [watchSex, setValue, currentUser?.role]);
+  }, [watchSex, setValue, currentUser?.role, isAdminEditing]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -126,32 +125,28 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
   
   const handleGalleryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
+    if (files) {
         const newFiles = Array.from(files);
-        const currentFieldValues = getValues("gallery") || [];
-        const newFieldValues = [...currentFieldValues, ...newFiles.map(file => ({ file }))];
-        replaceGallery(newFieldValues);
+        const currentFiles = getValues("gallery") || [];
+        
+        const combinedFiles = [...currentFiles, ...newFiles.map(file => ({ file }))];
 
-        const currentPreviews = getValues("gallery").map(item => {
-            const file = (item as any).file;
-            return typeof file === 'string' ? file : URL.createObjectURL(file);
-        });
-        
-        const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-        setGalleryPreviews(prev => [...prev.filter(p => typeof p === 'string'), ...newPreviews]);
-        
-        const updatedFiles = [...currentFieldValues.map(item => (item as any).file), ...newFiles];
-        const finalFieldValues = updatedFiles.map(file => ({file}));
-        replaceGallery(finalFieldValues);
+        const uniqueFiles = combinedFiles.reduce((acc: { file: any }[], current) => {
+            const file = current.file;
+            const fileName = file instanceof File ? file.name : file;
+            if (!acc.some(item => (item.file instanceof File ? item.file.name : item.file) === fileName)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+
+        replaceGallery(uniqueFiles);
     }
   };
 
 
   const removeGalleryImage = (index: number) => {
     removeGallery(index);
-    const updatedPreviews = [...galleryPreviews];
-    updatedPreviews.splice(index, 1);
-    setGalleryPreviews(updatedPreviews);
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -182,7 +177,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
         if (freshProfile) {
             const newFieldValues = freshProfile.gallery.map((url: string) => ({ file: url }));
             replaceGallery(newFieldValues);
-            setGalleryPreviews(freshProfile.gallery);
         }
 
         if (isAdminEditing) {
@@ -225,7 +219,6 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
       reset(initialValues);
       setAvatarPreview(user.avatarUrl);
       if (profile.gallery) {
-        setGalleryPreviews(profile.gallery);
         replaceGallery(profile.gallery.map(url => ({ file: url })));
       }
       if (isAdminEditing) {
@@ -285,7 +278,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                 </div>
                 {errors.avatar && <p className="text-destructive text-sm mt-1">{errors.avatar.message as string}</p>}
                 {isEditing ? (
-                    <div className="space-y-4">
+                    <div className="space-y-4 text-left">
                         <div>
                             <Label htmlFor="name">Name</Label>
                             <Controller
@@ -313,14 +306,14 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                           {errors.sex && <p className="text-destructive text-sm mt-1">{errors.sex.message}</p>}
                         </div>
 
-                        {currentUser?.role === 'Admin' && (
+                        {currentUser?.role === 'Admin' && isAdminEditing && (
                           <div>
                               <Label htmlFor="role">Role</Label>
                               <Controller
                                   name="role"
                                   control={control}
                                   render={({ field }) => (
-                                      <Select onValueChange={field.onChange} value={field.value} disabled={currentUser?.role !== 'Admin'}>
+                                      <Select onValueChange={field.onChange} value={field.value} disabled>
                                           <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                                           <SelectContent>
                                               <SelectItem value="Sugar Daddy">Sugar Daddy</SelectItem>
@@ -365,9 +358,9 @@ export function ProfileForm({ user, profile, isAdminEditing = false }: ProfileFo
                                <MapPin className="h-4 w-4" />
                                <span>{formValues.location}</span>
                             </div>
-                             <div className="flex items-center gap-2">
+                             {formValues.sex && <div className="flex items-center gap-2">
                                <span>Sex: {formValues.sex}</span>
-                            </div>
+                            </div>}
                             <div className="flex items-center gap-2">
                                <Mail className="h-4 w-4" />
                                <span>{formValues.email}</span>
