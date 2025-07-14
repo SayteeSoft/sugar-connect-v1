@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import * as paypal from '@paypal/checkout-server-sdk';
 import type { OrdersCreateRequest } from '@paypal/checkout-server-sdk/lib/orders/lib';
+import type { AmountBreakdown } from '@paypal/checkout-server-sdk/lib/payments/lib';
 
 const creditPackages: Record<string, {name: string, value: string}> = {
     credits_100: { name: "100 Credits Pack", value: "49.99" },
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
                                 currency_code: "USD",
                                 value: totalValue,
                             },
-                        },
+                        } as AmountBreakdown,
                     },
                     items: [
                         {
