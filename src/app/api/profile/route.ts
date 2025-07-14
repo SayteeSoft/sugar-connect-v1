@@ -10,7 +10,7 @@ import { getStore } from '@netlify/blobs';
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {  
-  if (process.env.NETLIFY_CONTEXT) return;
+  if (process.env.NODE_ENV === 'production') return;
   try {
     await fs.access(uploadDir);
   } catch (error) {
@@ -49,7 +49,7 @@ async function handleNewUser(jsonData: any, db: { users: User[], profiles: Profi
 
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
-    if (process.env.NETLIFY_CONTEXT) {
+    if (process.env.NODE_ENV === 'production') {
       const store = getStore('uploads');
       await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
       return `/api/uploads/${filename}`;

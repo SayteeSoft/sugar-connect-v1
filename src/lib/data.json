@@ -1,4 +1,3 @@
-
 {
   "users": [
     {
@@ -175,8 +174,10 @@
     {
       "id": "p1",
       "userId": "1",
-      "about": "Site administrator.",
-      "wants": [],
+      "about": "Site administrator :)",
+      "wants": [
+        "Financial Support"
+      ],
       "interests": [],
       "gallery": [],
       "metCount": 0,
