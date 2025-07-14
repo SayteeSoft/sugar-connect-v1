@@ -19,9 +19,10 @@ interface PayPalButtonsProps {
     amount: string;
   };
   onResult: (message: string) => void;
+  theme?: string;
 }
 
-export function PayPalButtonsComponent({ cart, onResult }: PayPalButtonsProps) {
+export function PayPalButtonsComponent({ cart, onResult, theme }: PayPalButtonsProps) {
   const { user, updateUser } = useAuth();
   const { toast } = useToast();
   
@@ -31,7 +32,7 @@ export function PayPalButtonsComponent({ cart, onResult }: PayPalButtonsProps) {
     if (window.paypal) {
       renderPaypalButtons();
     }
-  }, [cart]);
+  }, [cart, theme]);
 
   const renderPaypalButtons = () => {
     if(!window.paypal) return;
@@ -40,13 +41,20 @@ export function PayPalButtonsComponent({ cart, onResult }: PayPalButtonsProps) {
     const container = document.getElementById("paypal-button-container");
     if (container) container.innerHTML = "";
 
+    const buttonStyle = {
+      shape: "rect",
+      layout: "vertical",
+      color: "gold",
+      label: "paypal",
+      tagline: false,
+    };
+
+    if (theme === 'dark') {
+        buttonStyle.color = 'silver';
+    }
+
     window.paypal.Buttons({
-      style: {
-        shape: "rect",
-        layout: "vertical",
-        color: "gold",
-        label: "paypal",
-      },
+      style: buttonStyle,
       async createOrder() {
         try {
           const response = await fetch("/api/orders", {

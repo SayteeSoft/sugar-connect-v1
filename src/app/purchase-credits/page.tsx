@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { CreditCard, Wallet } from "lucide-react";
 import { PayPalButtonsComponent } from "@/components/paypal-provider";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 const creditPackages = [
     { credits: 100, price: 49.99, bonus: "Most Popular", id: "credits_100" },
@@ -30,6 +31,12 @@ export default function PurchaseCreditsPage() {
     const [selectedMethod, setSelectedMethod] = React.useState<string | null>(null);
     const [step, setStep] = React.useState<'select' | 'pay'>('select');
     const [message, setMessage] = React.useState('');
+    const { theme } = useTheme();
+    const [isClient, setIsClient] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const handleContinue = () => {
         if (selectedPackage && selectedMethod) {
@@ -37,14 +44,14 @@ export default function PurchaseCreditsPage() {
         }
     };
 
-    if (step === 'pay' && selectedPackage) {
+    if (step === 'pay' && selectedPackage && isClient) {
         return (
             <div className="container mx-auto px-4 md:px-6 py-12 md:py-20">
                  <div className="text-center mb-6">
                     <h1 className="text-3xl md:text-4xl font-headline text-primary font-bold">Complete Your Purchase</h1>
                     <p className="text-muted-foreground text-lg mt-2">Finalize your transaction below.</p>
                 </div>
-                 <Card className="max-w-md mx-auto">
+                 <Card className="max-w-md mx-auto bg-background">
                     <CardHeader>
                         <CardTitle>Payment for {selectedPackage.credits} Credits</CardTitle>
                         <CardDescription>
@@ -52,20 +59,15 @@ export default function PurchaseCreditsPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {selectedMethod === 'paypal' ? (
-                            <PayPalButtonsComponent
-                                cart={{
-                                    id: selectedPackage.id,
-                                    quantity: "1",
-                                    amount: selectedPackage.price.toFixed(2)
-                                }}
-                                onResult={(message) => setMessage(message)}
-                            />
-                        ) : (
-                            <div className="text-center p-8 text-muted-foreground">
-                                Credit/Debit card payments are coming soon. Please select PayPal to complete your purchase.
-                            </div>
-                        )}
+                        <PayPalButtonsComponent
+                            cart={{
+                                id: selectedPackage.id,
+                                quantity: "1",
+                                amount: selectedPackage.price.toFixed(2)
+                            }}
+                            onResult={(message) => setMessage(message)}
+                            theme={theme}
+                        />
                          {message && <p id="result-message" className="text-center mt-4 text-sm text-muted-foreground">{message}</p>}
                     </CardContent>
                     <CardContent>
