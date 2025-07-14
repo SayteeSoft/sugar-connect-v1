@@ -311,7 +311,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
                                     <Select 
                                         onValueChange={field.onChange} 
                                         value={field.value}
-                                        disabled={currentUser?.role !== 'Admin' || watchName === 'Admin'}
+                                        disabled={currentUser?.role !== 'Admin'}
                                     >
                                         <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                                         <SelectContent>
