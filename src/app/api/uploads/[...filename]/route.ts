@@ -19,11 +19,12 @@ export const GET = async (
     return new NextResponse('Not found', { status: 404 });
   }
 
-  const { type } = (await store.getMetadata(filename)) || {};
+  const { metadata } = (await store.getMetadata(filename)) || {};
+  const type = metadata?.type || 'application/octet-stream';
 
   return new NextResponse(blob, {
     headers: {
-      'Content-Type': type || 'application/octet-stream',
+      'Content-Type': type,
     },
   });
 };
