@@ -55,6 +55,7 @@ export async function POST(req: Request) {
                             },
                             quantity: cart.quantity.toString(),
                             sku: cart.id,
+                            category: 'DIGITAL_GOODS'
                         },
                     ],
                 },

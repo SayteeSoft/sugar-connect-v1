@@ -1,4 +1,6 @@
 
+'use server';
+
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -61,11 +63,9 @@ const writeFile = async (file: File) => {
             return `/uploads/${filename}`;
         }
     } catch (error: any) {
-        // Add specific error handling for read-only file system errors
         if (error.code === 'EROFS') {
             throw new Error(`File Upload Error: Attempted to write to a read-only file system in production. The application should be using Netlify Blobs. Please verify the environment configuration.`);
         }
-        // Throw a generic but detailed error for other issues
         throw new Error(`File Upload Failed: ${error.message}`);
     }
 };
