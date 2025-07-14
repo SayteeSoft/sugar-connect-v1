@@ -10,7 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Heart, Lock, ShieldCheck, Headset, Users, CakeSlice, HeartHandshake, Star } from "lucide-react";
 import { mockUsers, testimonials } from "@/lib/mock-data";
-import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -71,7 +70,7 @@ export default function Home() {
               <Card key={profile.id} className="overflow-hidden group">
                 <Link href={user ? `/profile/${profile.id}` : `/login`}>
                   <div className="relative">
-                    <Image 
+                    <img 
                         src={profile.avatarUrl} 
                         alt={profile.name} 
                         width={250} 
@@ -244,23 +243,5 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
-
-
-
-
-    
-
-    
-
-    
-
-
-
-
-    
 
     

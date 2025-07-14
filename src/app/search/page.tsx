@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { useAuth } from '@/hooks/use-auth';
 import { mockUsers } from '@/lib/mock-data';
 import { Card, CardContent } from '@/components/ui/card';
@@ -85,7 +84,7 @@ export default function SearchPage() {
             {searchResults.map(profile => (
               <Card key={profile.id} className="overflow-hidden group relative">
                 <Link href={`/profile/${profile.id}`}>
-                    <Image src={profile.avatarUrl} alt={profile.name} width={400} height={400} className="object-cover w-full h-60" data-ai-hint="profile photo" />
+                    <img src={profile.avatarUrl} alt={profile.name} width={400} height={400} className="object-cover w-full h-60" data-ai-hint="profile photo" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute bottom-0 left-0 p-4 text-white">
                         <h3 className="font-bold text-lg">{profile.name}, {profile.age}</h3>
@@ -108,3 +107,5 @@ export default function SearchPage() {
     </div>
   );
 }
+
+    

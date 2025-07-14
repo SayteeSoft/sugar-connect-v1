@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useForm, Controller, useFieldArray } from "react-hook-form";
@@ -14,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Camera, PlusCircle, Trash2, X, Edit, CheckCircle, Star, MapPin, Mail, Mars, Venus } from "lucide-react";
-import Image from "next/image";
 import { wantOptions, interestOptions } from "@/lib/mock-data";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -256,7 +254,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
             <Card>
               <CardContent className="p-6">
                 <div className="relative mb-4">
-                  <Image
+                  <img
                     src={avatarPreview || user.avatarUrl}
                     alt={user.name}
                     width={400}
@@ -490,7 +488,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
                                         const src = imageSources[index];
                                         return (
                                             <div key={field.id} className="relative group cursor-pointer" onClick={() => openLightbox(index)}>
-                                                <Image src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo" />
+                                                <img src={src} alt={`Gallery image ${index + 1}`} width={200} height={200} className="rounded-md w-full aspect-square object-cover" data-ai-hint="gallery photo" />
                                                 {isEditing && (
                                                     <Button
                                                         type="button"
@@ -722,3 +720,5 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
     </div>
   );
 }
+
+    

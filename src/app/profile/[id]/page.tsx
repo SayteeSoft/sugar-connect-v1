@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Edit, MessageSquare, Heart, CheckCircle, Mail, MapPin, Star, Mars, Venus, Flag, Ban } from "lucide-react";
-import Image from "next/image";
 import { notFound, useRouter, useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Profile } from "@/types";
@@ -202,7 +201,7 @@ export default function OtherUserProfilePage() {
             <Card>
               <CardContent className="p-6">
                 <div className="relative mb-4">
-                  <Image
+                  <img
                     src={user.avatarUrl}
                     alt={user.name}
                     width={400}
@@ -384,7 +383,7 @@ export default function OtherUserProfilePage() {
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {userProfile.gallery.map((src, index) => (
                           <div key={index} className="relative group cursor-pointer" onClick={() => openLightbox(index)}>
-                            <Image 
+                            <img 
                               src={src} 
                               alt={`Gallery image ${index + 1}`} 
                               width={200} 
@@ -461,3 +460,5 @@ export default function OtherUserProfilePage() {
     </div>
   );
 }
+
+    

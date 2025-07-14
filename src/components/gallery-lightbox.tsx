@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
@@ -100,13 +99,12 @@ export function GalleryLightbox({ images, renderThumbnails }: GalleryLightboxPro
                          )}
 
                         <div className="relative max-w-[90vw] max-h-[90vh]">
-                            <Image
+                            <img
                                 src={images[currentIndex]}
                                 alt={`Gallery image ${currentIndex + 1}`}
                                 width={1200}
                                 height={800}
                                 className="object-contain w-auto h-auto max-w-full max-h-full"
-                                priority
                             />
                         </div>
                         
@@ -121,3 +119,5 @@ export function GalleryLightbox({ images, renderThumbnails }: GalleryLightboxPro
         </div>
     );
 }
+
+    
