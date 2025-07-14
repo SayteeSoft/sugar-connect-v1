@@ -2,23 +2,21 @@
 import { NextResponse } from 'next/server';
 import * as paypal from '@paypal/checkout-server-sdk';
 
+function getPayPalClient() {
+    const {
+        PAYPAL_CLIENT_ID,
+        PAYPAL_CLIENT_SECRET,
+    } = process.env;
 
-export async function POST(req: Request, { params }: { params: { orderID: string } }) {
-    
-    function getPayPalClient() {
-        const {
-            PAYPAL_CLIENT_ID,
-            PAYPAL_CLIENT_SECRET,
-        } = process.env;
-
-        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-            throw new Error("PayPal client ID or secret is not configured in environment variables.");
-        }
-
-        const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
-        return new paypal.core.PayPalHttpClient(environment);
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+        throw new Error("PayPal client ID or secret is not configured in environment variables.");
     }
 
+    const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
+    return new paypal.core.PayPalHttpClient(environment);
+}
+
+export async function POST(req: Request, { params }: { params: { orderID: string } }) {
     try {
         const client = getPayPalClient();
         const { orderID } = params;

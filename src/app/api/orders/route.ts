@@ -9,22 +9,21 @@ const creditPackages: Record<string, {name: string, value: string}> = {
     credits_1000: { name: "1000 Credits Pack", value: "299.99" },
 };
 
-export async function POST(req: Request) {
-    
-    function getPayPalClient() {
-        const {
-            PAYPAL_CLIENT_ID,
-            PAYPAL_CLIENT_SECRET,
-        } = process.env;
+function getPayPalClient() {
+    const {
+        PAYPAL_CLIENT_ID,
+        PAYPAL_CLIENT_SECRET,
+    } = process.env;
 
-        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-            throw new Error("PayPal client ID or secret is not configured in environment variables.");
-        }
-
-        const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
-        return new paypal.core.PayPalHttpClient(environment);
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+        throw new Error("PayPal client ID or secret is not configured in environment variables.");
     }
 
+    const environment = new paypal.core.SandboxEnvironment(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET);
+    return new paypal.core.PayPalHttpClient(environment);
+}
+
+export async function POST(req: Request) {
     try {
         const client = getPayPalClient();
         const { cart } = await req.json();
