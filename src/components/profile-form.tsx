@@ -73,6 +73,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
 
   const watchSex = watch("sex");
   const watchRole = watch("role");
+  const watchName = watch("name");
 
   useEffect(() => {
     const initialValues = {
@@ -113,6 +114,13 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
         }
     }
   }, [watchSex, setValue, isAdminEditing]);
+
+  useEffect(() => {
+    // If name is changed to "Admin", force the role to "Admin"
+    if (watchName === 'Admin') {
+      setValue('role', 'Admin');
+    }
+  }, [watchName, setValue]);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -236,6 +244,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
   
   const imageSources = galleryFields
         .map(field => (field as any).file)
+        .filter(Boolean)
         .map(file => (typeof file === 'string' ? file : URL.createObjectURL(file)));
 
 
@@ -302,7 +311,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
                                     <Select 
                                         onValueChange={field.onChange} 
                                         value={field.value}
-                                        disabled={currentUser?.role !== 'Admin'}
+                                        disabled={currentUser?.role !== 'Admin' || watchName === 'Admin'}
                                     >
                                         <SelectTrigger id="role"><SelectValue placeholder="Select role..." /></SelectTrigger>
                                         <SelectContent>
@@ -472,7 +481,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
                     <CardTitle>Gallery</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {galleryFields.length > 0 ? (
+                    {galleryFields.length > 0 || isEditing ? (
                         <GalleryLightbox
                             images={imageSources}
                             renderThumbnails={({ openLightbox }) => (
@@ -512,27 +521,7 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
                             )}
                         />
                     ) : (
-                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {isEditing && (
-                                <>
-                                  <input
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    ref={galleryInputRef}
-                                    className="hidden"
-                                    onChange={handleGalleryChange}
-                                  />
-                                  <button type="button" onClick={() => galleryInputRef.current?.click()} className="flex flex-col items-center justify-center border-2 border-dashed rounded-md aspect-square text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                                      <PlusCircle className="h-8 w-8" />
-                                      <span className="text-sm mt-1">Add Photo</span>
-                                  </button>
-                                </>
-                            )}
-                            {!isEditing && (
-                                <p className="text-sm text-muted-foreground col-span-full">This user hasn't added any photos to their gallery yet.</p>
-                            )}
-                         </div>
+                        <p className="text-sm text-muted-foreground">This user hasn't added any photos to their gallery yet.</p>
                     )}
                     {errors.gallery && <p className="text-destructive text-sm mt-1">{errors.gallery.message as string}</p>}
                 </CardContent>

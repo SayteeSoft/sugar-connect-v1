@@ -48,7 +48,7 @@ async function handleNewUser(jsonData: any, db: AppData) {
         profile: newProfile
     }, { status: 201 });
 }
-
+// Handle file upload
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
     try {
