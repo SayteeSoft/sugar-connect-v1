@@ -8,7 +8,7 @@ import type { User, Profile, AppData } from '@/types';
 const DB_KEY = 'users-db';
 const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
 
-// A robust function to seed initial admin data in the respective data store.
+// A robust function to seed initial data in the respective data store.
 export const seedInitialData = async (): Promise<AppData> => {
     // Await the hash generation properly
     const passwordHash = await bcrypt.hash('password123', 10);
@@ -623,6 +623,7 @@ export const writeData = async (data: AppData) => {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
+
 
 
 
