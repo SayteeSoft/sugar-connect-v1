@@ -29,9 +29,11 @@ export async function POST(req: Request) {
         const client = getPayPalClient();
         const { cart } = await req.json();
         const item = creditPackages[cart.id];
+
         if (!item) {
             return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
         }
+        
         const totalValue = (parseFloat(item.value) * parseInt(cart.quantity)).toFixed(2);
         
         const request = new paypal.orders.OrdersCreateRequest() as OrdersCreateRequest;
