@@ -45,12 +45,6 @@ export async function POST(req: Request) {
                     amount: {
                         currency_code: "USD",
                         value: totalValue,
-                        breakdown: {
-                            item_total: {
-                                currency_code: "USD",
-                                value: totalValue,
-                            },
-                        },
                     },
                     items: [
                         {
