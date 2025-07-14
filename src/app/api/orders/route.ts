@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import * as paypal from '@paypal/checkout-server-sdk';
+import type { OrdersCreateRequest } from '@paypal/checkout-server-sdk/lib/orders/lib';
 
 const creditPackages: Record<string, {name: string, value: string}> = {
     credits_100: { name: "100 Credits Pack", value: "49.99" },
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
         }
         const totalValue = (parseFloat(item.value) * parseInt(cart.quantity)).toFixed(2);
         
-        const request = new paypal.orders.OrdersCreateRequest();
+        const request = new paypal.orders.OrdersCreateRequest() as OrdersCreateRequest;
         request.prefer("return=representation");
         request.requestBody({
             intent: "CAPTURE",
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
                                 currency_code: "USD",
                                 value: item.value,
                             },
-                            quantity: cart.quantity,
+                            quantity: cart.quantity.toString(),
                             sku: cart.id,
                         },
                     ],
