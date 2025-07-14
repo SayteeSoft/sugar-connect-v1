@@ -25,7 +25,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Admin",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p1"
         },
         {
@@ -38,7 +38,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
+          "avatarUrl": "/api/uploads/Darianna_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p4"
         },
         {
@@ -51,7 +51,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Kateryna_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p5"
         },
         {
@@ -64,7 +64,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p3"
         },
         {
@@ -77,7 +77,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Sofia_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p6"
         },
         {
@@ -90,7 +90,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p7"
         },
         {
@@ -103,7 +103,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Vansessa_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p8"
         },
         {
@@ -116,7 +116,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p9"
         },
         {
@@ -129,7 +129,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Female_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p10"
         },
         {
@@ -142,7 +142,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p11"
         },
         {
@@ -155,7 +155,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+          "avatarUrl": "/api/uploads/Female_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p12"
         },
         {
@@ -168,7 +168,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p13"
         }
       ],
@@ -214,9 +214,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Museums"
           ],
           "gallery": [
-            "/uploads/1752365523342_Darianna_Gemini_Generated_Image(small)-002.jpg",
-            "/uploads/1752365523352_Darianna_Gemini_Generated_Image(small)-003.jpg",
-            "/uploads/1752365523364_Darianna_Gemini_Generated_Image(small)-004.jpg"
+            "/api/uploads/1752365523342_Darianna_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/1752365523352_Darianna_Gemini_Generated_Image_small-003.jpg",
+            "/api/uploads/1752365523364_Darianna_Gemini_Generated_Image_small-004.jpg"
           ],
           "metCount": 5,
           "notMetCount": 12,
@@ -249,8 +249,8 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Fashion"
           ],
           "gallery": [
-            "/uploads/1752368089077_Kateryna_Gemini_Generated_Image (small)-002.jpg",
-            "/uploads/1752368089080_Kateryna_Gemini_Generated_Image (small)-003.jpg"
+            "/api/uploads/1752368089077_Kateryna_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/1752368089080_Kateryna_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 2,
           "notMetCount": 8,
@@ -312,9 +312,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Cooking"
           ],
           "gallery": [
-            "/uploads/1752368293737_Sofia_Gemini_Generated_Image (small)-002.jpg",
-            "/uploads/1752368293745_Sofia_Gemini_Generated_Image (small)-004.jpg",
-            "/uploads/1752368293753_Sofia_Gemini_Generated_Image (small)-003.jpg"
+            "/api/uploads/1752368293737_Sofia_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/1752368293745_Sofia_Gemini_Generated_Image_small-004.jpg",
+            "/api/uploads/1752368293753_Sofia_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 0,
           "notMetCount": 0,
@@ -623,6 +623,7 @@ export const writeData = async (data: AppData) => {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
+
 
 
 

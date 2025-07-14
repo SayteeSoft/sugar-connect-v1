@@ -11,3 +11,4 @@
   from = "/api/uploads/*"
   to = "/.netlify/functions/server/api/uploads/:splat"
   status = 200
+  force = true

