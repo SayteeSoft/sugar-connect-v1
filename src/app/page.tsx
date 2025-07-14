@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,22 +9,51 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Heart, Lock, ShieldCheck, Headset, Users, CakeSlice, HeartHandshake, Star } from "lucide-react";
-import { mockUsers, testimonials } from "@/lib/mock-data";
+import { testimonials } from "@/lib/mock-data";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import type { User } from "@/types";
 
 export default function Home() {
   const { user } = useAuth();
+  const [displayedProfiles, setDisplayedProfiles] = useState<User[]>([]);
 
-  const displayedProfiles = useMemo(() => {
-    if (user?.role === 'Sugar Daddy') {
-      return mockUsers.filter(p => p.role === 'Sugar Baby').slice(0, 4);
-    }
-    if (user?.role === 'Sugar Baby') {
-      return mockUsers.filter(p => p.role === 'Sugar Daddy').slice(0, 4);
-    }
-    // For guests or admins, show a mix of the first 4 profiles.
-    return mockUsers.filter(p => p.role !== 'Admin').slice(0, 4);
+  useEffect(() => {
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('/api/users');
+            if (!response.ok) {
+                throw new Error("Failed to fetch users");
+            }
+            const data = await response.json();
+            
+            let profilesToShow: User[] = [];
+            const allProfiles = data.users.filter((u: User) => u.role !== 'Admin');
+
+            if (user?.role === 'Sugar Daddy') {
+                profilesToShow = allProfiles.filter((p: User) => p.role === 'Sugar Baby').slice(0, 4);
+            } else if (user?.role === 'Sugar Baby') {
+                profilesToShow = allProfiles.filter((p: User) => p.role === 'Sugar Daddy').slice(0, 4);
+            } else {
+                profilesToShow = allProfiles.slice(0, 4);
+            }
+
+            // Prepend API path for production environment
+            if (process.env.NODE_ENV === 'production') {
+                profilesToShow.forEach((p: User) => {
+                    if (p.avatarUrl && !p.avatarUrl.startsWith('/api/uploads/')) {
+                        p.avatarUrl = `/api/uploads/${p.avatarUrl.split('/').pop()}`;
+                    }
+                });
+            }
+
+            setDisplayedProfiles(profilesToShow);
+
+        } catch (error) {
+            console.error("Failed to fetch featured profiles:", error);
+        }
+    };
+    fetchUsers();
   }, [user]);
   
   return (
@@ -243,5 +272,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

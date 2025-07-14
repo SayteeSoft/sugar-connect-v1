@@ -461,7 +461,9 @@
       "about": "My profile :)",
       "wants": [],
       "interests": [],
-      "gallery": [],
+      "gallery": [
+        "/uploads/1752537095791_1752457704564_profile-photo.jpg"
+      ],
       "attributes": {
         "height": "6'0\""
       }

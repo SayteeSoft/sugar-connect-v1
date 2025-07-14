@@ -52,6 +52,16 @@ export default function AdminPage() {
                     throw new Error("Failed to fetch users");
                  }
                  const data = await response.json();
+                 
+                 // Prepend API path for production environment
+                 if (process.env.NODE_ENV === 'production') {
+                    data.users.forEach((u: User) => {
+                        if (u.avatarUrl && !u.avatarUrl.startsWith('/api/uploads/')) {
+                            u.avatarUrl = `/api/uploads/${u.avatarUrl.split('/').pop()}`;
+                        }
+                    });
+                 }
+                 
                  setUsers(data.users);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
