@@ -25,7 +25,6 @@ export async function POST(req: Request, { params }: { params: { orderID: string
         }
         
         const request = new paypal.orders.OrdersCaptureRequest(orderID);
-        request.requestBody({}); // This is required even if empty
         
         const capture = await client.execute(request);
         
