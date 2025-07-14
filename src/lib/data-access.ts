@@ -52,7 +52,7 @@ export const seedInitialData = async (): Promise<AppData> => {
         messages: []
     };
 
-    if (process.env.NETLIFY) {
+    if (process.env.NODE_ENV === 'production') {
         const store = getStore('data');
         await store.setJSON(DB_KEY, initialData);
     } else {
@@ -64,7 +64,7 @@ export const seedInitialData = async (): Promise<AppData> => {
 // A robust function to read data from the correct source based on environment.
 export const readData = async (): Promise<AppData> => {
     // In production or any Netlify context, always use Netlify Blobs.
-    if (process.env.NETLIFY) {
+    if (process.env.NODE_ENV === 'production') {
         const store = getStore('data');
         try {
             const data = await store.get(DB_KEY, { type: 'json' });
@@ -96,7 +96,7 @@ export const readData = async (): Promise<AppData> => {
 
 // A robust function to write data to the correct source
 export const writeData = async (data: AppData) => {
-    if (process.env.NETLIFY) {
+    if (process.env.NODE_ENV === 'production') {
         const store = getStore('data');
         await store.setJSON(DB_KEY, data);
     } else {
