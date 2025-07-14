@@ -6,12 +6,12 @@ export const GET = async (
   _req: Request,
   { params }: { params: { filename: string[] } }
 ) => {
-  if (!process.env.NETLIFY_CONTEXT) {
+  if (!process.env.NODE_ENV) {
     return new NextResponse('Not found', { status: 404 });
   }
 
   const filename = params.filename.join('/');
-  const store = getStore('uploads');
+  const store = getStore('site:uploads');
   const blob = await store.get(filename, { type: 'blob' });
 
   if (!blob) {
