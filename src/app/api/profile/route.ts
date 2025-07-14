@@ -55,7 +55,7 @@ const writeFile = async (file: File) => {
     
     try {
         await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
-        // Always return the API path, which is handled by Netlify in prod and redirects in dev
+        // Always return the API path for production consistency
         return `/api/uploads/${filename}`;
     } catch (error: any) {
         throw new Error(`File Upload Failed: ${error.message}`);
