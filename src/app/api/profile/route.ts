@@ -49,15 +49,24 @@ async function handleNewUser(jsonData: any, db: AppData) {
 
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
-    if (process.env.NODE_ENV === 'production') {
-      const store = getStore('uploads');
-      await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
-      return `/api/uploads/${filename}`;
-    } else {
-      await ensureUploadDirExists();
-      const buffer = Buffer.from(await file.arrayBuffer());
-      await fs.writeFile(path.join(uploadDir, filename), buffer);
-      return `/uploads/${filename}`;
+    try {
+        if (process.env.NODE_ENV === 'production') {
+            const store = getStore('uploads');
+            await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
+            return `/api/uploads/${filename}`;
+        } else {
+            await ensureUploadDirExists();
+            const buffer = Buffer.from(await file.arrayBuffer());
+            await fs.writeFile(path.join(uploadDir, filename), buffer);
+            return `/uploads/${filename}`;
+        }
+    } catch (error: any) {
+        // Add specific error handling for read-only file system errors
+        if (error.code === 'EROFS') {
+            throw new Error(`File Upload Error: Attempted to write to a read-only file system in production. The application should be using Netlify Blobs. Please verify the environment configuration.`);
+        }
+        // Throw a generic but detailed error for other issues
+        throw new Error(`File Upload Failed: ${error.message}`);
     }
 };
 
@@ -145,7 +154,7 @@ async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) 
 
 export async function POST(req: Request) {
   try {
-    const db = await readData();
+    const db: AppData = await readData();
     const formData = await req.formData();
     const jsonDataString = formData.get('jsonData') as string;
 
@@ -176,7 +185,7 @@ export async function DELETE(req: Request) {
             return NextResponse.json({ message: 'User ID is required.' }, { status: 400 });
         }
 
-        const db = await readData();
+        const db: AppData = await readData();
         
         const userToDelete = db.users.find((u: User) => u.id === userId);
 
