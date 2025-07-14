@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import paypal from '@paypal/checkout-server-sdk';
+import * as paypal from '@paypal/checkout-server-sdk';
 
 const creditPackages: Record<string, {name: string, value: string}> = {
     credits_100: { name: "100 Credits Pack", value: "49.99" },

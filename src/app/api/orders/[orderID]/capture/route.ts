@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import paypal from '@paypal/checkout-server-sdk';
+import * as paypal from '@paypal/checkout-server-sdk';
 
 
 export async function POST(req: Request, { params }: { params: { orderID: string } }) {
