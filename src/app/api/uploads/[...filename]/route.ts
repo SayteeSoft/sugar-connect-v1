@@ -6,7 +6,8 @@ export const GET = async (
   _req: Request,
   { params }: { params: { filename: string[] } }
 ) => {
-  if (!process.env.NODE_ENV) {
+  if (process.env.NODE_ENV !== 'production') {
+    // This route is only for production on Netlify
     return new NextResponse('Not found', { status: 404 });
   }
 
@@ -18,7 +19,7 @@ export const GET = async (
     return new NextResponse('Not found', { status: 404 });
   }
 
-  const { type } = await store.getMetadata(filename);
+  const { type } = (await store.getMetadata(filename)) || {};
 
   return new NextResponse(blob, {
     headers: {

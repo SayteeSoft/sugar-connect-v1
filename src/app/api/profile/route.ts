@@ -50,10 +50,11 @@ async function handleNewUser(jsonData: any, db: { users: User[], profiles: Profi
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
     if (process.env.NODE_ENV === 'production') {
-      const store = getStore('uploads');
+      const store = getStore('site:uploads');
       await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
       return `/api/uploads/${filename}`;
     } else {
+      await ensureUploadDirExists();
       const buffer = Buffer.from(await file.arrayBuffer());
       await fs.writeFile(path.join(uploadDir, filename), buffer);
       return `/uploads/${filename}`;
@@ -143,8 +144,6 @@ async function handleUpdateUser(jsonData: any, formData: FormData, db: { users: 
 }
 
 export async function POST(req: Request) {
-  await ensureUploadDirExists();
-  
   try {
     const db = await readData();
     const formData = await req.formData();
