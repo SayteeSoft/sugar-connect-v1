@@ -12,7 +12,7 @@ export const GET = async (
   }
 
   const filename = params.filename.join('/');
-  const store = getStore('site:uploads');
+  const store = getStore('uploads');
   const blob = await store.get(filename, { type: 'blob' });
 
   if (!blob) {

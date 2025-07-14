@@ -50,7 +50,7 @@ async function handleNewUser(jsonData: any, db: { users: User[], profiles: Profi
 const writeFile = async (file: File) => {
     const filename = `${Date.now()}_${file.name}`;
     if (process.env.NODE_ENV === 'production') {
-      const store = getStore('site:uploads');
+      const store = getStore('uploads');
       await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
       return `/api/uploads/${filename}`;
     } else {
