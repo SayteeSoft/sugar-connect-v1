@@ -60,7 +60,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "London, UK",
       "role": "Admin",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p1"
     },
     {
@@ -71,7 +71,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "London, UK",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
+      "avatarUrl": "/uploads/Darianna_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p4"
     },
     {
@@ -82,7 +82,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Birmingham, UK",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Kateryna_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p5"
     },
     {
@@ -93,7 +93,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Edinburgh, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p3"
     },
     {
@@ -104,7 +104,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Cartagena, CO",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Sofia_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p6"
     },
     {
@@ -115,7 +115,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Medellín, CO",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p7"
     },
     {
@@ -126,7 +126,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Frankfurt, DE",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Vansessa_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p8"
     },
     {
@@ -137,7 +137,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "London, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p9"
     },
     {
@@ -148,7 +148,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Medellín, CO",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p10"
     },
     {
@@ -159,7 +159,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Cardiff, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p11"
     },
     {
@@ -170,7 +170,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "Rio, Brazil",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p12"
     },
     {
@@ -181,7 +181,7 @@ export const mockUsers: Omit<User, 'passwordHash'>[] = [
       "location": "London, UK",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p13"
     }
 ];

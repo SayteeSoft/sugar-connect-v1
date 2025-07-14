@@ -12,13 +12,32 @@ import { getStore } from '@netlify/blobs';
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {  
-  if (process.env.NODE_ENV === 'production') return;
+  if (process.env.NETLIFY) return;
   try {
     await fs.access(uploadDir);
   } catch (error) {
     await fs.mkdir(uploadDir, { recursive: true });
   }
 };
+
+async function writeFile(file: File): Promise<string> {
+    const filename = `${Date.now()}_${file.name}`;
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    if (process.env.NETLIFY) {
+        // Production: Use Netlify Blobs
+        const store = getStore('uploads');
+        await store.set(filename, buffer, { metadata: { type: file.type } });
+        return `/api/uploads/${filename}`;
+    } else {
+        // Local development: Use local filesystem
+        await ensureUploadDirExists();
+        const filePath = path.join(uploadDir, filename);
+        await fs.writeFile(filePath, buffer);
+        return `/uploads/${filename}`;
+    }
+}
 
 async function handleNewUser(jsonData: any, db: AppData) {
     const { user: newUser, profile: newProfile, password } = jsonData;
@@ -48,20 +67,6 @@ async function handleNewUser(jsonData: any, db: AppData) {
         profile: newProfile
     }, { status: 201 });
 }
-
-const writeFile = async (file: File) => {
-    const filename = `${Date.now()}_${file.name}`;
-    const store = getStore('uploads');
-    
-    try {
-        await store.set(filename, await file.arrayBuffer(), { metadata: { type: file.type } });
-        // Always return the API path for production consistency
-        return `/api/uploads/${filename}`;
-    } catch (error: any) {
-        throw new Error(`File Upload Failed: ${error.message}`);
-    }
-};
-
 
 async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) {
     const { userId, ...updateData } = jsonData;

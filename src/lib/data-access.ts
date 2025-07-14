@@ -27,7 +27,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Admin",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p1"
         },
         {
@@ -40,7 +40,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Darianna_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Darianna_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p4"
         },
         {
@@ -53,7 +53,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Kateryna_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Kateryna_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p5"
         },
         {
@@ -66,7 +66,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
+          "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p3"
         },
         {
@@ -79,7 +79,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Sofia_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Sofia_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p6"
         },
         {
@@ -92,7 +92,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
+          "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p7"
         },
         {
@@ -105,7 +105,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Vansessa_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Vansessa_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p8"
         },
         {
@@ -118,7 +118,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
+          "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p9"
         },
         {
@@ -131,7 +131,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Female_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p10"
         },
         {
@@ -144,7 +144,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
+          "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p11"
         },
         {
@@ -157,7 +157,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Female",
           "role": "Sugar Baby",
           "credits": "unlimited",
-          "avatarUrl": "/api/uploads/Female_Gemini_Generated_Image_small-001.jpg",
+          "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
           "profileId": "p12"
         },
         {
@@ -170,7 +170,7 @@ export const seedInitialData = async (): Promise<AppData> => {
           "sex": "Male",
           "role": "Sugar Daddy",
           "credits": 10,
-          "avatarUrl": "/api/uploads/Male_Gemini_Generated_Image_small-002.jpg",
+          "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
           "profileId": "p13"
         }
       ],
@@ -216,9 +216,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Museums"
           ],
           "gallery": [
-            "/api/uploads/Darianna_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/Darianna_Gemini_Generated_Image_small-003.jpg",
-            "/api/uploads/Darianna_Gemini_Generated_Image_small-004.jpg"
+            "/uploads/Darianna_Gemini_Generated_Image_small-002.jpg",
+            "/uploads/Darianna_Gemini_Generated_Image_small-003.jpg",
+            "/uploads/Darianna_Gemini_Generated_Image_small-004.jpg"
           ],
           "metCount": 5,
           "notMetCount": 12,
@@ -251,8 +251,8 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Fashion"
           ],
           "gallery": [
-            "/api/uploads/Kateryna_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/Kateryna_Gemini_Generated_Image_small-003.jpg"
+            "/uploads/Kateryna_Gemini_Generated_Image_small-002.jpg",
+            "/uploads/Kateryna_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 2,
           "notMetCount": 8,
@@ -314,9 +314,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Cooking"
           ],
           "gallery": [
-            "/api/uploads/Sofia_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/Sofia_Gemini_Generated_Image_small-004.jpg",
-            "/api/uploads/Sofia_Gemini_Generated_Image_small-003.jpg"
+            "/uploads/Sofia_Gemini_Generated_Image_small-002.jpg",
+            "/uploads/Sofia_Gemini_Generated_Image_small-004.jpg",
+            "/uploads/Sofia_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 0,
           "notMetCount": 0,
@@ -574,9 +574,22 @@ export const seedInitialData = async (): Promise<AppData> => {
       ]
     };
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NETLIFY) {
         const store = getStore('data');
-        await store.setJSON(DB_KEY, initialData);
+        // On production, transform local /uploads/ paths to /api/uploads/
+        const prodData = JSON.parse(JSON.stringify(initialData)); // Deep copy
+        prodData.users.forEach((user: User) => {
+            if (user.avatarUrl?.startsWith('/uploads/')) {
+                user.avatarUrl = user.avatarUrl.replace('/uploads/', '/api/uploads/');
+            }
+        });
+        prodData.profiles.forEach((profile: Profile) => {
+            if (profile.gallery) {
+                profile.gallery = profile.gallery.map(url => url.startsWith('/uploads/') ? url.replace('/uploads/', '/api/uploads/') : url);
+            }
+        });
+        await store.setJSON(DB_KEY, prodData);
+        return prodData;
     } else {
         await fs.writeFile(localDbPath, JSON.stringify(initialData, null, 2));
     }
@@ -586,7 +599,7 @@ export const seedInitialData = async (): Promise<AppData> => {
 // A robust function to read data from the correct source based on environment.
 export const readData = async (): Promise<AppData> => {
     // In production or any Netlify context, always use Netlify Blobs.
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NETLIFY) {
         const store = getStore('data');
         try {
             const data = await store.get(DB_KEY, { type: 'json' });
@@ -618,7 +631,7 @@ export const readData = async (): Promise<AppData> => {
 
 // A robust function to write data to the correct source
 export const writeData = async (data: AppData) => {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NETLIFY) {
         const store = getStore('data');
         await store.setJSON(DB_KEY, data);
     } else {
