@@ -139,7 +139,7 @@ export default function AdminPage() {
                         <Button variant="ghost" size="icon" onClick={() => router.push(`/profile/${u.id}`)}>
                             <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => router.push(`/admin/edit-user/${u.id}`)}>
+                        <Button variant="ghost" size="icon" onClick={() => router.push(`/profile/${u.id}`)}>
                             <Pencil className="h-4 w-4" />
                         </Button>
                         <AlertDialog>

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ProfileForm } from "@/components/profile-form";
 
 const ViewField = ({ label, value }: { label: string, value?: string | number | null }) => {
     return (
@@ -49,11 +50,11 @@ export default function OtherUserProfilePage() {
   const [dataLoading, setDataLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   
-  // Voting state
   const [metCount, setMetCount] = useState(0);
   const [notMetCount, setNotMetCount] = useState(0);
   const [userVote, setUserVote] = useState<'met' | 'notMet' | null>(null);
   const [canVote, setCanVote] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -75,12 +76,10 @@ export default function OtherUserProfilePage() {
             setNotMetCount(foundProfile.notMetCount || 0);
 
             if (currentUser) {
-              // Check if current user has already voted
               const existingVote = foundProfile.votes?.[currentUser.id];
               if (existingVote) {
                   setUserVote(existingVote);
               }
-              // User can vote if they are logged in and NOT viewing their own profile
               setCanVote(currentUser.id !== foundUser.id);
             }
 
@@ -98,7 +97,6 @@ export default function OtherUserProfilePage() {
     fetchUserData();
   }, [id, currentUser]);
   
-  // If the current user is viewing their own profile, redirect to the editable /profile page
   useEffect(() => {
     if (!loading && currentUser && currentUser.id === id) {
       router.push('/profile');
@@ -106,7 +104,7 @@ export default function OtherUserProfilePage() {
   }, [currentUser, id, loading, router]);
 
   const handleVote = (voteType: 'met' | 'notMet') => {
-    if (!canVote || userVote) return; // Can't vote if not allowed or already voted
+    if (!canVote || userVote) return;
 
     if (voteType === 'met') {
       setMetCount(prev => prev + 1);
@@ -115,7 +113,6 @@ export default function OtherUserProfilePage() {
     }
     setUserVote(voteType);
     
-    // In a real app, you would send this vote to the backend API
     toast({
         title: "Vote Recorded",
         description: "Thank you for your feedback!",
@@ -131,8 +128,6 @@ export default function OtherUserProfilePage() {
   };
 
   const handleMessage = () => {
-      // In a real app, this might open a specific chat window.
-      // For now, we'll navigate to the main messages page.
       router.push('/messages');
   };
 
@@ -148,7 +143,6 @@ export default function OtherUserProfilePage() {
           title: "User Blocked",
           description: `You have successfully blocked ${user?.name}. You will no longer see their profile.`,
       });
-      // In a real app, you would also redirect the user away from this profile.
       router.push('/search');
   };
 
@@ -178,7 +172,6 @@ export default function OtherUserProfilePage() {
     );
   }
 
-  // Render nothing if we are about to redirect, to prevent a flash of content.
   if (currentUser && currentUser.id === id) {
     return null; 
   }
@@ -188,13 +181,23 @@ export default function OtherUserProfilePage() {
     return null;
   }
   
+  if (isEditing && currentUser?.role === 'Admin') {
+    return (
+        <ProfileForm 
+            user={user} 
+            profile={userProfile} 
+            isAdminEditing={true} 
+            currentUser={currentUser} 
+        />
+    )
+  }
+
   const isEmailVisible = userVote === 'met';
   const isStarUser = metCount > 5 && metCount > notMetCount;
   
   return (
     <div className="container mx-auto px-4 md:px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          {/* Left Column */}
           <div className="md:col-span-1 space-y-6 sticky top-24">
             <Card>
               <CardContent className="p-6">
@@ -249,6 +252,12 @@ export default function OtherUserProfilePage() {
                 </div>
               </CardContent>
             </Card>
+            {currentUser?.role === 'Admin' && (
+              <Button className="w-full" onClick={() => setIsEditing(true)}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Profile
+              </Button>
+            )}
              <div className="flex gap-2">
                 <Button className="w-full" onClick={handleMessage}>
                     <MessageSquare className="mr-2 h-4 w-4" />
@@ -261,7 +270,6 @@ export default function OtherUserProfilePage() {
             </div>
           </div>
 
-          {/* Right Column */}
           <div className="md:col-span-2 space-y-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
