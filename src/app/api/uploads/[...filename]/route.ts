@@ -20,7 +20,7 @@ export const GET = async (
   }
 
   const { metadata } = (await store.getMetadata(filename)) || {};
-  const type = metadata?.type || 'application/octet-stream';
+  const type = (metadata?.type && typeof metadata.type === 'string') ? metadata.type : 'application/octet-stream';
 
   return new NextResponse(blob, {
     headers: {
