@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { User, Profile, ProfileFormValues } from '@/types';
+import type { User, Profile, AppData } from '@/types';
 import bcrypt from 'bcrypt';
 import { readData, writeData } from '@/lib/data-access';
 import { getStore } from '@netlify/blobs';
@@ -18,7 +18,7 @@ const ensureUploadDirExists = async () => {
   }
 };
 
-async function handleNewUser(jsonData: any, db: { users: User[], profiles: Profile[] }) {
+async function handleNewUser(jsonData: any, db: AppData) {
     const { user: newUser, profile: newProfile, password } = jsonData;
     
     if (!newUser || !newProfile || !password) {
@@ -61,7 +61,7 @@ const writeFile = async (file: File) => {
     }
 };
 
-async function handleUpdateUser(jsonData: any, formData: FormData, db: { users: User[], profiles: Profile[] }) {
+async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) {
     const { userId, ...updateData } = jsonData;
 
     if (!userId) {
@@ -177,9 +177,8 @@ export async function DELETE(req: Request) {
         }
 
         const db = await readData();
-        let { users, profiles } = db;
         
-        const userToDelete = users.find((u: User) => u.id === userId);
+        const userToDelete = db.users.find((u: User) => u.id === userId);
 
         if (!userToDelete) {
             return NextResponse.json({ message: 'User not found.' }, { status: 404 });
@@ -189,8 +188,8 @@ export async function DELETE(req: Request) {
             return NextResponse.json({ message: 'Cannot delete administrator account.' }, { status: 403 });
         }
 
-        const updatedUsers = users.filter((u: User) => u.id !== userId);
-        const updatedProfiles = profiles.filter((p: Profile) => p.userId !== userId);
+        const updatedUsers = db.users.filter((u: User) => u.id !== userId);
+        const updatedProfiles = db.profiles.filter((p: Profile) => p.userId !== userId);
 
         await writeData({ ...db, users: updatedUsers, profiles: updatedProfiles });
 
