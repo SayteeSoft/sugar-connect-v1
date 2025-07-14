@@ -23,6 +23,7 @@ export const seedInitialData = async (): Promise<AppData> => {
                 "age": 49,
                 "location": "London, UK",
                 "role": "Admin",
+                "sex": "Male",
                 "credits": "unlimited",
                 "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
                 "profileId": "p1"
@@ -103,4 +104,5 @@ export const writeData = async (data: AppData) => {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
+
 
