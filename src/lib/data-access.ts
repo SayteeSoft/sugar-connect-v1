@@ -1,4 +1,6 @@
 
+'use server';
+
 import { getStore } from '@netlify/blobs';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -214,9 +216,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Museums"
           ],
           "gallery": [
-            "/api/uploads/1752365523342_Darianna_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/1752365523352_Darianna_Gemini_Generated_Image_small-003.jpg",
-            "/api/uploads/1752365523364_Darianna_Gemini_Generated_Image_small-004.jpg"
+            "/api/uploads/Darianna_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/Darianna_Gemini_Generated_Image_small-003.jpg",
+            "/api/uploads/Darianna_Gemini_Generated_Image_small-004.jpg"
           ],
           "metCount": 5,
           "notMetCount": 12,
@@ -249,8 +251,8 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Fashion"
           ],
           "gallery": [
-            "/api/uploads/1752368089077_Kateryna_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/1752368089080_Kateryna_Gemini_Generated_Image_small-003.jpg"
+            "/api/uploads/Kateryna_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/Kateryna_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 2,
           "notMetCount": 8,
@@ -312,9 +314,9 @@ export const seedInitialData = async (): Promise<AppData> => {
             "Cooking"
           ],
           "gallery": [
-            "/api/uploads/1752368293737_Sofia_Gemini_Generated_Image_small-002.jpg",
-            "/api/uploads/1752368293745_Sofia_Gemini_Generated_Image_small-004.jpg",
-            "/api/uploads/1752368293753_Sofia_Gemini_Generated_Image_small-003.jpg"
+            "/api/uploads/Sofia_Gemini_Generated_Image_small-002.jpg",
+            "/api/uploads/Sofia_Gemini_Generated_Image_small-004.jpg",
+            "/api/uploads/Sofia_Gemini_Generated_Image_small-003.jpg"
           ],
           "metCount": 0,
           "notMetCount": 0,
@@ -624,9 +626,4 @@ export const writeData = async (data: AppData) => {
     }
 };
 
-
-
-
-
-
-
+    
