@@ -11,7 +11,7 @@ import { getStore } from '@netlify/blobs';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
-const ensureUploadDirExists = async () => {  
+const ensureUploadDirExists = async () => {
   // This function is only for local development, no need to run on Netlify.
   if (process.env.NETLIFY) return;
   try {

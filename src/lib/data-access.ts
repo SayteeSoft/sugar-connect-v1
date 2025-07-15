@@ -573,7 +573,7 @@ export const seedInitialData = async (): Promise<AppData> => {
         }
       ]
     };
-
+    
     if (process.env.NETLIFY) {
         const store = getStore('data');
         // On production, transform local /uploads/ paths to /api/uploads/
