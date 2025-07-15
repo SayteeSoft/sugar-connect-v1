@@ -54,7 +54,7 @@ export default function AdminPage() {
                  const data = await response.json();
                  
                  // Prepend API path for production environment
-                 if (process.env.NODE_ENV === 'production') {
+                 if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
                     data.users.forEach((u: User) => {
                         if (u.avatarUrl && !u.avatarUrl.startsWith('/api/uploads/')) {
                             u.avatarUrl = `/api/uploads/${u.avatarUrl.split('/').pop()}`;
@@ -149,7 +149,7 @@ export default function AdminPage() {
                         <Button variant="ghost" size="icon" onClick={() => router.push(`/profile/${u.id}`)}>
                             <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => router.push(`/profile/${u.id}`)}>
+                        <Button variant="ghost" size="icon" onClick={() => router.push(`/profile/${u.id}?edit=true`)}>
                             <Pencil className="h-4 w-4" />
                         </Button>
                         <AlertDialog>
@@ -183,3 +183,5 @@ export default function AdminPage() {
     </div>
   );
 }
+
+    

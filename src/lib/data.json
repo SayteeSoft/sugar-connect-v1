@@ -1,3 +1,4 @@
+
 {
   "users": [
     {
@@ -10,7 +11,7 @@
       "sex": "Male",
       "role": "Admin",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Admin_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p1"
     },
     {
@@ -23,7 +24,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Darianna_Gemini_Generated_Image(small)-001.jpg",
+      "avatarUrl": "/uploads/Darianna_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p4"
     },
     {
@@ -36,7 +37,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Kateryna_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Kateryna_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p5"
     },
     {
@@ -49,7 +50,7 @@
       "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p3"
     },
     {
@@ -62,7 +63,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Sofia_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Sofia_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p6"
     },
     {
@@ -75,7 +76,7 @@
       "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p7"
     },
     {
@@ -88,7 +89,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Vansessa_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Vansessa_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p8"
     },
     {
@@ -101,7 +102,7 @@
       "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p9"
     },
     {
@@ -114,7 +115,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p10"
     },
     {
@@ -127,7 +128,7 @@
       "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p11"
     },
     {
@@ -140,7 +141,7 @@
       "sex": "Female",
       "role": "Sugar Baby",
       "credits": "unlimited",
-      "avatarUrl": "/profile-images/Female_Gemini_Generated_Image (small)-001.jpg",
+      "avatarUrl": "/uploads/Female_Gemini_Generated_Image_small-001.jpg",
       "profileId": "p12"
     },
     {
@@ -153,21 +154,8 @@
       "sex": "Male",
       "role": "Sugar Daddy",
       "credits": 10,
-      "avatarUrl": "/profile-images/Male_Gemini_Generated_Image (small)-002.jpg",
+      "avatarUrl": "/uploads/Male_Gemini_Generated_Image_small-002.jpg",
       "profileId": "p13"
-    },
-    {
-      "id": "1752417984405",
-      "email": "larry.saytee@email.com",
-      "name": "Larry",
-      "age": 18,
-      "location": "London, UK",
-      "role": "Sugar Daddy",
-      "credits": 8,
-      "avatarUrl": "/uploads/1752432192682_Photo 09-02-2019, 19 01 19 (small).jpg",
-      "profileId": "p1752417984405",
-      "passwordHash": "$2b$10$tnz.ro/TaNXAMSPTBNlQ/.1gPeVhVp0.LzNIG5rLXukomb3l93b3a",
-      "sex": "Male"
     }
   ],
   "profiles": [
@@ -181,9 +169,7 @@
       "interests": [
         "Music"
       ],
-      "gallery": [
-        "/uploads/1752531479859_1752457704564_profile-photo.jpg"
-      ],
+      "gallery": [],
       "metCount": 0,
       "notMetCount": 0,
       "votes": {},
@@ -214,9 +200,9 @@
         "Museums"
       ],
       "gallery": [
-        "/uploads/1752365523342_Darianna_Gemini_Generated_Image(small)-002.jpg",
-        "/uploads/1752365523352_Darianna_Gemini_Generated_Image(small)-003.jpg",
-        "/uploads/1752365523364_Darianna_Gemini_Generated_Image(small)-004.jpg"
+        "/uploads/Darianna_Gemini_Generated_Image_small-002.jpg",
+        "/uploads/Darianna_Gemini_Generated_Image_small-003.jpg",
+        "/uploads/Darianna_Gemini_Generated_Image_small-004.jpg"
       ],
       "metCount": 5,
       "notMetCount": 12,
@@ -249,8 +235,8 @@
         "Fashion"
       ],
       "gallery": [
-        "/uploads/1752368089077_Kateryna_Gemini_Generated_Image (small)-002.jpg",
-        "/uploads/1752368089080_Kateryna_Gemini_Generated_Image (small)-003.jpg"
+        "/uploads/Kateryna_Gemini_Generated_Image_small-002.jpg",
+        "/uploads/Kateryna_Gemini_Generated_Image_small-003.jpg"
       ],
       "metCount": 2,
       "notMetCount": 8,
@@ -312,9 +298,9 @@
         "Cooking"
       ],
       "gallery": [
-        "/uploads/1752368293737_Sofia_Gemini_Generated_Image (small)-002.jpg",
-        "/uploads/1752368293745_Sofia_Gemini_Generated_Image (small)-004.jpg",
-        "/uploads/1752368293753_Sofia_Gemini_Generated_Image (small)-003.jpg"
+        "/uploads/Sofia_Gemini_Generated_Image_small-002.jpg",
+        "/uploads/Sofia_Gemini_Generated_Image_small-004.jpg",
+        "/uploads/Sofia_Gemini_Generated_Image_small-003.jpg"
       ],
       "metCount": 0,
       "notMetCount": 0,
@@ -454,20 +440,6 @@
       "notMetCount": 0,
       "votes": {},
       "attributes": {}
-    },
-    {
-      "id": "p1752417984405",
-      "userId": "1752417984405",
-      "about": "My profile :)",
-      "wants": [],
-      "interests": [],
-      "gallery": [
-        "/uploads/1752538014069_1752457704564_profile-photo.jpg",
-        "/uploads/1752584686453_IMG_0179_small.jpg"
-      ],
-      "attributes": {
-        "height": "6'0\""
-      }
     }
   ],
   "messages": [
@@ -585,3 +557,5 @@
     }
   ]
 }
+
+    

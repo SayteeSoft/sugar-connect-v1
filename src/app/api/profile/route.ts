@@ -13,7 +13,7 @@ const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {
   // This function is only for local development, no need to run on Netlify.
-  if (process.env.NETLIFY) return;
+  if (process.env.NETLIFY === 'true') return;
   try {
     await fs.access(uploadDir);
   } catch (error) {
@@ -27,7 +27,7 @@ async function writeFile(file: File): Promise<string> {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY === 'true') {
         // Production: Use Netlify Blobs
         const store = getStore('uploads');
         await store.set(filename, buffer, { metadata: { type: file.type } });
@@ -216,3 +216,5 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ message: `Error deleting user: ${errorMessage}` }, { status: 500 });
     }
 }
+
+    

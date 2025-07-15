@@ -580,7 +580,7 @@ export const getSeedData = async (): Promise<AppData> => {
 // A robust function to read data from the correct source based on environment.
 export const readData = async (): Promise<AppData> => {
     // In production or any Netlify context, always use Netlify Blobs.
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY === 'true') {
         const store = getStore('data');
         let data: AppData | null = null;
         try {
@@ -609,7 +609,6 @@ export const readData = async (): Promise<AppData> => {
         
         await store.setJSON(DB_KEY, prodData);
         return prodData;
-
     }
 
     // In local development, use the local data.json file.
@@ -640,12 +639,14 @@ export const readData = async (): Promise<AppData> => {
 
 // A robust function to write data to the correct source
 export const writeData = async (data: AppData) => {
-    if (process.env.NETLIFY) {
+    if (process.env.NETLIFY === 'true') {
         const store = getStore('data');
         await store.setJSON(DB_KEY, data);
     } else {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
+
+    
 
     

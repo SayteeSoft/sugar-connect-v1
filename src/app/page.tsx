@@ -39,7 +39,7 @@ export default function Home() {
             }
 
             // Prepend API path for production environment
-            if (process.env.NODE_ENV === 'production') {
+            if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
                 profilesToShow.forEach((p: User) => {
                     if (p.avatarUrl && !p.avatarUrl.startsWith('/api/uploads/')) {
                         p.avatarUrl = `/api/uploads/${p.avatarUrl.split('/').pop()}`;
@@ -272,3 +272,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
