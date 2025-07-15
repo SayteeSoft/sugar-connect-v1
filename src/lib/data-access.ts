@@ -11,7 +11,7 @@ const DB_KEY = 'users-db';
 const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
 
 // A robust function to seed initial data in the respective data store.
-export const seedInitialData = async (): Promise<AppData> => {
+export const getSeedData = async (): Promise<AppData> => {
     // Await the hash generation properly
     const passwordHash = await bcrypt.hash('password123', 10);
     
@@ -573,11 +573,29 @@ export const seedInitialData = async (): Promise<AppData> => {
         }
       ]
     };
-    
+
+    return initialData;
+};
+
+// A robust function to read data from the correct source based on environment.
+export const readData = async (): Promise<AppData> => {
+    // In production or any Netlify context, always use Netlify Blobs.
     if (process.env.NETLIFY) {
         const store = getStore('data');
+        let data: AppData | null = null;
+        try {
+            data = await store.get(DB_KEY, { type: 'json' });
+        } catch (error) {
+            console.log("No data found in blob store, will seed.");
+        }
+        
+        if (data && data.users && data.users.length > 0) return data;
+
+        // If no data, seed it
+        const seedData = await getSeedData();
+        const prodData = JSON.parse(JSON.stringify(seedData)); // Deep copy
+        
         // On production, transform local /uploads/ paths to /api/uploads/
-        const prodData = JSON.parse(JSON.stringify(initialData)); // Deep copy
         prodData.users.forEach((user: User) => {
             if (user.avatarUrl?.startsWith('/uploads/')) {
                 user.avatarUrl = user.avatarUrl.replace('/uploads/', '/api/uploads/');
@@ -588,44 +606,35 @@ export const seedInitialData = async (): Promise<AppData> => {
                 profile.gallery = profile.gallery.map(url => url.startsWith('/uploads/') ? url.replace('/uploads/', '/api/uploads/') : url);
             }
         });
+        
         await store.setJSON(DB_KEY, prodData);
         return prodData;
-    } else {
-        await fs.writeFile(localDbPath, JSON.stringify(initialData, null, 2));
-    }
-    return initialData;
-};
 
-// A robust function to read data from the correct source based on environment.
-export const readData = async (): Promise<AppData> => {
-    // In production or any Netlify context, always use Netlify Blobs.
-    if (process.env.NETLIFY) {
-        const store = getStore('data');
-        try {
-            const data = await store.get(DB_KEY, { type: 'json' });
-            if (data && data.users && data.users.length > 0) return data;
-            return seedInitialData(); // Seed if no data exists in production.
-        } catch(e) {
-             return seedInitialData();
-        }
     }
 
     // In local development, use the local data.json file.
     try {
+        await fs.access(localDbPath);
         const fileContent = await fs.readFile(localDbPath, 'utf-8');
         // Handle empty file case
         if (!fileContent) {
-            return seedInitialData();
+            const seedData = await getSeedData();
+            await fs.writeFile(localDbPath, JSON.stringify(seedData, null, 2));
+            return seedData;
         }
         const data = JSON.parse(fileContent);
         // Basic validation to see if the file is empty or corrupted
         if (!data || !data.users || data.users.length === 0) {
-            return seedInitialData();
+            const seedData = await getSeedData();
+            await fs.writeFile(localDbPath, JSON.stringify(seedData, null, 2));
+            return seedData;
         }
         return data;
     } catch (error) {
         // If the file doesn't exist or is invalid, create it with seed data.
-        return seedInitialData();
+        const seedData = await getSeedData();
+        await fs.writeFile(localDbPath, JSON.stringify(seedData, null, 2));
+        return seedData;
     }
 };
 
@@ -638,3 +647,5 @@ export const writeData = async (data: AppData) => {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
+
+    
