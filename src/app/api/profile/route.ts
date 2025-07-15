@@ -12,10 +12,12 @@ import { getStore } from '@netlify/blobs';
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {  
+  // This function is only for local development, no need to run on Netlify.
   if (process.env.NETLIFY) return;
   try {
     await fs.access(uploadDir);
   } catch (error) {
+    // If the directory doesn't exist, create it.
     await fs.mkdir(uploadDir, { recursive: true });
   }
 };
@@ -29,12 +31,14 @@ async function writeFile(file: File): Promise<string> {
         // Production: Use Netlify Blobs
         const store = getStore('uploads');
         await store.set(filename, buffer, { metadata: { type: file.type } });
+        // Return the API path to retrieve the blob
         return `/api/uploads/${filename}`;
     } else {
         // Local development: Use local filesystem
         await ensureUploadDirExists();
         const filePath = path.join(uploadDir, filename);
         await fs.writeFile(filePath, buffer);
+        // Return a direct public path for local serving
         return `/uploads/${filename}`;
     }
 }
