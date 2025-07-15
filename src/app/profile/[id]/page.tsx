@@ -460,5 +460,3 @@ export default function OtherUserProfilePage() {
     </div>
   );
 }
-
-    

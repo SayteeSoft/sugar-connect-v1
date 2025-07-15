@@ -720,5 +720,3 @@ export function ProfileForm({ user, profile, isAdminEditing = false, currentUser
     </div>
   );
 }
-
-    
