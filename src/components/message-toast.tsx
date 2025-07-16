@@ -88,7 +88,7 @@ export function MessageToast() {
                 <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
                     <div className="flex items-center gap-3">
                         <Avatar>
-                            <AvatarImage src={fromUser.avatarUrl} alt={fromUser.name} />
+                            <img src={fromUser.avatarUrl} alt={fromUser.name} className="aspect-square h-full w-full object-cover" />
                             <AvatarFallback>{fromUser.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <p className="font-semibold">{fromUser.name}</p>

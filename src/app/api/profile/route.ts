@@ -28,7 +28,6 @@ async function writeFile(file: File): Promise<string> {
     const buffer = Buffer.from(bytes);
 
     if (process.env.NETLIFY === 'true') {
-        // Production: Use Netlify Blobs
         const store = getStore('uploads');
         await store.set(filename, buffer, { metadata: { type: file.type } });
         // Return the API path to retrieve the blob
@@ -216,5 +215,3 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ message: `Error deleting user: ${errorMessage}` }, { status: 500 });
     }
 }
-
-    

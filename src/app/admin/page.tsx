@@ -53,15 +53,6 @@ export default function AdminPage() {
                  }
                  const data = await response.json();
                  
-                 // Prepend API path for production environment
-                 if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
-                    data.users.forEach((u: User) => {
-                        if (u.avatarUrl && !u.avatarUrl.startsWith('/api/uploads/')) {
-                            u.avatarUrl = `/api/uploads/${u.avatarUrl.split('/').pop()}`;
-                        }
-                    });
-                 }
-                 
                  setUsers(data.users);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
@@ -129,7 +120,7 @@ export default function AdminPage() {
                 <TableRow key={u.id}>
                   <TableCell>
                     <Avatar>
-                      <AvatarImage src={u.avatarUrl} />
+                      <img src={u.avatarUrl} alt={u.name} className="aspect-square h-full w-full object-cover" />
                       <AvatarFallback>{u.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </TableCell>
@@ -183,5 +174,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-    

@@ -134,7 +134,7 @@ export function Header() {
                     <Button variant="ghost" size="icon" className="rounded-full">
                         <Avatar>
                         {isClient && user ? (
-                            <AvatarImage src={user.avatarUrl} />
+                            <img src={user.avatarUrl} alt={user.name} className="aspect-square h-full w-full object-cover" />
                         ) : null}
                         <AvatarFallback>
                             <User className="h-5 w-5" />

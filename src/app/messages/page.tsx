@@ -211,7 +211,7 @@ export default function MessagesPage() {
                                 onClick={() => handleConversationClick(convo as User)}
                             >
                                 <Avatar className="h-12 w-12">
-                                    <AvatarImage src={convo.avatarUrl} />
+                                    <img src={convo.avatarUrl} alt={convo.name} className="aspect-square h-full w-full object-cover"/>
                                     <AvatarFallback>{convo.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 overflow-hidden">
@@ -230,7 +230,7 @@ export default function MessagesPage() {
                     <div className="w-2/3 flex flex-col bg-muted/20">
                         <div className="p-4 border-b flex items-center gap-4 bg-background">
                             <Avatar>
-                                <AvatarImage src={activeConversation.avatarUrl} />
+                                <img src={activeConversation.avatarUrl} alt={activeConversation.name} className="aspect-square h-full w-full object-cover"/>
                                 <AvatarFallback>{activeConversation.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
@@ -261,7 +261,7 @@ export default function MessagesPage() {
                                         <div key={msg.id} className={cn("flex items-end gap-2", { 'justify-end': msg.sender === 'me' })}>
                                             {msg.sender === 'them' && (
                                                 <Avatar className="h-8 w-8">
-                                                    <AvatarImage src={msg.avatarUrl} />
+                                                    <img src={msg.avatarUrl} alt={activeConversation.name} className="aspect-square h-full w-full object-cover"/>
                                                     <AvatarFallback>{activeConversation.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                             )}
@@ -273,7 +273,7 @@ export default function MessagesPage() {
                                             </div>
                                             {msg.sender === 'me' && (
                                                 <Avatar className="h-8 w-8">
-                                                    <AvatarImage src={currentUser.avatarUrl} />
+                                                    <img src={currentUser.avatarUrl} alt={currentUser.name} className="aspect-square h-full w-full object-cover"/>
                                                     <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                             )}

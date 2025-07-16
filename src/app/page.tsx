@@ -38,15 +38,6 @@ export default function Home() {
                 profilesToShow = allProfiles.slice(0, 4);
             }
 
-            // Prepend API path for production environment
-            if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
-                profilesToShow.forEach((p: User) => {
-                    if (p.avatarUrl && !p.avatarUrl.startsWith('/api/uploads/')) {
-                        p.avatarUrl = `/api/uploads/${p.avatarUrl.split('/').pop()}`;
-                    }
-                });
-            }
-
             setDisplayedProfiles(profilesToShow);
 
         } catch (error) {
@@ -145,7 +136,7 @@ export default function Home() {
                       </div>
                       <div className="flex items-center gap-4 mt-6">
                         <Avatar>
-                          <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} />
+                          <img src={testimonial.avatarUrl} alt={testimonial.name} className="aspect-square h-full w-full object-cover" />
                           <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -272,5 +263,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
