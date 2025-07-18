@@ -9,16 +9,13 @@ import bcrypt from 'bcrypt';
 import { readData, writeData } from '@/lib/data-access';
 import { getStore } from '@netlify/blobs';
 
-const uploadDir = path.join(process.cwd(), 'public/uploads');
+const localUploadDir = path.join(process.cwd(), 'public/uploads');
 
 const ensureUploadDirExists = async () => {
-  // This function is only for local development, no need to run on Netlify.
-  if (process.env.NETLIFY === 'true') return;
   try {
-    await fs.access(uploadDir);
+    await fs.access(localUploadDir);
   } catch (error) {
-    // If the directory doesn't exist, create it.
-    await fs.mkdir(uploadDir, { recursive: true });
+    await fs.mkdir(localUploadDir, { recursive: true });
   }
 };
 
@@ -35,7 +32,7 @@ async function writeFile(file: File): Promise<string> {
     } else {
         // Local development: Use local filesystem
         await ensureUploadDirExists();
-        const filePath = path.join(uploadDir, filename);
+        const filePath = path.join(localUploadDir, filename);
         await fs.writeFile(filePath, buffer);
         // Return a direct public path for local serving
         return `/uploads/${filename}`;
@@ -92,9 +89,24 @@ async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) 
         profileToUpdate.attributes = {};
     }
 
-    if (updateData.name === 'Admin') {
-        userToUpdate.role = 'Admin';
+    // Handle avatar file upload first to get the URL
+    const avatarFile = formData.get('avatar');
+    if (avatarFile instanceof File && avatarFile.size > 0) {
+        userToUpdate.avatarUrl = await writeFile(avatarFile);
     }
+    
+    // Handle gallery update
+    const existingGallery: string[] = Array.isArray(updateData.existingGallery) ? updateData.existingGallery : [];
+    const newGalleryFiles = formData.getAll('gallery').filter(f => f instanceof File) as File[];
+
+    let finalGallery = [...existingGallery];
+
+    for (const file of newGalleryFiles) {
+        const path = await writeFile(file);
+        finalGallery.push(path);
+    }
+    
+    profileToUpdate.gallery = finalGallery;
 
     // Update user fields from jsonData
     userToUpdate.name = updateData.name ?? userToUpdate.name;
@@ -122,25 +134,6 @@ async function handleUpdateUser(jsonData: any, formData: FormData, db: AppData) 
     profileToUpdate.attributes.drinker = updateData.drinker ?? profileToUpdate.attributes.drinker;
     profileToUpdate.attributes.piercings = updateData.piercings ?? profileToUpdate.attributes.piercings;
     profileToUpdate.attributes.tattoos = updateData.tattoos ?? profileToUpdate.attributes.tattoos;
-
-    // Handle avatar file upload
-    const avatarFile = formData.get('avatar');
-    if (avatarFile instanceof File && avatarFile.size > 0) {
-        userToUpdate.avatarUrl = await writeFile(avatarFile);
-    }
-    
-    // Handle gallery update
-    const existingGallery: string[] = Array.isArray(updateData.existingGallery) ? updateData.existingGallery : [];
-    const newGalleryFiles = formData.getAll('gallery').filter(f => f instanceof File) as File[];
-
-    let finalGallery = [...existingGallery];
-
-    for (const file of newGalleryFiles) {
-        const path = await writeFile(file);
-        finalGallery.push(path);
-    }
-    
-    profileToUpdate.gallery = finalGallery;
     
     // Save updated data to database
     db.users[userIndex] = userToUpdate;
@@ -215,5 +208,3 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ message: `Error deleting user: ${errorMessage}` }, { status: 500 });
     }
 }
-
-    

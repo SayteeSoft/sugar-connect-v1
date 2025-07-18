@@ -10,12 +10,12 @@ import type { User, Profile, AppData } from '@/types';
 const DB_KEY = 'users-db';
 const localDbPath = path.join(process.cwd(), 'src', 'lib', 'data.json');
 
-// A robust function to seed initial data in the respective data store.
-export const getSeedData = async (): Promise<AppData> => {
-    // Await the hash generation properly
+// This function provides the initial data structure.
+// It will be used to seed both the local JSON file and the Netlify blob store.
+const getSeedData = async (): Promise<AppData> => {
     const passwordHash = await bcrypt.hash('password123', 10);
     
-    const initialData: AppData = {
+    return {
       "users": [
         {
           "id": "1",
@@ -573,11 +573,8 @@ export const getSeedData = async (): Promise<AppData> => {
         }
       ]
     };
-
-    return initialData;
 };
 
-// A robust function to read data from the correct source based on environment.
 export const readData = async (): Promise<AppData> => {
     // In production or any Netlify context, always use Netlify Blobs.
     if (process.env.NETLIFY === 'true') {
@@ -615,19 +612,9 @@ export const readData = async (): Promise<AppData> => {
     try {
         await fs.access(localDbPath);
         const fileContent = await fs.readFile(localDbPath, 'utf-8');
-        // Handle empty file case
-        if (!fileContent) {
-            const seedData = await getSeedData();
-            await fs.writeFile(localDbPath, JSON.stringify(seedData, null, 2));
-            return seedData;
-        }
+        if (!fileContent) { throw new Error("File is empty"); }
         const data = JSON.parse(fileContent);
-        // Basic validation to see if the file is empty or corrupted
-        if (!data || !data.users || data.users.length === 0) {
-            const seedData = await getSeedData();
-            await fs.writeFile(localDbPath, JSON.stringify(seedData, null, 2));
-            return seedData;
-        }
+        if (!data || !data.users || data.users.length === 0) { throw new Error("File is corrupted"); }
         return data;
     } catch (error) {
         // If the file doesn't exist or is invalid, create it with seed data.
@@ -637,7 +624,6 @@ export const readData = async (): Promise<AppData> => {
     }
 };
 
-// A robust function to write data to the correct source
 export const writeData = async (data: AppData) => {
     if (process.env.NETLIFY === 'true') {
         const store = getStore('data');
@@ -646,5 +632,3 @@ export const writeData = async (data: AppData) => {
         await fs.writeFile(localDbPath, JSON.stringify(data, null, 2));
     }
 };
-
-    
