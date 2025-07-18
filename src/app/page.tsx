@@ -35,7 +35,10 @@ export default function Home() {
             } else if (user?.role === 'Sugar Baby') {
                 profilesToShow = allProfiles.filter((p: User) => p.role === 'Sugar Daddy').slice(0, 4);
             } else {
-                profilesToShow = allProfiles.slice(0, 4);
+                // Show a mix of profiles if user is not logged in or is an Admin
+                const babies = allProfiles.filter((p: User) => p.role === 'Sugar Baby');
+                const daddies = allProfiles.filter((p: User) => p.role === 'Sugar Daddy');
+                profilesToShow = [...babies.slice(0, 3), ...daddies.slice(0, 1)];
             }
 
             setDisplayedProfiles(profilesToShow);
@@ -99,7 +102,7 @@ export default function Home() {
                             "object-cover w-full h-[250px] transition-all",
                             !user && "blur-md group-hover:blur-sm"
                         )}
-                        data-ai-hint={`${profile.name === 'Darianna' ? 'art student' : profile.name === 'Kateryna' ? 'marketing graduate' : profile.name === 'Mark' ? 'outdoors investor' : 'fashion designer' }`}
+                        data-ai-hint={profile.role === 'Sugar Baby' ? 'attractive woman' : 'successful man'}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <div className="absolute bottom-0 left-0 p-4 text-white">

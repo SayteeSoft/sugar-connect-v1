@@ -1,4 +1,3 @@
-
 {
   "users": [
     {
@@ -11,7 +10,7 @@
       "sex": "Male",
       "role": "Admin",
       "credits": "unlimited",
-      "avatarUrl": "/uploads/Admin_Gemini_Generated_Image_small-001.jpg",
+      "avatarUrl": "/uploads/1752850693078_Admin_Gemini_Generated_Image (small)-001.jpg",
       "profileId": "p1"
     },
     {
@@ -162,7 +161,7 @@
     {
       "id": "p1",
       "userId": "1",
-      "about": "Site administrator :)",
+      "about": "Site administrator :))",
       "wants": [
         "Financial Support"
       ],
@@ -180,7 +179,7 @@
         "hairColor": "Black",
         "eyeColor": "Brown",
         "smoker": "No",
-        "drinker": "No",
+        "drinker": "Socially",
         "piercings": "No",
         "tattoos": "No"
       }
@@ -557,5 +556,3 @@
     }
   ]
 }
-
-    
